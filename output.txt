@@ -1,1 +1,3 @@
-34
+Max Element: 12 - Max Freq: 3
+Min Element: 2 - Min Freq: 1
+
