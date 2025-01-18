@@ -263,6 +263,7 @@ void explainMap(){
 void explainMultimap(){
     // same as map, only difference is it can store duplicate keys here
     // mpp[key] can't be used here.
+    // equal_range(key) - returns iterator of entries with range of pairs for the key.
 }
 
 void explainUnorderedMap(){
