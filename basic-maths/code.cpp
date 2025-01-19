@@ -12,6 +12,7 @@ int countDigits(int n){
 
 int countDigitsLog(int n){
     // since count depends on the number of times N is divisible by 10 -> log10(n) integer part + 1
+    // num of digits in number = log10(n) + 1;
     int count = (int)log10(n) + 1;
     return count;
 }
