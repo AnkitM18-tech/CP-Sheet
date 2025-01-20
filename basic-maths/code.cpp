@@ -190,4 +190,6 @@ So instead of subtracting one step by one step, we can do GCD(N1%N2,N2). It will
 so GCD(a,b) = GCD(a%b,b), where a>b.
 Greater % Smaller , Smaller => we go until one of them is 0.and we get the GCD (other one remaining) in logarithmic complexity.
 
+LCM = (N1 * N2) / gcd(N1,N2);
+
  */
