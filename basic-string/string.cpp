@@ -76,6 +76,31 @@ bool isomorphicString(string s, string t) {
     return true;
 }
 
+bool brute(string& s, string& goal) {
+    if (s.length() != goal.length()) return false;
+
+    for (int i = 0; i < s.length(); i++) {
+        string rotated = s.substr(i) + s.substr(0, i);
+        if (rotated == goal) return true;
+    }
+    return false;
+    /*
+    Time Complexity O(N^2) Generate N rotations
+    and each comparison takes O(N) time.
+    Space Complexity O(N) for the space needed
+    to store each rotated string.
+    */
+}
+
+bool optimal(string& s, string& goal) {
+    if(s.length() != goal.length()) return false;
+    string newStr = s + s;
+    return newStr.find(goal) != string::npos;
+    // TC - O(N) - concatenating + O(2N) - finding
+}
+bool rotateString(string& s, string& goal) { 
+	return optimal(s, goal);
+}
 // O(N * log N + M), where N is the number of strings and 
 // M is the maximum length of a string. The sorting operation 
 // takes O(N * log N) time, and the 
