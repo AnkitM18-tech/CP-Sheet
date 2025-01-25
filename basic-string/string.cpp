@@ -1,7 +1,34 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-void bruteForce(vector<char>& s) {
+bool bruteAnagram(string& s, string& t) {
+    if(s.length() != t.length()) return false;
+
+    sort(s.begin(),s.end());
+    sort(t.begin(),t.end());
+
+    return s == t;
+    // TC - O(N log N)
+}
+bool optimalAnagram(string& s, string& t) {
+    if(s.length() != t.length()) return false;
+    vector<int> count(26,0);
+
+    // occurence of each character in first string
+    for(char ch: s) count[ch - 'a']++;
+    // decrement count from second string
+    for(char ch: t) count[ch - 'a']--;
+
+    for(int i: count) {
+        // check if count is zero or not - if 
+        // same number of characters present then the count
+        // will get cancelled out
+        if(i != 0) return false;
+    }
+    return true;
+    // O(N), where N is the length of the string - TC
+}
+void bruteForceReverse(vector<char>& s) {
     stack<char> st;
     for(auto ch:s) {
         st.push(ch);
@@ -11,7 +38,7 @@ void bruteForce(vector<char>& s) {
         st.pop();
     }
 }
-void optimal(vector<char>& s) {
+void optimalReverse(vector<char>& s) {
     int left = 0;
     int right = s.size() - 1;
     while(left < right) {
@@ -23,6 +50,10 @@ void optimal(vector<char>& s) {
     }
 }
 
+void reverseString(vector<char>& s){
+    // bruteForce(s);
+    // optimal(s);
+}
 bool palindromeCheck(string& s){
     int left = 0;
     int right = s.length() - 1;
@@ -32,10 +63,6 @@ bool palindromeCheck(string& s){
         right--;
     }
     return true;
-}
-void reverseString(vector<char>& s){
-    // bruteForce(s);
-    // optimal(s);
 }
 
 string longestCommonPrefix(vector<string>& str){
@@ -76,7 +103,7 @@ bool isomorphicString(string s, string t) {
     return true;
 }
 
-bool brute(string& s, string& goal) {
+bool bruteRotate(string& s, string& goal) {
     if (s.length() != goal.length()) return false;
 
     for (int i = 0; i < s.length(); i++) {
@@ -92,14 +119,14 @@ bool brute(string& s, string& goal) {
     */
 }
 
-bool optimal(string& s, string& goal) {
+bool optimalRotate(string& s, string& goal) {
     if(s.length() != goal.length()) return false;
     string newStr = s + s;
     return newStr.find(goal) != string::npos;
     // TC - O(N) - concatenating + O(2N) - finding
 }
 bool rotateString(string& s, string& goal) { 
-	return optimal(s, goal);
+	return optimalRotate(s, goal);
 }
 // O(N * log N + M), where N is the number of strings and 
 // M is the maximum length of a string. The sorting operation 
