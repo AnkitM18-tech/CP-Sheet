@@ -87,8 +87,30 @@ string longestCommonPrefix(vector<string>& str){
         ans += first[i];
     }
     return ans;
+    // O(N * log N + M), where N is the number of strings and 
+    // M is the maximum length of a string. The sorting operation 
+    // takes O(N * log N) time, and the 
+    // comparison of characters in the first and 
+    // last strings takes O(M) time.
 }
 
+string largeOddNum(string& s){
+    int index = -1;
+    // find odd digit from the last
+    for(int i=s.length()-1; i>=0;i--){
+        if((s[i] - '0') % 2 == 1) {
+            index = i;
+            break;
+        }
+    }
+
+    // leading zeros elimination
+    int i = 0;
+    while(i<=index && s[i] == '0') i++;
+
+    return s.substr(i,index - i+1);
+    // TC - O(N)
+}
 bool isomorphicString(string s, string t) {
     int map_s[256] = {0};
     int map_t[256] = {0};
@@ -128,11 +150,6 @@ bool optimalRotate(string& s, string& goal) {
 bool rotateString(string& s, string& goal) { 
 	return optimalRotate(s, goal);
 }
-// O(N * log N + M), where N is the number of strings and 
-// M is the maximum length of a string. The sorting operation 
-// takes O(N * log N) time, and the 
-// comparison of characters in the first and 
-// last strings takes O(M) time.
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
