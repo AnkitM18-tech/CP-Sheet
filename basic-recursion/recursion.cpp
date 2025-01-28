@@ -68,6 +68,19 @@ bool prime(int num, int x) {
 
     return prime(num,x+1);
 }
+
+vector<int> reverseArray(vector<int>& nums){			
+    reverse(nums,0,nums.size() - 1);
+    return nums;
+}
+
+void reverse(vector<int>& nums, int left, int right) {
+    if(left >= right) return;
+    int temp = nums[left];
+    nums[left] = nums[right];
+    nums[right] = temp;
+    reverse(nums,left+1,right-1);
+}
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
