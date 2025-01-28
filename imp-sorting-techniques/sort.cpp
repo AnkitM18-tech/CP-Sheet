@@ -35,6 +35,22 @@ vector<int> bubbleSort(vector<int>& nums) {
     }
     return nums;
 }
+
+// Take an element and place it in its correct order
+vector<int> insertionSort(vector<int>& nums) {
+    int n = nums.size();
+    for(int i=0;i<n;i++){
+        int j = i;
+        while(j > 0 && nums[j-1] > nums[j]) {
+            swap(nums[j-1],nums[j]);
+            j--;
+        }
+    }
+    return nums;
+}
+// Worst - Avg - O(N^2)
+// Best - O(N)
+
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
