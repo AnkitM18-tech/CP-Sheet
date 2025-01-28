@@ -81,6 +81,17 @@ void reverse(vector<int>& nums, int left, int right) {
     nums[right] = temp;
     reverse(nums,left+1,right-1);
 }
+
+bool isSorted(vector<int>& nums){
+    if(nums.size() <= 1) return true;
+    checkSorted(nums,0);
+}
+
+bool checkSorted(vector<int>& nums, int left) {
+    if(left > nums.size()-2) return true;
+    if(nums[left] > nums[left+1]) return false;
+    checkSorted(nums,left+1);
+}
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
