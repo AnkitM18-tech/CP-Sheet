@@ -38,6 +38,19 @@ void reverse(vector<char>& s,int left,int right) {
 
     reverse(s,left+1,right-1);
 }
+
+
+bool palindromeCheck(string& s){
+    return reverseCheck(s, 0, s.length()-1);
+}
+
+bool reverseCheck(string& s, int left, int right) {
+    if(left >= right) return true;
+
+    if(s[left] != s[right]) return false;
+
+    return reverseCheck(s,left+1,right-1);
+}
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
