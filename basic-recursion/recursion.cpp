@@ -51,6 +51,23 @@ bool reverseCheck(string& s, int left, int right) {
 
     return reverseCheck(s,left+1,right-1);
 }
+
+
+bool checkPrime(int num){
+    if(num <= 1) return false;
+
+    return prime(num,2);
+}
+
+bool prime(int num, int x) {
+    if(x > sqrt(num)) {
+        return true;
+    }
+
+    if(num % x == 0) return false;
+
+    return prime(num,x+1);
+}
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
