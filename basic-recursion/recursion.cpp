@@ -92,6 +92,17 @@ bool checkSorted(vector<int>& nums, int left) {
     if(nums[left] > nums[left+1]) return false;
     checkSorted(nums,left+1);
 }
+
+int addDigits(int num){
+    if(num < 10) return num;
+
+    int sum = 0;
+    while(num > 0) {
+        sum += num % 10;
+        num /= 10;
+    }
+    return addDigits(sum);
+}
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
