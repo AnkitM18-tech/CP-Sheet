@@ -95,6 +95,38 @@ vector<int> mergeSort(vector<int>& nums) {
     mergeSortHelper(nums,0,n-1);
     return nums;
 } // TC - O(nlogn) , SC - O(n)
+
+int partition(vector<int>& nums, int low, int high) {
+    int pivot = nums[low];
+    int i = low;
+    int j = high;
+    while (i < j) {
+        while (nums[i] <= pivot && i <= high - 1) {
+            i++;
+        }
+        while (nums[j] > pivot && j >= low + 1) {
+            j--;
+        }
+        if (i < j) swap(nums[i], nums[j]);
+    }
+    swap(nums[low], nums[j]);
+    return j;
+}
+
+void quickSortHelper(vector<int>& nums, int low, int high) {
+    if (low < high) {
+        int pIndex = partition(nums, low, high);
+        quickSortHelper(nums, low, pIndex - 1);
+        quickSortHelper(nums, pIndex + 1, high);
+    }
+}
+// Divide and Conquer
+vector<int> quickSort(vector<int>& nums) {
+    int n = nums.size();
+    quickSortHelper(nums, 0, n - 1);
+    return nums;
+}  // SC - O(1) + O(N) auxiliary stack space
+// TC - O(N*logN)
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
