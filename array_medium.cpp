@@ -88,6 +88,43 @@ void rotateArrayByOne(vector<int>& nums) {
     }
     nums[nums.size()-1] = temp;
 }
+
+void reverseArray(vector<int>& arr, int start, int end) {
+    while(start < end) {
+        int temp = arr[start];
+        arr[start] = arr[end];
+        arr[end] = temp;
+        start++;
+        end--;
+    }
+}
+void rotateArray(vector<int>& nums, int k) {
+    /*
+    // Brute
+    int n = nums.size();
+    k = k % n;
+
+    vector<int> temp;
+
+    for(int i =0;i<k;i++) {
+        temp.push_back(nums[i]);
+    }
+
+    for(int i=k;i<n;i++) {
+        nums[i-k] = nums[i];
+    }
+
+    for(int i=0;i<k;i++) {
+        nums[n-k+i] = temp[i];
+    }
+    */
+    // Best
+    int n = nums.size();
+    k = k % n;
+    reverseArray(nums,0,n-1);
+    reverseArray(nums,0,n-1-k);
+    reverseArray(nums,n-k,n-1);
+}
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
