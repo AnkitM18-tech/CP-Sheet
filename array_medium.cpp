@@ -20,6 +20,52 @@ int largestElement(vector<int>& nums) {
     }
     return largest;
 } // TC - O(N)
+
+int secondLargestElement(vector<int>& nums) {
+    int n = nums.size();
+    if(n<2) return -1;
+    /*
+    // Brute Force
+    sort(nums.begin(),nums.end());
+    int largest = nums.back();
+    int secondLargest = -1;
+    for(int i=n-2;i>=0;i--){
+        if(nums[i] != largest){
+            secondLargest = nums[i];
+            break;
+        }
+    }
+    return secondLargest;
+    //TC - O(N * log N) 
+    
+    // Better
+    int largest = INT_MIN, secondLargest = INT_MIN;
+    for(int i=0;i<n;i++){
+        if(nums[i] > largest) {
+            largest = nums[i];
+        }
+    }
+    for(int i=0;i<n;i++) {
+        if(nums[i] != largest && nums[i] > secondLargest) {
+            secondLargest = nums[i];
+        }
+    }
+
+    return secondLargest == INT_MIN ? -1 : secondLargest;
+    // TC -  O(N) + O(N) = O(2N)
+    */
+    // Best
+    int largest = INT_MIN, secondLargest = INT_MIN;
+    for(int i=0;i<n;i++) {
+        if(nums[i] > largest) {
+            secondLargest = largest;
+            largest = nums[i];
+        } else if(nums[i] > secondLargest && nums[i] != largest) {
+            secondLargest = nums[i];
+        }
+    }
+    return secondLargest == INT_MIN ? -1 : secondLargest;
+}
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
