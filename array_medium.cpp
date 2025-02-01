@@ -66,6 +66,19 @@ int secondLargestElement(vector<int>& nums) {
     }
     return secondLargest == INT_MIN ? -1 : secondLargest;
 }
+
+int findMaxConsecutiveOnes(vector<int>& nums) {
+    int maxCnt = 0, cnt = 0;
+    for(int i=0;i<nums.size();i++) {
+        if(nums[i] == 1) {
+            cnt += 1;
+            maxCnt = max(maxCnt,cnt);
+        } else {
+            cnt = 0;
+        }
+    }
+    return maxCnt;
+}
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
