@@ -40,6 +40,37 @@ void moveZeroes(vector<int>& nums) {
     }
 }
 
+int removeDuplicates(vector<int>& nums) {
+    if(nums.empty()) return 0;
+    int n = nums.size();
+    /*
+    // Brute
+    set<int> temp;
+    for(int num:nums) {
+        temp.insert(num);
+    }
+    int k = temp.size();
+
+    int j = 0;
+    for(int num:temp) {
+        nums[j] = num;
+        j++;
+    }
+    return k;
+    // TC - O(N * log N) for set + O(N) traverse array
+    */
+    // Optimal
+    int i = 0;
+
+    for(int j=1;j<n;j++) {
+        if(nums[i] != nums[j]) {
+            i++;
+            nums[i] = nums[j];
+        }
+    }
+    return i+1;
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
