@@ -71,6 +71,49 @@ int removeDuplicates(vector<int>& nums) {
     return i+1;
 }
 
+int missingNumber(vector<int>& nums) {
+    int n = nums.size();
+    /*
+    // Brute
+    for(int i=0;i<=n;i++) {
+        int flag = 0;
+        for(int j=0;j<=n;j++) {
+            if(nums[j] == i) {
+                flag = 1;
+                break;
+            }
+        }
+
+        if(flag == 0) return i;
+    }
+    return -1; // O(N^2)
+    
+    // Better
+    int freq[n+1] = {0};
+    for(int num:nums) {
+        freq[num]++;
+    }
+    for(int i=0;i<=n;i++) {
+        if(freq[i] == 0) return i;
+    }
+    return -1; // TC - O(2N) , SC - O(N+1)
+    
+    // Optimal
+    int sumOfN = (n * (n+1)) / 2;
+    int sumOfArray = 0;
+    for(int num : nums) {
+        sumOfArray += num;
+    }
+    return sumOfN - sumOfArray; // TC - O(N)
+    */
+    // Optimal 2
+    int xor1=0,xor2=0;
+    for(int i=0;i<n;i++) {
+        xor1 = xor1 ^ (i+1); // XOR - 1..n
+        xor2 = xor2 ^ nums[i]; // XOR of array elements
+    }
+    return (xor1 ^ xor2);
+}
 
 int main() {
     ios_base::sync_with_stdio(false);
