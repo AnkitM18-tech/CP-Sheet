@@ -204,6 +204,43 @@ vector<int> intersectionArray(vector<int>& nums1, vector<int>& nums2) {
     // O(M), 
     // where M is the length of that array which has less elements.
 }
+
+vector<int> leaders(vector<int>& nums) {
+    vector<int> ans;
+    /*
+    // Brute
+    for(int i = 0; i<nums.size(); i++) {
+    bool leader = true;
+    for(int j = i+1;j<nums.size();j++) {
+        if(nums[j] > nums[i]) {
+            leader = false;
+            break;
+        }
+    }
+    if(leader) {
+        ans.push_back(nums[i]);
+    }
+    }
+    return ans; // O(N^2)
+    */
+    if(nums.empty()) return ans;
+
+    int endMax = nums[nums.size()-1];
+    ans.push_back(endMax);
+
+    for(int i = nums.size() - 2; i >= 0; i--) {
+    if(nums[i] > endMax) {
+        ans.push_back(nums[i]);
+        endMax = nums[i];
+    }
+    }
+
+    reverse(ans.begin(), ans.end());
+
+    return ans;
+}
+
+
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
