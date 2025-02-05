@@ -276,6 +276,42 @@ vector<int> spiralOrder(vector<vector<int>>& matrix) {
     return ans; // TC - O(MxN)
 }
 
+vector<int> rearrangeArray(vector<int>& nums) {
+    int n = nums.size();
+    /*
+    // Brute
+    // O(N+N/2), where N is the size of the array. 
+    // O(N) for traversing the array once for segregating positives 
+    // and negatives and another 
+    // O(N/2) for adding those elements alternatively to the array.
+    vector<int> pos,neg;
+    for(int i = 0; i<n; i++) {
+        if(nums[i] > 0) pos.push_back(nums[i]);
+        else neg.push_back(nums[i]);
+    }
+
+    for(int i = 0; i < n/2; i++) {
+        nums[2*i] = pos[i];
+        nums[2*i + 1] = neg[i];
+    }
+
+    return nums;
+    */
+    // Optimal
+    vector<int> ans(n,0);
+    int posIndex = 0, negIndex = 1;
+    for(int i = 0; i<n; i++) {
+        if(nums[i] < 0) {
+            ans[negIndex] = nums[i];
+            negIndex += 2;
+        } else {
+            ans[posIndex] = nums[i];
+            posIndex += 2;
+        }
+    }
+    return ans; // TC - O(N)
+}
+
 
 
 int main() {
