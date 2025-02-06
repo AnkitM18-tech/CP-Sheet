@@ -312,7 +312,30 @@ vector<int> rearrangeArray(vector<int>& nums) {
     return ans; // TC - O(N)
 }
 
+// Variety 1
+int nCr(int n, int r) {
+    if(r > n - r) {
+        r = n - r;
+    }
+    long long res = 1;
+    for(int i = 0; i<r;i++) {
+        res = res * (n-i);
+        res = res / (i+1);
+    }
+    return (int)res;
+}
 
+vector<vector<int>> pascalTriangle(int numRows) {
+    vector<vector<int>> triangle(numRows);
+
+    for(int i = 0; i< numRows; i++) {
+        triangle[i].resize(i+1);
+        for(int j=0;j<=i;j++) {
+            triangle[i][j] = nCr(i,j);
+        }
+    }
+    return triangle;
+}
 
 int main() {
     ios_base::sync_with_stdio(false);
