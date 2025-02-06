@@ -325,9 +325,18 @@ int nCr(int n, int r) {
     return (int)res;
 }
 
+int nCr2(int n, int r) {
+    long long res = 1;
+    // Calculate nCr:
+    for (int i = 0; i < r; i++) {
+        res = res * (n - i);
+        res = res / (i + 1);
+    }
+    return res;
+}
+
 vector<vector<int>> pascalTriangle(int numRows) {
     vector<vector<int>> triangle(numRows);
-
     for(int i = 0; i< numRows; i++) {
         triangle[i].resize(i+1);
         for(int j=0;j<=i;j++) {
@@ -337,6 +346,42 @@ vector<vector<int>> pascalTriangle(int numRows) {
     return triangle;
 }
 
+// Generate nth row for pascal triangle
+void generate(int n) {   
+    /* Print the entire row of 
+    Pascal's Triangle for row n:*/
+    for (int c = 1; c <= n; c++) {
+        cout << nCr2(n - 1, c - 1) << " ";
+    }
+    cout << endl;
+}
+
+vector<int> generateRow(int row) {    
+    long long ans = 1;
+    vector<int> ansRow;
+    /// Inserting the 1st element
+    ansRow.push_back(1); 
+
+    // Calculate the rest of the elements
+    for (int col = 1; col < row; col++) {
+        ans = ans * (row - col);
+        ans = ans / col;
+        ansRow.push_back(ans);
+    }
+    return ansRow;
+}
+
+vector<vector<int>> pascalTriangle2(int n) {
+    vector<vector<int>> pascalTriangle;
+
+    // Store the entire Pascal's Triangle
+    for (int row = 1; row <= n; row++) {
+        pascalTriangle.push_back(generateRow(row));
+    }
+    
+    //return the pascalTriangle
+    return pascalTriangle;
+}
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
@@ -345,7 +390,7 @@ int main() {
     while(t--){
         int N;
         cin >> N;
-        
+        generate(N);
     }
     return 0;
 }
