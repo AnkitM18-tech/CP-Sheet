@@ -382,6 +382,37 @@ vector<vector<int>> pascalTriangle2(int n) {
     //return the pascalTriangle
     return pascalTriangle;
 }
+
+void rotateMatrix(vector<vector<int>>& matrix) {
+    int n = matrix.size();
+    /*
+    // Brute
+    vector<vector<int>> rotated(n,vector<int>(n,0));
+
+    for(int i = 0; i< n; i++) {
+        for(int j = 0; j<n; j++) {
+            rotated[j][n-i-1] = matrix[i][j];
+        }
+    }
+    for(int i = 0;i<rotated.size();i++) {
+        for(int j = 0;j<rotated[0].size(); j++) {
+            matrix[i][j] = rotated[i][j];
+        }
+    } // O(N**2) + O(N**2) - TC , SC - O(N**2)
+    */
+    // Optimal - Transpose and Reverse rows
+    for(int i = 0; i < n; i++) {
+        for(int j = i+1; j < n; j++) {
+            swap(matrix[i][j],matrix[j][i]);
+        }
+    }
+
+    for(int i = 0; i < n; i++) {
+        reverse(matrix[i].begin(),matrix[i].end());
+    } // TC - O(N**2) +O(N**2) , SC - O(1) 
+}
+
+
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
