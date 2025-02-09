@@ -22,7 +22,7 @@ vector<int> twoSum(vector<int>& nums, int target) {
         int num = nums[i];
         int reqNum = target - num;
         if(mpp.find(reqNum) != mpp.end()) {
-            return {i,mpp[reqNum]};
+            return {mpp[reqNum],i};
         }
         mpp[num] = i;
     }
@@ -59,6 +59,8 @@ vector<int> twoSum(vector<int>& nums, int target) {
     // to consider this change, 
     // the space complexity will be O(N).
 }
+
+
 
 int main() {
     ios_base::sync_with_stdio(false);
