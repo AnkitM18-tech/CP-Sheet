@@ -206,6 +206,49 @@ vector<vector<int>> fourSum(vector<int>& nums, int target) {
     // TC - O(N^3), SC - O(no. of quadruplets)
 }
 
+void sortZeroOneTwo(vector<int>& nums) {
+    /*
+    // Brute
+    sort(nums.begin(),nums.end());
+    // TC - O(N*logN), SC - O(1)
+    
+    // Better
+    int n = nums.size();
+    int cntZero = 0, cntOne = 0, cntTwo = 0;
+    for(int i = 0; i<n; i++) {
+        if(nums[i] == 0) cntZero++;
+        else if(nums[i] == 1) cntOne++;
+        else cntTwo++;
+    }
+    for(int i = 0; i<cntZero; i++) {
+        nums[i] = 0;
+    }
+    for(int i = cntZero; i<cntZero + cntOne; i++) {
+        nums[i] = 1;
+    }
+    for(int i = cntZero + cntOne; i<n; i++) {
+        nums[i] = 2;
+    } // TC = O(N)+O(N) = O(2N)
+    */
+    // Optimal - Dutch National Flag ALgorithm
+    int low = 0, mid = 0, high = nums.size()-1;
+    while(mid <= high) {
+        if(nums[mid] == 0) {
+            swap(nums[low],nums[mid]);
+            low++;
+            mid++;
+        } else if(nums[mid] == 1) {
+            mid++;
+        } else {
+            swap(nums[mid],nums[high]);
+            high--;
+        }
+    } // TC - O(N)
+    // Index 0 to low - 1 contains 0
+    // Index low to mid - 1 contains 1
+    // Index high +1 to sizeOfArray - 1 contains 2.
+}
+
 
 
 int main() {
