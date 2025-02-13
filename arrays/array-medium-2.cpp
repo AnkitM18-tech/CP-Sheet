@@ -334,7 +334,7 @@ int maxSubArrayWithPrint(vector<int>& nums) {
     cout << "]" << endl;
     
     // Return the maximum subarray sum found
-    return maxi;
+    return maxi; // TC - O(N)
 }
 
 int main() {
