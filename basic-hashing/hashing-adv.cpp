@@ -130,7 +130,37 @@ int longestSubarray(vector<int> &nums, int k){
     return maxLen; // TC - O(NlogN), SC - O(N)
 }
 
-
+int subarraySum(vector<int> &nums, int k){
+    int n = nums.size();
+    /*
+    // Brute - using 3 loops - one iterating through i -> j // O(N^3)
+    int cnt = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = i; j < n; j++) {
+            int sum = 0;
+            for (int K = i; K <= j; K++) {
+                sum += nums[K];
+            }
+            if (sum == k) {
+                cnt++;
+            }
+        }
+    }
+    return cnt;
+    // Better
+    int cnt = 0;
+    for(int i = 0; i<n; i++) {
+        int sum = 0;
+        for(int j = i; j<n; j++) {
+            sum += nums[j];
+            if(sum == k) {
+                cnt++;
+            }
+        }
+    }
+    return cnt; // O(N^2)
+    */
+}
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
