@@ -160,6 +160,17 @@ int subarraySum(vector<int> &nums, int k){
     }
     return cnt; // O(N^2)
     */
+    // Optimal
+    unordered_map<int,int> prefixSumMap;
+    int cnt = 0, sum = 0;
+    prefixSumMap[0] = 1;
+    for(int i = 0; i<n; i++) {
+        sum += nums[i];
+        int sumToRemove = sum - k;
+        cnt += prefixSumMap[sumToRemove];
+        prefixSumMap[sum] += 1;
+    }
+    return cnt; // O(N)
 }
 int main() {
     ios_base::sync_with_stdio(false);
