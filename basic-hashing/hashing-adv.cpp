@@ -172,6 +172,49 @@ int subarraySum(vector<int> &nums, int k){
     }
     return cnt; // O(N)
 }
+
+int subarraysWithXorK(vector<int> &nums, int k) {
+    int n = nums.size();
+    int cnt = 0;
+    /*
+    // Brute - use 3 loops - 3rd => K = i->j
+    for(int i = 0; i<n; i++) {
+        for(int j = i; j<n; j++) {
+            int xorr = 0;
+            for(int K = i; K<j; K++) {
+                xorr = xorr ^ nums[j];
+            }
+            if(xorr == k) {
+                cnt++;
+            }
+        }
+    }
+    return cnt; // O(N^3)
+
+    // Better
+    for(int i = 0; i<n; i++) {
+        int xorr = 0;
+        for(int j = i; j<n; j++) {
+            xorr = xorr ^ nums[j];
+            if(xorr == k) {
+                cnt++;
+            }
+        }
+    }
+    return cnt; // O(N^2)
+    */
+    // Optimal
+    map<int,int> mpp;
+    mpp[0] = 1;
+    int xorr = 0;
+    for(int i = 0; i<n; i++) {
+        xorr = xorr ^ nums[i];
+        int x = xorr ^ k;
+        cnt += mpp[x];
+        mpp[xorr]++;
+    }
+    return cnt; // O(Nlog N)
+}
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
