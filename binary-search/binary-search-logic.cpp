@@ -29,6 +29,17 @@ int searchInsert(vector<int> &nums, int target)  {
 
 int findFloor(vector<int> nums, int x) {
     int ans = -1, n = nums.size();
+    /*
+    // Brute - O(N)
+    for(int i = 0; i<n; i++) {
+        if(nums[i] <= x) {
+            ans = nums[i];
+        } else {
+            break;
+        }
+    }
+    return ans;
+    */
     int low = 0, high = n - 1;
     while(low <= high) {
         int mid = (low + high)/2;
@@ -44,6 +55,18 @@ int findFloor(vector<int> nums, int x) {
 
 int findCeil(vector<int> nums, int x) {
     int ans = -1, n = nums.size();
+    /*
+    // Brute - O(N)
+    for(int i = 0; i<n; i++) {
+        if(nums[i] >= x) {
+            ans = nums[i];
+            break;
+        } else {
+            continue;
+        }
+    }
+    return ans;
+    */
     int low = 0, high = n - 1;
     while(low <= high) {
         int mid = (low + high)/2;
@@ -64,6 +87,8 @@ vector<int> getFloorAndCeil(vector<int> nums, int x) {
     int ceil = findCeil(nums,x);
     return {floor,ceil}; // O(log N)
 }
+
+
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
