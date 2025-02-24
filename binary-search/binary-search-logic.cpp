@@ -250,6 +250,36 @@ bool searchInARotatedSortedArrayII(vector<int> &nums, int k)  {
     return false; // O(log N)
 }
 
+int linearSearchFindmin(vector<int> &arr) {
+    int n = arr.size();
+    int minNum = INT_MAX;
+    for(int i = 0; i<n; i++) {
+        minNum = min(minNum, arr[i]);
+    }
+    return minNum; // O(N)
+}
+
+int findMin(vector<int> &arr)  {
+    int n = arr.size();
+    int low = 0, high = n-1, ans = INT_MAX;
+    while(low <= high) {
+        int mid = (low + high)/2;
+        // search space sorted already
+        if(arr[low] <= arr[high]) {
+            ans = min(arr[low],ans);
+            break;
+        }
+        if(arr[low] <= arr[mid]) {
+            ans = min(ans,arr[low]);
+            low = mid + 1;
+        } else {
+            ans = min(ans,arr[mid]);
+            high = mid - 1;
+        }
+    }
+    return ans; // O(log N)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
