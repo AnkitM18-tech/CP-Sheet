@@ -280,7 +280,46 @@ int findMin(vector<int> &arr)  {
     return ans; // O(log N)
 }
 
+int linearSearchFindKRotation(vector<int> &nums) {
+    int n = nums.size();
+    int ans = INT_MAX, index = -1;
+    for(int i = 0; i<n; i++) {
+        if(nums[i] < ans) {
+            ans = nums[i];
+            index = i;
+        }
+    }
+    return index; // O(N)
+}
 
+int findKRotation(vector<int> &nums)  {
+    int n = nums.size();
+    int low = 0, high = n - 1, ans = INT_MAX, index = -1;
+    while(low <= high) {
+        int mid = (low + high)/2;
+        if(nums[low] <= nums[high]) {
+            if(nums[low] < ans) {
+                ans = nums[low];
+                index = low;
+            }
+            break;
+        }
+        if(nums[low] <= nums[mid]) {
+            if(nums[low] < ans) {
+                ans = nums[low];
+                index = low;
+            }
+            low = mid + 1;
+        } else {
+            if(nums[mid] < ans) {
+                ans = nums[mid];
+                index = mid;
+            }
+            high = mid - 1;
+        }
+    }
+    return index; // O(log N)
+}
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
