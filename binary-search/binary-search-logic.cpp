@@ -350,6 +350,26 @@ int brute2SingleNonDuplicate(vector<int> &nums) {
     return ans; // O(N)
 }
 
+int singleNonDuplicate(vector<int> &nums) {
+    int n = nums.size();
+    int low = 1, high = n-2;
+    // edge cases
+    if(n == 1) return nums[0];
+    if(nums[0] != nums[1]) return nums[0];
+    if(nums[n-1] != nums[n-2]) return nums[n-1];
+    while(low <= high) {
+        int mid = (low + high)/2;
+        if(nums[mid] != nums[mid-1] && nums[mid] != nums[mid+1]) return nums[mid];
+        // elimination - (even,odd) - left <=> (odd,even) - right
+        if((mid % 2 == 1 && nums[mid] == nums[mid-1]) || (mid % 2 == 0 && nums[mid] == nums[mid+1])) {
+            low = mid + 1; 
+        } else {
+            high = mid - 1;
+        }
+    }
+    return -1; // O(log N)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
