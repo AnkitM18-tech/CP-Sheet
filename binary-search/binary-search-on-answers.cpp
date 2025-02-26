@@ -131,6 +131,7 @@ int sumByD(vector<int> &nums, int limit) {
 
 int smallestDivisor(vector<int> &nums, int limit) {
     int n = nums.size();
+    // max limit can be = size of array - ceil every member to 1
     if(n > limit) return -1;
     int low = 1, high = *max_element(nums.begin(),nums.end());
 
