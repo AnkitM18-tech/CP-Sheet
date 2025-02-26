@@ -103,6 +103,50 @@ int NthRoot(int N, int M) {
     return -1; // O(logM * logN)
 }
 
+int linearSmallestDivisor(vector<int> &nums, int limit) {
+    int n = nums.size();
+    int maxi = *max_element(nums.begin(),nums.end());
+
+    for(int d = 1; d <= maxi; d++) {
+        int sum = 0;
+        for(int i = 0; i<n; i++) {
+            sum += ceil((double)nums[i]/(double)d);
+        }
+        if(sum <= limit) {
+            return d;
+        }
+    }
+    return -1; // O(max*N), where max 
+    // is the maximum element in the array, N is size of the array.
+}
+
+int sumByD(vector<int> &nums, int limit) {
+    int n = nums.size();
+    int sum = 0;
+    for(int i = 0; i<n; i++) {
+        sum += ceil((double)nums[i] / (double)limit);
+    }
+    return sum;
+}
+
+int smallestDivisor(vector<int> &nums, int limit) {
+    int n = nums.size();
+    if(n > limit) return -1;
+    int low = 1, high = *max_element(nums.begin(),nums.end());
+
+    while(low <= high) {
+        int mid = (low + high)/2;
+        if(sumByD(nums,mid) <= limit) {
+            high = mid - 1;
+        } else {
+            low = mid + 1;
+        }
+    }
+    return low;
+    // O(log(max)*N), where max is 
+    // the maximum element in the array, N is size of the array.
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
