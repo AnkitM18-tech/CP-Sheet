@@ -148,6 +148,56 @@ int smallestDivisor(vector<int> &nums, int limit) {
     // the maximum element in the array, N is size of the array.
 }
 
+int findMax(vector<int> &nums) {
+    int n = nums.size();
+    int maxi = INT_MIN;
+    for(int i = 0; i<n; i++) {
+        maxi = max(maxi,nums[i]);
+    }
+    return maxi;
+}
+
+long long calculateHours(vector<int> &nums, int hourlyRate) {
+    long long totalHours = 0;
+    int n = nums.size();
+
+    for(int i = 0; i<n; i++) {
+        totalHours += ceil((double)nums[i]/(double)hourlyRate);
+    }
+    return totalHours;
+}
+
+int linearMinimumRate(vector<int> &nums, int h) {
+    int n = nums.size();
+    int maxi = findMax(nums);
+
+    for(int i = 1; i<=maxi; i++) {
+        long long reqTime = calculateHours(nums,i);
+        if(reqTime <= (long long)h) {
+            return i;
+        }
+    }
+    return maxi;
+    // O(max * N), where max is the maximum 
+    // element in the array and N is the size of the array
+}
+
+int minimumRateToEatBananas(vector<int> &nums, int h) {
+    int low = 1, high = findMax(nums);
+    while(low <= high) {
+        int mid = (low + high)/2;
+        int totalHours = calculateHours(nums,mid);
+        if(totalHours <= h) {
+            high = mid - 1;
+        } else {
+            low = mid + 1;
+        }
+    }
+    return low;
+    // O(N * log(max)), where max is the 
+    // maximum element in the array and N is size of the array
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
