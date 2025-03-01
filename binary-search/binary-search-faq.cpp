@@ -49,6 +49,57 @@ int aggressiveCows(vector<int> &nums, int k) {
     // max is the maximum element in array, min is the minimum element in array.
 }
 
+int countStudents(vector<int> &nums, int pages) {
+    int n = nums.size();
+
+    int students = 1;
+    int pagesStudent = 0;
+
+    for(int i=0; i<n; i++) {
+        if(pagesStudent + nums[i] <= pages) {
+            pagesStudent += nums[i];
+        } else {
+            students++;
+            pagesStudent = nums[i];
+        }
+    }
+    return students;
+}
+
+int findPages(vector<int> &nums, int m)  {
+    int n = nums.size();
+
+    if(m > n) return -1;
+
+    int start = *max_element(nums.begin(),nums.end());
+    int end = accumulate(nums.begin(),nums.end(),0);
+    /* 
+    // Linear Search
+    for(int pages = start; pages <= end; pages++) {
+        if(countStudents(nums,pages) == m) {
+            return pages;
+        }
+    }
+    return start;
+    // O(N * (sum-max)), where N is size of the array, 
+    // sum is the sum of all array elements, 
+    // max is the maximum of all array elements.
+    */
+    while(start <= end) {
+        int mid = (start + end)/2;
+        int students = countStudents(nums,mid);
+        if(students > m) {
+            start = mid + 1;
+        } else {
+            end = mid - 1;
+        }
+    }
+    return start;
+    // O(N * log(sum-max)), where N is size of the array, 
+    // sum is the sum of all array elements, 
+    // max is the maximum of all array elements.
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
