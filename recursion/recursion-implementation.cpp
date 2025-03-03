@@ -64,6 +64,31 @@ vector<string> generateParenthesis(int n) {
 // required for the result list of valid combinations. 
 // The space is proportional to the number of valid combinations generated.
 
+void func(int ind, int n, vector<int> &nums, vector<int> &arr, vector<vector<int>> &ans) {
+    // Base Case
+    if(ind == n) {
+        ans.push_back(arr);
+        return;
+    }
+    // Recursive case - exclude current ele and move to next
+    func(ind + 1,n, nums, arr, ans);
+    
+    // include current element and move to next
+    arr.push_back(nums[ind]);
+    func(ind + 1, n, nums, arr, ans);
+
+    // backtrack - remove last added element to explore other subsets
+    arr.pop_back();
+}
+
+vector<vector<int>> powerSet(vector<int>& nums) {
+    vector<vector<int>> ans;
+    vector<int> arr;
+    func(0, nums.size(),nums,arr,ans);
+    return ans;
+    // O(2^N) - TC, SC -  O(N * 2^N)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
