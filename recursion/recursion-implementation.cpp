@@ -107,6 +107,17 @@ bool checkSubsequenceSum(vector<int>& nums, int k) {
     // SC - O(n)
 }
 
+int func2(int ind, int sum, vector<int> &nums) {
+    if(sum == 0) return 1;
+    if(sum < 0 || ind == nums.size()) return 0;
+
+    return func(ind + 1, sum - nums[ind], nums) + func(ind + 1, sum, nums);
+}
+
+int countSubsequenceWithTargetSum(vector<int>& nums, int k){
+    return func2(0,k,nums); // TC - O(2^N * N)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
