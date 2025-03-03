@@ -89,6 +89,24 @@ vector<vector<int>> powerSet(vector<int>& nums) {
     // O(2^N) - TC, SC -  O(N * 2^N)
 }
 
+bool func(int ind, int sum, vector<int> &nums) {
+    if(sum == 0) {
+        return true;
+    }
+
+    if(sum < 0 || ind == nums.size()) {
+        return false;
+    }
+
+    return func(ind + 1, sum - nums[ind], nums) | func(ind + 1, sum, nums);
+}
+
+bool checkSubsequenceSum(vector<int>& nums, int k) {
+    return func(0,k,nums);
+    // TC - O(2^n * n)
+    // SC - O(n)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
