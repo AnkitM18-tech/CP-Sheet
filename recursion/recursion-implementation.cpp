@@ -35,6 +35,35 @@ double myPow(double x, int n) {
     return power(x,n); // O(log N)
 }
 
+void func(int open, int close, int n, string s, vector<string> &ans) {
+    if(open == close && (open + close) == 2*n) {
+        ans.push_back(s);
+        return;
+    }
+
+    if(open < n) {
+        func(open + 1, close, n, s + '(', ans);
+    }
+
+    if(close < open) {
+        func(open, close + 1, n, s + ')', ans);
+    }
+}
+
+vector<string> generateParenthesis(int n) {
+    vector<string> ans;
+    func(0,0,n,"",ans);
+    return ans;
+}
+// TC = O(4^n / sqrt(n)), where n is the number of pairs of parentheses. T
+// his complexity arises because each step involves branching into two possibilities, 
+// resulting in an exponential number of possibilities, 
+// reduced by the Catalan number formula for valid combinations.
+
+// SC = O(4^n / sqrt(n)), primarily due to the recursion stack and the storage 
+// required for the result list of valid combinations. 
+// The space is proportional to the number of valid combinations generated.
+
 
 int main() {
     ios_base::sync_with_stdio(false);
