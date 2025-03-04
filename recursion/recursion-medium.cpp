@@ -78,6 +78,36 @@ vector<int> subsetSums(vector<int>& nums) {
     return ans; // TC - O(2^N * N) - SC
 }
 
+void fnSubsetWithDup(int ind, vector<int> &nums, vector<int> &arr, vector<vector<int>> &ans) {
+    if(ind == nums.size()) {
+        ans.push_back(arr);
+        return;
+    }
+
+    arr.push_back(nums[ind]);
+    fnSubsetWithDup(ind + 1, nums, arr, ans);
+    arr.pop_back();
+
+    for(int i = ind + 1; i<nums.size(); i++) {
+        if(nums[i] != nums[ind]) {
+            fnSubsetWithDup(i, nums, arr, ans);
+            return;
+        }
+    }
+
+    // Ensure the function finishes when no more unique elements are left
+    fnSubsetWithDup(nums.size(),nums,arr,ans);
+}
+
+vector<vector<int> > subsetsWithDup(vector<int>& nums) {
+    vector<int> arr;
+    vector<vector<int>> ans;
+    sort(nums.begin(), nums.end());
+    fnSubsetWithDup(0,nums,arr,ans);
+    return ans;
+    // TC - O(2^N * N) , SC - O(N)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
