@@ -62,6 +62,23 @@ vector<vector<int> > combinationSum2(vector<int>& candidates, int target) {
     // TC - O(2^N * N), SC - O(N)
 }
 
+void fnSubset1(int ind, int sum ,vector<int> &nums, vector<int> &ans) {
+    if(ind == nums.size()) {
+        ans.push_back(sum);
+        return;
+    }
+
+    fnSubset1(ind + 1, sum + nums[ind], nums, ans);
+    fnSubset1(ind + 1, sum , nums, ans);
+}
+
+vector<int> subsetSums(vector<int>& nums) {
+    vector<int> ans;
+    fnSubset1(0,0,nums,ans);
+    return ans; // TC - O(2^N * N) - SC
+}
+
+
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
