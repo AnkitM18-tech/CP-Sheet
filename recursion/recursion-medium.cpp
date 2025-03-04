@@ -108,6 +108,36 @@ vector<vector<int> > subsetsWithDup(vector<int>& nums) {
     // TC - O(2^N * N) , SC - O(N)
 }
 
+void fnCombinationSum3(int last, int k, int sum, vector<int> &arr, vector<vector<int>> &ans) {
+    if(sum == 0 && arr.size() == k) {
+        ans.push_back(arr);
+        return;
+    }
+
+    if(sum <= 0 || arr.size() > k) {
+        return;
+    }
+
+    for(int i = last; i<=9; i++) {
+        if(i <= sum) {
+            arr.push_back(i);
+            fnCombinationSum3(i + 1, k , sum - i, arr, ans);
+            arr.pop_back();
+        } else {
+            break;
+        }
+    }
+}
+
+vector<vector<int> > combinationSum3(int k, int n) {
+    vector<vector<int>> ans;
+    vector<int> arr;
+    fnCombinationSum3(1,k,n,arr,ans);
+    return ans;
+    // TC - O(2^9 * k), due to the exploration of 
+    // all subsets of the set {1, 2, ..., 9}.
+    // SC - O(k)
+}
 
 int main() {
     ios_base::sync_with_stdio(false);
