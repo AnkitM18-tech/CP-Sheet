@@ -139,6 +139,31 @@ vector<vector<int> > combinationSum3(int k, int n) {
     // SC - O(k)
 }
 
+void fnLetterComb(int ind, string digits, string s, vector<string> &ans, string combos[]) {
+    if(ind == digits.size()) {
+        ans.push_back(s);
+        return;
+    }
+    int digit = digits[ind] - '0';
+    for(int i = 0; i < combos[digit].size(); i++) {
+        fnLetterComb(ind + 1, digits, s + combos[digit][i], ans, combos);
+    }
+}
+
+vector<string> letterCombinations(string digits) {
+    // Mapping of digits
+    string combos[] = {"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+    vector<string> ans;
+    string s = "";
+    fnLetterComb(0,digits,s,ans,combos);
+    return ans;
+    // O(4^N * N), where n is the length of the input digits. 
+    // This is because each digit can map to up to 4 letters and 
+    // there are n digits.
+    // SC - O(N)
+}
+
+
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
