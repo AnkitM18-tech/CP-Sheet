@@ -12,6 +12,20 @@ string decimalToBinary(int n) {
     }
     reverse(result.begin(), result.end());
     return result;
+    // TC = SC - O(logN)
+}
+
+int binaryToDecimal(string binary) {
+    int n = binary.size();
+    int num = 0, val = 1;
+
+    for(int i = n - 1; i >= 0; i--) {
+        if(binary[i] == '1') {
+            num = num + val;
+        }
+        val = val * 2;
+    }
+    return num; // O(N)
 }
 
 int main() {
@@ -20,9 +34,9 @@ int main() {
     int t;
     cin >> t;
     while(t--){
-        int N;
+        string N;
         cin >> N;
-        cout << decimalToBinary(N);
+        cout << binaryToDecimal(N);
     }
     return 0;
 }
