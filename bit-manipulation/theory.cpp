@@ -35,6 +35,47 @@ void swapNumbers(int &a, int &b) {
     // TC - O(1) - SC
 }
 
+bool isBitSet(int n, int i) {
+    return (n & (1 << i)) != 0 | ((n >> 1) & 1 == 0);
+}
+
+bool setBit(int n, int i) {
+    return (n | (1 << i));
+}
+
+int clearBit(int n, int i) {
+    return (n & ~(1 << i));
+}
+
+int toggleBit(int n, int i) {
+    return (n ^ (1 << i));
+}
+
+int removeLastSetBit(int n) {
+    return n & (n-1);
+}
+
+bool isPowerOfTwo(int n) {
+    return (n > 0) && ((n & (n-1)) == 0);
+}
+
+int countSetBits(int n) {
+    int cnt = 0;
+    /*
+    // O(log N)
+    while(n > 0) {
+        cnt += (n & 1);
+        n >>= 1;
+    }
+    */
+   //  O(K) Where K is the number of set bits.
+    while (n) {
+        n &= (n - 1);
+        cnt++;
+    }
+    return cnt;
+}
+
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
