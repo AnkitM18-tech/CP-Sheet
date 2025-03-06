@@ -28,6 +28,13 @@ int binaryToDecimal(string binary) {
     return num; // O(N)
 }
 
+void swapNumbers(int &a, int &b) {
+    a = a ^ b; // 5 ^ 6
+    b = a ^ b; // (5 ^ 6) ^ 6
+    a = a ^ b; // (5 ^ 6) ^ 5
+    // TC - O(1) - SC
+}
+
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
