@@ -12,6 +12,33 @@ int minBitsFlip(int start, int goal) {
     return cnt; // O(1)
 }
 
+int singleNumber(vector<int>& nums){
+    /*
+    // Brute - O(N) - TC & SC
+    unordered_map<int,int> mpp;
+
+    for(int i = 0; i< nums.size(); i++) {
+        mpp[nums[i]]++;
+    }
+
+    for(auto it: mpp) {
+        if(it.second == 1) {
+            return it.first;
+        }
+    }
+
+    return -1;
+    */
+    // Optimal - TC - O(N), SC - O(1)
+    int XOR = 0;
+
+    for(int i = 0; i<nums.size(); i++) {
+        XOR ^= nums[i];
+    }
+
+    return XOR;
+}
+
 
 
 int main() {
