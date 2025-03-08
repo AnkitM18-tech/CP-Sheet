@@ -195,6 +195,24 @@ int divide(int dividend, int divisor) {
     return isPositive ? ans : -1 * ans;
 }
 
+vector<vector<int> > powerSet(vector<int>& nums) {
+    int n = nums.size();
+    int count = 1 << n;
+    vector<vector<int>> ans;
+
+    for(int val = 0; val < count; val++) {
+        vector<int> list;
+        for(int i = 0; i < n; i++) {
+            if(val & (1 << i)) {
+                list.push_back(nums[i]);
+            }
+        }
+        ans.push_back(list);
+    }
+    return ans;
+    // TC - O(2^N*N) - SC
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
