@@ -107,6 +107,48 @@ int singleNumber2(vector<int>& nums) {
     return ones;
 }
 
+vector<int> singleNumber3(vector<int>& nums){
+    int n = nums.size();
+    /*
+    // Brute - SC - O(N) ans TC - O(N)
+    vector<int> ans;
+    unordered_map<int,int> mpp;
+
+    for(int i = 0; i<n; i++) {
+        mpp[nums[i]]++;
+    }
+
+    for(auto it : mpp) {
+        if(it.second == 1) {
+            ans.push_back(it.first);
+        }
+    }
+
+    sort(ans.begin(), ans.end());
+    return ans;
+    */
+    // Optimal - O(2N)
+    long XOR = 0;
+    for(int i = 0; i<n; i++) {
+        XOR = XOR ^ nums[i];
+    }
+    // Variable to get the rightmost 
+    // set bit in overall XOR
+    int rightmost = (XOR & (XOR - 1)) ^ XOR;
+    int XOR1 = 0, XOR2 = 0;
+
+    for(int i = 0; i<n; i++) {
+        if(nums[i] & rightmost) {
+            XOR1 = XOR1 ^ nums[i];
+        } else {
+            XOR2 = XOR2 ^ nums[i];
+        }
+    }
+
+    if(XOR1 < XOR2) return {XOR1, XOR2};
+    return {XOR2, XOR1};
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
