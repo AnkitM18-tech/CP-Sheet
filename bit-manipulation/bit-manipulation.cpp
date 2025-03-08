@@ -149,6 +149,52 @@ vector<int> singleNumber3(vector<int>& nums){
     return {XOR2, XOR1};
 }
 
+int divide(int dividend, int divisor) {
+    if(dividend == divisor) return 1;
+
+    bool isPositive = true;
+
+    if(dividend >= 0 && divisor < 0) {
+        isPositive = false;
+    } else if(dividend < 0 && divisor > 0) {
+        isPositive = false;
+    }
+
+    int n = abs(dividend);
+    int d = abs(divisor);
+    /*
+    // Brute - O(dividend)
+
+    int ans = 0, sum = 0;
+
+    while(sum + d <= n) {
+        ans++;
+        sum += d;
+    }
+    */
+    // Optimal - O((logN)^2)
+    int ans = 0;
+
+    while(n >= d) {
+        int cnt = 0;
+        while(n >= (d << (cnt + 1))) {
+            cnt++;
+        }
+
+        ans += (1 << cnt);
+        n -= d*(1 << cnt);
+    }
+
+    if(ans > INT_MAX && isPositive) {
+        return INT_MAX;
+    }
+    if(ans > INT_MAX && !isPositive) {
+        return INT_MIN;
+    }
+
+    return isPositive ? ans : -1 * ans;
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
