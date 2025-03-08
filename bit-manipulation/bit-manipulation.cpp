@@ -213,6 +213,25 @@ vector<vector<int> > powerSet(vector<int>& nums) {
     // TC - O(2^N*N) - SC
 }
 
+int xorTillN(int n) {
+    if(n % 4 == 1) return 1;
+    if(n % 4 == 2) return n+1;
+    if(n % 4 == 3) return 0;
+    return n;
+}
+
+int findRangeXOR(int l,int r){
+    /*
+    // Brute - O(N)
+    int XOR = 0;
+    for(int i = l; i <= r; i++) {
+        XOR ^= i;
+    }
+    return XOR;
+    */
+    // Optimal - O(1)
+    return xorTillN(l-1) ^ xorTillN(r);
+}
 
 int main() {
     ios_base::sync_with_stdio(false);
