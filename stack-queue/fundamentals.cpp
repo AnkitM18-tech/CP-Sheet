@@ -48,6 +48,72 @@ public:
     }
 };
 
+class ArrayQueue {
+private:
+    int* arr;
+    int start, end;
+    int currentSize, maxSize;
+
+public:
+    ArrayQueue() {
+        arr = new int[10];
+        start = -1;
+        end = -1;
+        currentSize = 0;
+        maxSize = 10;
+    }
+    
+    void push(int x) {
+        if(currentSize == maxSize) {
+            cout << "Queue is full\nExiting..." << endl;
+            exit(1);
+        }
+
+        // If the queue is empty, initialize start and end
+        if(end == -1) {
+            start = 0;
+            end = 0;
+        } else {
+            // Circular increment of end
+            end = (end + 1) % maxSize;
+        }
+
+        arr[end] = x;
+        currentSize++;
+    }
+    
+    int pop() {
+        if(start == -1) {
+            cout << "Queue Empty\nExiting..." << endl;
+            exit(1);
+        }
+
+        int popped = arr[start];
+
+        if(currentSize == 1) {
+            start = -1;
+            end = -1;
+        } else {
+            start = (start + 1) % maxSize;
+        }
+
+        currentSize--;
+        return popped;
+    }
+    
+    int peek() {
+        if(start == -1) {
+            cout << "Queue is Empty" << endl;
+            exit(1);
+        }
+        return arr[start];
+    }
+    
+    bool isEmpty() {
+        return (currentSize == 0);
+    }
+};
+
 
 int main() {
     ios_base::sync_with_stdio(false);
