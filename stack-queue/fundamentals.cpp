@@ -114,6 +114,39 @@ public:
     }
 };
 
+class QueueStack {
+    queue<int> q;
+    
+public:
+    QueueStack() {
+    }
+    
+    void push(int x) { // O(n)
+        int size = q.size();
+        q.push(x);
+
+        // Move elements before new element to back
+        for(int i = 0; i<size; i++) {
+            q.push(q.front());
+            q.pop();
+        }
+    }
+    
+    int pop() {
+        int n = q.front();
+        q.pop();
+        return n;
+    }
+    
+    int top() {
+        return q.front();
+    }
+    
+    bool isEmpty() {
+        return q.empty();
+    }
+};
+
 
 int main() {
     ios_base::sync_with_stdio(false);
