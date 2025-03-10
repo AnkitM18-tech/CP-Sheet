@@ -195,6 +195,58 @@ public:
     }
 };
 
+// TC - O(1),  SC - O(2N)
+class StackQueue2 {
+private:
+    stack<int> input, output;
+
+public:
+    StackQueue2() {
+    }
+    
+    void push(int x) {
+        input.push(x);
+    }
+    
+    int pop() {
+        if(output.empty()) {
+            while(!input.empty()) {
+                output.push(input.top());
+                input.pop();
+            }
+        }
+
+        if(output.empty()) {
+            cout << "Queue is empty, can't pop." << endl;
+            return -1;
+        }
+
+        int x = output.top();
+        output.pop();
+        return x;
+    }
+    
+    int peek() {
+        if(output.empty()) {
+            while(!input.empty()) {
+                output.push(input.top());
+                input.pop();
+            }
+        }
+
+        if(output.empty()) {
+            cout << "Queue is empty, can't peek." << endl;
+            return -1;
+        }
+
+        return output.top();
+    }
+    
+    bool isEmpty() {
+        return input.empty() && output.empty();
+    }
+};
+
 
 int main() {
     ios_base::sync_with_stdio(false);
