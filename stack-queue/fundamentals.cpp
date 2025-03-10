@@ -116,7 +116,6 @@ public:
 
 class QueueStack {
     queue<int> q;
-    
 public:
     QueueStack() {
     }
@@ -144,6 +143,55 @@ public:
     
     bool isEmpty() {
         return q.empty();
+    }
+};
+
+// TC - O(N),  SC - O(2N)
+class StackQueue {
+private:
+    stack<int> st1,st2;
+
+public:
+    StackQueue() {
+    }
+    
+    void push(int x) {
+        while(!st1.empty()) {
+            st2.push(st1.top());
+            st1.pop();
+        }
+
+        st1.push(x);
+
+        while(!st2.empty()) {
+            st1.push(st2.top());
+            st2.pop();
+        }
+    }
+    
+    int pop() {
+        if(st1.empty()) {
+            cout << "Stack is empty";
+            return -1;
+        }
+
+        int topEle = st1.top();
+        st1.pop();
+
+        return topEle;
+    }
+    
+    int peek() {
+        if(st1.empty()) {
+            cout << "Stack is empty";
+            return -1;
+        }
+
+        return st1.top();
+    }
+    
+    bool isEmpty() {
+        return st1.empty();
     }
 };
 
