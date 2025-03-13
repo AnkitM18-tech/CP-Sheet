@@ -173,6 +173,128 @@ int sumSubarrayMins(vector<int> &arr) {
     return sum;
 }
 
+vector<int> findNSE(vector<int>& arr) {
+    int n = arr.size();
+    vector<int> ans(n);
+    stack<int> st;
+
+    for(int i = n-1; i>=0; i--) {
+        while(!st.empty() && arr[st.top()] >= arr[i]) {
+            st.pop();
+        }
+
+        ans[i] = !st.empty() ? st.top() : n;
+
+        st.push(i);
+    }
+    return ans;
+}
+
+vector<int> findPSEE(vector<int>& arr) {
+    int n = arr.size();
+    vector<int> ans(n);
+    stack<int> st;
+
+    for(int i = 0; i<n; i++) {
+        while(!st.empty() && arr[st.top()] > arr[i]) {
+            st.pop();
+        }
+
+        ans[i] = !st.empty() ? st.top() : -1;
+
+        st.push(i);
+    }
+    return ans;
+}
+
+vector<int> findNGE(vector<int>& arr) {
+    int n = arr.size();
+    vector<int> ans(n);
+    stack<int> st;
+
+    for(int i = n-1; i>=0; i--) {
+        while(!st.empty() && arr[st.top()] <= arr[i]) {
+            st.pop();
+        }
+
+        ans[i] = !st.empty() ? st.top() : n;
+        st.push(i);
+    }
+    return ans;
+}
+
+vector<int> findPGEE(vector<int>& arr) {
+    int n = arr.size();
+    vector<int> ans(n);
+    stack<int> st;
+
+    for(int i = 0; i<n; i++) {
+        while(!st.empty() && arr[st.top()] < arr[i]) {
+            st.pop();
+        }
+
+        ans[i] = !st.empty() ? st.top() : -1;
+        st.push(i);
+    }
+    return ans;
+}
+
+long long sumSubArrayMins(vector<int> &arr) {
+    vector<int> nse = findNSE(arr);
+    vector<int> psee = findPSEE(arr);
+    int n = arr.size();
+    long long sum = 0;
+
+    for(int i = 0; i<n; i++) {
+        int left = i - psee[i];
+        int right = nse[i] - i;
+        long long freq = left * right * 1LL;
+        long long val = (freq * arr[i] * 1LL);
+
+        sum += val;
+    }
+
+    return sum;
+}
+
+long long sumSubarrayMaxs(vector<int> &arr) {
+    vector<int> nge = findNGE(arr);
+    vector<int> pgee = findPGEE(arr);
+    int n = arr.size();
+    long long sum = 0;
+
+    for(int i = 0; i<n; i++) {
+        int left = i - pgee[i];
+        int right = nge[i] - i;
+        long long freq = left * right * 1LL;
+        long long val = (freq * arr[i] * 1LL);
+
+        sum += val;
+    }
+
+    return sum;
+}
+
+long long subArrayRanges(vector<int> &nums) {
+    
+    /*
+    // Brute = O(N^2)
+    int n = nums.size();
+    long long sum = 0;
+    for(int i = 0; i<n; i++) {
+    int smallest = arr[i], largest = arr[i];
+    for(int j = i; j<n; j++) {
+        smallest = min(smallest, arr[j]);
+        largest = max(largest,arr[j]);
+        sum += (largest - smallest);
+    }
+    }
+    return sum;
+    */
+    // Optimal - O(N)
+    return (sumSubarrayMaxs(nums) - sumSubArrayMins(nums));
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
