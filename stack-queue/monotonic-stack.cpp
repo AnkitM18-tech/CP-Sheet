@@ -295,7 +295,44 @@ long long subArrayRanges(vector<int> &nums) {
     return (sumSubarrayMaxs(nums) - sumSubArrayMins(nums));
 }
 
+string removeKdigits(string nums, int k) {
+    stack<char> st;
 
+    for(int i = 0; i<nums.size(); i++) {
+        char digit = nums[i];
+
+        while(!st.empty() && k > 0 && st.top() > digit) {
+            st.pop();
+            k--;
+        }
+        st.push(digit);
+    }
+    // If more digits can be removed
+    while(!st.empty() && k > 0) {
+        st.pop();
+        k--;
+    }
+    // Handling edge case
+    if(st.empty()) return "0";
+    
+    string result = "";
+    // Adding digits in stack to result
+    while(!st.empty()) {
+        result.push_back(st.top());
+        st.pop();
+    }
+    // Trimming the zeroes at the back
+    while(result.size() > 0 && result.back() == '0') {
+        result.pop_back();
+    }
+
+    reverse(result.begin(), result.end());
+
+    if(result.empty()) return "0";
+
+    return result;
+    // O(N)
+}
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
