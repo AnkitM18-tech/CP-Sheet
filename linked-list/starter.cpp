@@ -155,6 +155,23 @@ ListNode* insertAtKthPosition(ListNode* &head, int X, int K) {
     return head; // O(N)
 }
 
+ListNode* insertBeforeX(ListNode* &head, int X, int val) {
+    if(head == NULL) return head;
+
+    if(head->val == X) return new ListNode(val,head);
+
+    ListNode* temp = head;
+
+    while(temp->next != NULL) {
+        if(temp->next->val == X) {
+            ListNode* newNode = new ListNode(val,temp->next);
+            temp->next = newNode;
+            break;
+        }
+        temp = temp->next;
+    }
+    return head; // O(N)
+}
 
 int main() {
     ios_base::sync_with_stdio(false);
