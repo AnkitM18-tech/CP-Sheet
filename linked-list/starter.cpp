@@ -117,6 +117,20 @@ ListNode* insertAtHead(ListNode* &head, int X) {
     // return new ListNode(X, head);
 }
 
+ListNode* insertAtTail(ListNode* &head, int X) {
+    ListNode* newNode = new ListNode(X);
+    if(head == NULL) return newNode;
+
+    ListNode* temp = head;
+
+    while(temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+
+    return head; // O(N)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
