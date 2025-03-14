@@ -131,6 +131,30 @@ ListNode* insertAtTail(ListNode* &head, int X) {
     return head; // O(N)
 }
 
+ListNode* insertAtKthPosition(ListNode* &head, int X, int K) {
+    if(head == NULL) {
+        if(K == 1) return new ListNode(X);
+        else return head;
+    }
+
+    if(K == 1) return new ListNode(X,head);
+
+    int cnt = 0;
+    ListNode* temp = head;
+
+    while(temp != NULL) {
+        cnt++;
+        if(cnt == K-1) {
+            ListNode* newNode = new ListNode(X, temp->next);
+            temp->next = newNode;
+            break;
+        }
+        temp = temp->next;
+    }
+
+    return head; // O(N)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
