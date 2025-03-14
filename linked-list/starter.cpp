@@ -40,6 +40,23 @@ ListNode* deleteHead(ListNode* &head) {
     return head; // O(1)
 }
 
+ListNode* deleteTail(ListNode* &head) {
+    if(head == NULL || head->next == NULL) {
+        return NULL;
+    }
+
+    ListNode* temp = head;
+
+    while(temp->next->next != NULL) {
+        temp = temp->next;
+    }
+
+    delete temp->next;
+    temp->next = nullptr;
+
+    return head; // O(N)
+}
+
 
 
 int main() {
