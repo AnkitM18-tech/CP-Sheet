@@ -114,6 +114,7 @@ ListNode* insertAtHead(ListNode* &head, int X) {
     newNode->next = head;
     head = newNode;
     return head; // O(1)
+    // return new ListNode(X, head);
 }
 
 
