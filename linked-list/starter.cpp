@@ -57,6 +57,32 @@ ListNode* deleteTail(ListNode* &head) {
     return head; // O(N)
 }
 
+ListNode* deleteKthNode(ListNode* &head, int k) {
+    if(head == NULL) return NULL;
+
+    if(k == 1) {
+        ListNode* temp = head;
+        head = temp->next;
+        delete temp;
+        return head;
+    }
+
+    int cnt = 0;
+    ListNode* temp = head;
+    ListNode* prev = NULL;
+    
+    while(temp != NULL) {
+        cnt++;
+        if(cnt == k) {
+            prev->next = prev->next->next;
+            delete temp;
+            break;
+        }
+        prev = temp;
+        temp = temp->next;
+    }
+    return head;
+}
 
 
 int main() {
