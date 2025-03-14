@@ -84,6 +84,31 @@ ListNode* deleteKthNode(ListNode* &head, int k) {
     return head;
 }
 
+ListNode* deleteNodeWithValueX(ListNode* &head, int X) {
+    if(head == NULL) return head;
+
+    if(X == head->val) {
+        ListNode* temp = head;
+        head = head->next;
+        delete temp;
+        return head;
+    }
+
+    ListNode* temp = head;
+    ListNode* prev = NULL;
+
+    while(temp != NULL) {
+        if(temp->val == X) {
+            prev->next = temp->next;
+            delete temp;
+            return head;
+        }
+        prev = temp;
+        temp = temp->next;
+    }
+    return head; // O(N)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
