@@ -109,6 +109,13 @@ ListNode* deleteNodeWithValueX(ListNode* &head, int X) {
     return head; // O(N)
 }
 
+ListNode* insertAtHead(ListNode* &head, int X) {
+    ListNode* newNode = new ListNode(X);
+    newNode->next = head;
+    head = newNode;
+    return head; // O(1)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
