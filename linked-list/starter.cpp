@@ -32,6 +32,14 @@ vector<int> LLTraversal(ListNode *head) {
     return ans; // O(N) - SC & TC
 }
 
+ListNode* deleteHead(ListNode* &head) {
+    if(head == nullptr) return nullptr;
+    ListNode* temp = head;
+    head = head->next;
+    delete temp;
+    return head; // O(1)
+}
+
 
 
 int main() {
