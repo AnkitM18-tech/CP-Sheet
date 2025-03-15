@@ -119,6 +119,12 @@ void deleteGivenNode(ListNode* node) {
     // O(1)
 }
 
+ListNode* insertBeforeHead(ListNode* head, int X) {
+    ListNode* newHead = new ListNode(X,head,nullptr);
+    head->prev = newHead;
+    return newHead; // O(1)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
