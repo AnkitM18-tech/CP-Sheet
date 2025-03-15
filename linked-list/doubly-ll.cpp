@@ -35,6 +35,21 @@ ListNode * deleteHead(ListNode* head) {
     return head; // O(1)
 }
 
+ListNode* deleteTail(ListNode* head) {
+    if(head == NULL || head->next == NULL) return NULL;
+
+    ListNode* temp = head;
+    while(temp->next != nullptr) {
+        temp = temp->next;
+    }
+    ListNode* newTail = temp->prev;
+    newTail->next = nullptr;
+    temp->prev = nullptr;
+
+    delete temp;
+    return head; // O(1)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
