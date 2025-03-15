@@ -125,6 +125,27 @@ ListNode* insertBeforeHead(ListNode* head, int X) {
     return newHead; // O(1)
 }
 
+ListNode* insertBeforeTail(ListNode* head, int X) {
+    if(head->next == nullptr) {
+        ListNode* newHead = new ListNode(X,head,nullptr);
+        head->prev = newHead;
+        return newHead;
+    }
+
+    ListNode* tail = head;
+    while(tail->next != NULL) {
+        tail = tail->next;
+    }
+
+    ListNode* prev = tail->prev;
+    ListNode* newNode = new ListNode(X,tail,prev);
+
+    prev->next = newNode;
+    tail->prev = newNode;
+
+    return head; // O(N)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
