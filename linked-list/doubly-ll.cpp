@@ -146,6 +146,30 @@ ListNode* insertBeforeTail(ListNode* head, int X) {
     return head; // O(N)
 }
 
+ListNode* insertBeforeKthPosition(ListNode* head, int X, int K) {
+    if(K == 1) {
+        ListNode* newHead = new ListNode(X,head,nullptr);
+        head->prev = newHead;
+        return newHead;
+    }
+
+    ListNode* temp = head;
+    int cnt = 0;
+    while(temp != nullptr) {
+        cnt++;
+        if(cnt == K) break;
+        temp = temp->next;
+    }
+
+    ListNode* prev = temp->prev;
+
+    ListNode* newNode = new ListNode(X,temp,prev);
+    prev->next = newNode;
+    temp->prev = newNode;
+
+    return head; // O(N)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
