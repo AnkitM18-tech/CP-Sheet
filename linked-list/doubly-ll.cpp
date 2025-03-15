@@ -97,6 +97,28 @@ ListNode* deleteKthElement(ListNode* head, int k) {
     return head; // O(k)
 }
 
+void deleteGivenNode(ListNode* node) {
+    ListNode* prev = node->prev;
+    ListNode* next = node->next;
+
+    // tail
+    if(next == nullptr) {
+        prev->next = nullptr;
+        node->prev = nullptr;
+        delete node;
+        return;
+    }
+
+    prev->next = next;
+    next->prev = prev;
+
+    node->next = nullptr;
+    node->prev = nullptr;
+
+    delete node;
+    // O(1)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
