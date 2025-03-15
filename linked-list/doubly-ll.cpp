@@ -87,6 +87,8 @@ ListNode* deleteKthElement(ListNode* head, int k) {
     else {
         prev->next = next;
         next->prev = prev;
+        temp->next = NULL;
+        temp->prev = NULL;
     }
 
     // free memory
