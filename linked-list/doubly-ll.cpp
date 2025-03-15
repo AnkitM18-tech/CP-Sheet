@@ -50,6 +50,49 @@ ListNode* deleteTail(ListNode* head) {
     return head; // O(1)
 }
 
+ListNode* deleteKthElement(ListNode* head, int k) {
+    if(head == nullptr) return head;
+    int cnt = 0;
+    ListNode* temp = head;
+
+    while(temp != nullptr) {
+        cnt++;
+        if(cnt == k) break;
+        temp = temp->next;
+    }
+    
+    // k larger than length
+    if(temp == nullptr) return head;
+
+    ListNode* prev = temp->prev;
+    ListNode* next = temp->next;
+
+    // If node to be deleted is only node in list
+    if(prev == nullptr && next == nullptr) {
+        delete temp;
+        return nullptr;
+    } 
+    // If node to be deleted is head of list
+    else if(prev == nullptr) {
+        head = next;
+        head->prev = nullptr;
+    }
+    // If node to be deleted is tail of list
+    else if(next == nullptr) {
+        prev->next = nullptr;
+    }
+    // If node to be deleted is in middle of list
+    else {
+        prev->next = next;
+        next->prev = prev;
+    }
+
+    // free memory
+    delete temp;
+
+    return head; // O(k)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
