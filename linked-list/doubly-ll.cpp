@@ -76,10 +76,12 @@ ListNode* deleteKthElement(ListNode* head, int k) {
     else if(prev == nullptr) {
         head = next;
         head->prev = nullptr;
+        temp->next = nullptr;
     }
     // If node to be deleted is tail of list
     else if(next == nullptr) {
         prev->next = nullptr;
+        temp->prev = nullptr;
     }
     // If node to be deleted is in middle of list
     else {
