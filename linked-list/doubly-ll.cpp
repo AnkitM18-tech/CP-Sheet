@@ -170,6 +170,19 @@ ListNode* insertBeforeKthPosition(ListNode* head, int X, int K) {
     return head; // O(N)
 }
 
+void insertBeforeGivenNode(ListNode* node, int X) {
+    ListNode* prev = node->prev;
+
+    ListNode* newNode = new ListNode(X,node,prev);
+    prev->next = newNode;
+    node->prev = newNode;
+
+    return; // O(1)
+    // constant number of pointer updates are being performed 
+    // regardless of 
+    // the size of the Doubly Linked List.
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
