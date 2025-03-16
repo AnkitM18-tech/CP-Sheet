@@ -43,6 +43,72 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
     return dummy->next; // O(max(M,N)) - size of l1 and l2
 }
 
+ListNode* oddEvenList(ListNode* head) {
+    if(head == NULL || head->next == NULL) return head;
+    /*
+    // Brute
+    vector<int> arr;
+    ListNode* temp = head;
+
+    /*Traverse the list, skipping one node, 
+    and store values in the vector
+    while(temp != NULL && temp->next != NULL) {
+        arr.push_back(temp->val);
+        temp = temp->next->next;
+    }
+
+    /*If there's an even number 
+    of nodes, add the value
+        of the last node
+    if(temp != NULL) {
+        arr.push_back(temp->val);
+    }
+
+    // Reset temp
+    temp = head->next;
+
+    /*Traverse the list again, skipping one node 
+    and store values 
+    in the vector
+    while(temp != NULL && temp->next != NULL) {
+        arr.push_back(temp->val);
+        temp = temp->next->next;
+    }
+
+    /* If there's an odd number
+    of nodes, add the 
+    value of the last node
+    if(temp != NULL) {
+        arr.push_back(temp->val);
+    }
+
+    // Reset temp
+    temp = head;
+    int i = 0;
+
+    while(temp != NULL) {
+        temp->val = arr[i];
+        temp = temp->next;
+        i++;
+    }
+
+    return head; // O(2N)
+    */
+    // Optimal
+    ListNode* odd = head;
+    ListNode* even = head->next;
+    ListNode* firstEven = head->next;
+
+    while(even && even->next) {
+        odd->next = odd->next->next;
+        even->next = even->next->next;
+        odd = odd->next;
+        even = even->next;
+    }
+
+    odd->next = firstEven;
+    return head; // O(N)
+}
 
 
 int main() {
