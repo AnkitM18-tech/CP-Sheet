@@ -110,6 +110,78 @@ ListNode* oddEvenList(ListNode* head) {
     return head; // O(N)
 }
 
+ListNode *sortList(ListNode *head) {
+    /*
+    // Brute
+    int cnt0 = 0, cnt1 = 0, cnt2 = 0;
+    ListNode* temp = head;
+
+    while(temp != NULL) {
+        if(temp->val == 0) cnt0++;
+        else if (temp->val == 1) cnt1++;
+        else if (temp->val == 2) cnt2++;
+
+        temp = temp->next;
+    }
+
+    temp = head;
+    while(temp != NULL) {
+        if(cnt0 > 0) {
+            temp->val = 0;
+            cnt0--;
+        } else if(cnt1 > 0) {
+            temp->val = 1;
+            cnt1--;
+        } else if(cnt2 > 0) {
+            temp->val = 2;
+            cnt2--;
+        }
+        temp = temp->next;
+    }
+
+    return head; // O(2N)
+    */
+    // Optimal
+    if(head == NULL || head->next == NULL) return head;
+
+    ListNode* zeroHead = new ListNode(-1);
+    ListNode* oneHead = new ListNode(-1);
+    ListNode* twoHead = new ListNode(-1);
+
+    // Traversing the LL
+    ListNode* zero = zeroHead;
+    ListNode* one = oneHead;
+    ListNode* two = twoHead;
+    ListNode* temp = head;
+
+    while(temp != NULL) {
+        if(temp->val == 0) {
+            zero->next = temp;
+            zero = temp;
+        } else if(temp->val == 1) {
+            one->next = temp;
+            one = temp;
+        } else if(temp->val == 2) {
+            two->next = temp;
+            two = temp;
+        }
+
+        temp = temp->next;
+    }
+    
+    zero->next = (oneHead->next) ? oneHead->next : twoHead->next;
+    one->next = twoHead->next;
+    two->next = NULL;
+
+    ListNode* newHead = zeroHead->next;
+
+    delete zeroHead;
+    delete oneHead;
+    delete twoHead;
+
+    return newHead; // O(N)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
