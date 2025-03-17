@@ -182,6 +182,69 @@ ListNode *sortList(ListNode *head) {
     return newHead; // O(N)
 }
 
+ListNode* removeNthFromEnd(ListNode* head, int n) {
+    if(head == NULL) return head;
+
+    /*
+    // Brute
+    int cnt = 0;
+    ListNode* temp = head;
+
+    while(temp != NULL) {
+        cnt++;
+        temp = temp->next;
+    }
+
+    if(cnt == n) {
+        ListNode* newHead = head->next;
+        head->next = NULL;
+        delete head;
+        return newHead;
+    }
+
+    int res = cnt - n;
+    temp = head;
+
+    while(temp != NULL) {
+        res--;
+        if(res == 0) {
+            break;
+        }
+        temp = temp->next;
+    }
+    ListNode* delNode = temp->next;
+    temp->next = temp->next->next;
+    delNode->next = NULL;
+    delete delNode;
+    return head;
+    // O(L) + O(L-N) We are calculating the length of 
+    // the linked list and then iterating up to the (L-N)th 
+    // node of the linked list, where L is the total length 
+    // of the list and 
+    // N is the position of the node to delete.
+    */
+    // Optimal
+    ListNode* fastPtr = head;
+    ListNode* slowPtr = head;
+
+    for(int i = 0; i<n; i++) {
+        fastPtr = fastPtr->next;
+    }
+
+    if(fastPtr == NULL) return head->next;
+
+    while(fastPtr->next != NULL) {
+        fastPtr = fastPtr->next;
+        slowPtr = slowPtr->next;
+    }
+
+    ListNode* delNode = slowPtr->next;
+    slowPtr->next = slowPtr->next->next;
+    delNode->next = NULL;
+    delete delNode;
+    return head; // O(N)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
