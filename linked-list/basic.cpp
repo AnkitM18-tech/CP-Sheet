@@ -245,6 +245,52 @@ ListNode* removeNthFromEnd(ListNode* head, int n) {
     return head; // O(N)
 }
 
+ListNode* reverseList(ListNode* head) {
+    /*
+    // Method-1 - Iterative - TC - O(2N) & SC - O(N) 
+    ListNode* temp = head;
+    stack<int> st;
+
+    while(temp != NULL) {
+        st.push(temp->val);
+        temp = temp->next;
+    }
+
+    temp = head;
+    while(temp != NULL) {
+        temp->val = st.top();
+        st.pop();
+        temp = temp->next;
+    }
+    return head;
+
+    // Method-1 - Iterative - Optimal
+    ListNode* temp = head;
+    ListNode* prev = NULL;
+
+    while(temp != NULL) {
+        ListNode* front = temp->next;
+        temp->next = prev;
+        prev = temp;
+        temp = front;
+    }
+
+    return prev; // O(N)
+    */
+    // Recursive - O(N)
+    if(head == NULL || head->next == NULL) {
+        return head;
+    }
+
+    ListNode* newHead = reverseList(head->next);
+    ListNode* front = head->next;
+
+    front->next = head;
+    head->next = NULL;
+
+    return newHead;
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
