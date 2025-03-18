@@ -156,6 +156,42 @@ bool isPalindrome(ListNode* head) {
     // which simplifies to O(2N), ultimately reducing to O(N)   
 }
 
+ListNode* middleOfLinkedList(ListNode* head) {
+    /*
+    // Brute - O(N/2) + O(N)
+    ListNode* temp = head;
+    int cnt = 0;
+
+    while(temp != NULL) {
+        cnt += 1;
+        temp = temp->next;
+    }
+
+    int midPos = (cnt/2) + 1;
+
+    ListNode* midNode = head;
+    for(int i = 1; i<midPos; i++) {
+        midNode = midNode->next;
+    }
+
+    return midNode;
+    */
+    // odd length = fast ends at last node
+    // even length = fast ends at null
+    // If one pointer is moving 2x fast than the other
+    // then when the fast reaches the end , the slow is at the
+    // middle - Tortoise Hare Algorithm
+    // Optimal
+    ListNode* slow = head;
+    ListNode* fast = head;
+
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    return slow; // O(N/2)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
