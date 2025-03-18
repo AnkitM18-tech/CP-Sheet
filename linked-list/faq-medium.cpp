@@ -192,6 +192,45 @@ ListNode* middleOfLinkedList(ListNode* head) {
     return slow; // O(N/2)
 }
 
+bool hasCycle(ListNode *head) {
+    /*
+    // Brute - TC - O(N * 2 * log(N)), SC - O(N)
+    ListNode* temp = head;
+
+    unordered_map<ListNode*, int> nodeMap;
+
+    while(temp != NULL) {
+        if(nodeMap.find(temp) != nodeMap.end()) {
+            return true;
+        }
+
+        nodeMap[temp] = 1;
+        temp = temp->next;
+    }
+
+    return false;
+    */
+    // Optimal - O(N)
+    ListNode* slow = head;
+    ListNode* fast = head;
+
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+
+        if(slow == fast) return true;
+    }
+
+    return false;
+    // The reason this complexity is O(N) and not 
+    // slower is due to the fact that each step of the 
+    // algorithm decreases the gap between the fast and slow pointers 
+    // (when they are within the loop) by one node. 
+    // Thus, the maximum number of steps required for them to meet 
+    // is directly related to the 
+    // number of nodes in the list.
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
