@@ -315,6 +315,60 @@ int findLengthOfLoop(ListNode *head) {
     return 0;
 }
 
+ListNode* deleteMiddle(ListNode* head) {
+    /*
+    // Brute - O(N + N/2)
+    if(head == NULL || head->next == NULL) {
+        delete head;
+        return NULL;
+    }
+
+    ListNode* temp = head;
+    int cnt = 0;
+
+    while(temp != NULL) {
+        cnt++;
+        temp = temp->next;
+    }
+
+    int middle = cnt/2;
+
+    temp = head;
+
+    for(int i = 1; i<middle; i++) {
+        temp = temp->next;
+    }
+
+    if(temp->next != NULL) {
+        ListNode* middleNode = temp->next;
+        temp->next = temp->next->next;
+        middleNode->next = NULL;
+        delete middleNode;
+    }
+    return head;
+    */
+    // Optimal - O(N/2)
+    if(head == NULL || head->next == NULL) {
+        delete head;
+        return NULL;
+    }
+    
+    ListNode* slow = head;
+    ListNode* fast = head;
+    fast = head->next->next;
+
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    ListNode* middleNode = slow->next;
+    slow->next = slow->next->next;
+    middleNode->next = NULL;
+    delete middleNode;
+    return head;
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
