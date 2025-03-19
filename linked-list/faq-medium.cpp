@@ -231,6 +231,43 @@ bool hasCycle(ListNode *head) {
     // number of nodes in the list.
 }
 
+ListNode *findStartingPoint(ListNode *head) {
+    /*
+    // Brute - O(N) - SC and TC
+    ListNode* temp = head;
+    unordered_map<ListNode*, int> nodeList;
+
+    while(temp != NULL) {
+        if(nodeList.count(temp) != 0) return temp;
+        nodeList[temp] = 1;
+        temp = temp->next;
+    }
+
+    return NULL;
+    */
+    // Optimal - O(N)
+    ListNode* slow = head;
+    ListNode* fast = head;
+
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+
+        if(slow == fast) {
+            slow = head;
+            while(slow != fast) {
+                slow = slow->next;
+                fast = fast->next;
+            }
+
+            return slow;
+        }
+    }
+
+    return NULL;
+}
+
+
 
 int main() {
     ios_base::sync_with_stdio(false);
