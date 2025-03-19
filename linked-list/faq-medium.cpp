@@ -267,6 +267,53 @@ ListNode *findStartingPoint(ListNode *head) {
     return NULL;
 }
 
+int findLength(ListNode* slow, ListNode* fast) {
+    fast = fast->next;
+    int cnt = 1;
+
+    while(slow != fast) {
+        cnt++;
+        fast = fast->next;
+    }
+    return cnt;
+}
+
+int findLengthOfLoop(ListNode *head) {
+    /*
+    // Brute - O(N) - TC & SC
+    unordered_map<ListNode*, int> nodeList;
+    ListNode* temp = head;
+
+    int cnt = 0;
+
+    while(temp != NULL) {
+        if(nodeList.find(temp) != nodeList.end()) {
+            int loopLength = cnt - nodeList[temp];
+
+            return loopLength;
+        }
+
+        nodeList[temp] = cnt;
+        temp = temp->next;
+        cnt++;
+    }
+
+    return 0;
+    */
+    // Optimal - O(N)
+    ListNode* slow = head;
+    ListNode* fast = head;
+
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+
+        if(slow == fast) {
+            return findLength(slow,fast);
+        }
+    }
+    return 0;
+}
 
 
 int main() {
