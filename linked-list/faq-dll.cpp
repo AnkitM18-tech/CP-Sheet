@@ -51,6 +51,32 @@ ListNode * deleteAllOccurrences(ListNode* head, int target) {
     return head; // O(N)
 }
 
+ListNode * removeDuplicates(ListNode *head) {
+    ListNode* temp = head;
+
+    while(temp != NULL && temp->next != NULL) {
+        ListNode* nextNode = temp->next;
+
+        while(nextNode != NULL && nextNode->val == temp->val) {
+            ListNode* duplicateNode = nextNode;
+            nextNode = nextNode->next;
+            delete duplicateNode;
+        }
+
+        temp->next = nextNode;
+        if(nextNode != NULL) nextNode->prev = temp;
+
+        temp = temp->next;
+    }
+
+    return head; // O(N)
+    // O(n) and not O(n^2) because each node in the doubly linked list 
+    // is visited exactly once. The outer loop traverses each distinct 
+    // node, and the inner loop skips over consecutive duplicates in a 
+    // single pass, ensuring a total linear traversal of the list. 
+    // Thus the combined process does not create nested iterations 
+    // and remains efficient
+}
 
 
 int main() {
