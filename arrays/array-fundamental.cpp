@@ -412,6 +412,17 @@ void rotateMatrix(vector<vector<int>>& matrix) {
     } // TC - O(N**2) +O(N**2) , SC - O(1) 
 }
 
+vector<int> pascalTriangleII(int r) {
+    vector<int> ans(r);
+
+    ans[0] = 1;
+
+    for(int i = 1; i<r; i++) {
+        ans[i] = (ans[i-1]*(r-i))/i;
+    }
+    return ans;
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
