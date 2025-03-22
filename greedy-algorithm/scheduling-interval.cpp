@@ -44,6 +44,34 @@ vector<int> JobScheduling(vector<vector<int>>& Jobs) {
     return {cnt,totalProfit}; // O(N log N + N * maxdeadline) - TC, SC - O(maxDeadline)
 }
 
+static bool comparator(const pair<int,int> &a, const pair<int,int> &b) {
+    return a.second < b.second;
+}
+int maxMeetings(vector<int>& start, vector<int>& end){
+    int n = start.size();
+
+    vector<pair<int,int>> meetings;
+
+    for(int i = 0; i<n; i++) {
+        meetings.push_back({start[i],end[i]});
+    }
+
+    sort(meetings.begin(),meetings.end(),comparator);
+
+    int limit = meetings[0].second;
+
+    int count = 1;
+
+    for(int i = 1; i<n; i++) {
+        if(meetings[i].first > limit) {
+        limit = meetings[i].second;
+        count++;
+        }
+    }
+
+    return count; // O(2N + N log N) = TC && SC = O(N)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
