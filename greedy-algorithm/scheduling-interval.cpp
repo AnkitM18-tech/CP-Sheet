@@ -41,7 +41,7 @@ vector<int> JobScheduling(vector<vector<int>>& Jobs) {
         }
     }
 
-    return {cnt,totalProfit}; // O(N log N + N^2) - TC, SC - O(maxDeadline)
+    return {cnt,totalProfit}; // O(N log N + N * maxdeadline) - TC, SC - O(maxDeadline)
 }
 
 
