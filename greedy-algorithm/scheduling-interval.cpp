@@ -72,6 +72,26 @@ int maxMeetings(vector<int>& start, vector<int>& end){
     return count; // O(2N + N log N) = TC && SC = O(N)
 }
 
+static bool comp(vector<int> &a, vector<int> &b) {
+    return a[1] < b[1];
+}
+
+int MaximumNonOverlappingIntervals(vector<vector<int>>& Intervals) {
+    sort(Intervals.begin(), Intervals.end(),comp);
+
+    int n = Intervals.size();
+    int count = 1;
+    int lastEndTime = Intervals[0][1];
+
+    for(int i = 1; i<n; i++) {
+        if(Intervals[i][0] >= lastEndTime) {
+        count++;
+        lastEndTime = Intervals[i][1];
+        }
+    }
+    return n - count; // O(N log N + N)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
