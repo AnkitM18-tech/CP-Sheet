@@ -92,6 +92,34 @@ int MaximumNonOverlappingIntervals(vector<vector<int>>& Intervals) {
     return n - count; // O(N log N + N)
 }
 
+vector<vector<int>> insertNewInterval(vector<vector<int>>& Intervals, vector<int>& newInterval){
+    vector<vector<int>> ans;
+    int n = Intervals.size();
+    int i = 0;
+    // Left Part
+    while( i < n && Intervals[i][1] < newInterval[0]) {
+        ans.push_back(Intervals[i]);
+        i++;
+    }
+
+    // Overlapping Part
+    while( i < n && Intervals[i][0] <= newInterval[1]) {
+        newInterval[0] = min(newInterval[0],Intervals[i][0]);
+        newInterval[1] = max(newInterval[1], Intervals[i][1]);
+        i++;
+    }
+
+    ans.push_back(newInterval);
+
+    // Right Part
+    while(i < n) {
+        ans.push_back(Intervals[i]);
+        i++;
+    }
+
+    return ans; // O(N)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
