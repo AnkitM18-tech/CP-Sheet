@@ -120,6 +120,52 @@ vector<vector<int>> insertNewInterval(vector<vector<int>>& Intervals, vector<int
     return ans; // O(N)
 }
 
+int findPlatform(vector<int>& Arrival, vector<int>& Departure){
+    /*
+    // Brute Force
+    int n = Arrival.size();
+
+    int ans = 1;
+
+    for(int i = 0; i<n; i++) {
+        int cnt = 1;
+
+        for(int j = 0; j<n; j++) {
+        if(i != j) {
+            if(Arrival[i] >= Arrival[j] && Departure[j] >= Arrival[i]) {
+            cnt++;
+            }
+            ans = max(ans,cnt);
+        }
+        }
+    }
+
+    return ans; // O(N^2)
+    */
+    // Optimal
+    int n = Arrival.size();
+    sort(Arrival.begin(), Arrival.end());
+    sort(Departure.begin(), Departure.end());
+
+    int ans = 1;
+    int cnt = 1;
+    int i = 1, j = 0;
+
+    while(i < n && j < n) {
+    if(Arrival[i] <= Departure[j]) {
+        cnt++;
+        i++;
+    } else {
+        cnt--;
+        j++;
+    }
+
+    ans = max(cnt,ans);
+    }
+    return ans; // O(2 * N log N) + O(2 * N)
+}
+
+
 
 int main() {
     ios_base::sync_with_stdio(false);
