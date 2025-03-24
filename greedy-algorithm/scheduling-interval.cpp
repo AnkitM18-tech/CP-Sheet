@@ -165,6 +165,45 @@ int findPlatform(vector<int>& Arrival, vector<int>& Departure){
     return ans; // O(2 * N log N) + O(2 * N)
 }
 
+bool checkValid(string &s,int ind, int cnt) {
+    if(cnt < 0) return false;
+    if(ind == s.size()) return cnt == 0;
+    bool ans = false;
+
+    if(s[ind] == '(') ans = checkValid(s,ind+1,cnt+1);
+    else if(s[ind] == ')') ans = checkValid(s,ind+1,cnt-1);
+    else {
+        for(int i = -1; i<=1; i++) {
+            ans = ans || checkValid(s,ind+1,cnt+i);
+        }
+    }
+    return ans;
+}
+
+bool isValid(string s) {
+    /*
+    // Brute - O(3^N) - TC & SC - O(N)
+    int n = s.size();
+    return checkValid(s,0,0);
+    */
+    // Optimal
+    int minOpen = 0, maxOpen = 0;
+    for(char ch : s) {
+        if(ch == '(') {
+            minOpen++;
+            maxOpen++;
+        } else if(ch == ')') {
+            minOpen--;
+            maxOpen--;
+        } else if(ch == '*') {
+            minOpen--;
+            maxOpen++;
+        }
+        if(maxOpen < 0) return false;
+        if(minOpen < 0) minOpen = 0;
+    }
+    return minOpen == 0; // TC - O(N)
+}
 
 
 int main() {
