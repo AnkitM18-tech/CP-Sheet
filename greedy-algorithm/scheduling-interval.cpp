@@ -205,6 +205,97 @@ bool isValid(string s) {
     return minOpen == 0; // TC - O(N)
 }
 
+int candy(vector<int>& ratings) {
+    int n = ratings.size();
+    if(n == 0) return 0;
+    /*
+    // Brute - TC = O(3*N) & SC = O(2*N)
+
+    vector<int> left(n,1);
+    vector<int> right(n,1);
+
+    // Left to Right
+    for(int i = 1; i<n; i++) {
+    if(ratings[i] > ratings[i-1]) {
+        left[i] = left[i-1] + 1;
+    }
+    }
+
+    // Right to Left
+    for(int i = n-2; i>= 0; i--) {
+    if(ratings[i] > ratings[i+1]) {
+        right[i] = right[i+1] + 1;
+    }
+    }
+
+    int ans = 0;
+    for(int i = 0; i<n; i++) {
+    ans += max(left[i],right[i]);
+    }
+
+    return ans;
+    
+    // Better - TC - O(2*N) & SC - O(N)
+    vector<int> left(n,1);
+
+    // Left to Right
+    for(int i = 1; i<n; i++) {
+    if(ratings[i] > ratings[i-1]) {
+        left[i] = left[i-1] + 1;
+    }
+    }
+
+    int cur = 1, right = 1;
+    int sum = max(1,left[n-1]);
+
+    // Right to Left
+    for(int i = n-2; i>=0; i--) {
+    if(ratings[i] > ratings[i+1]) {
+        cur = right+1;
+    } else {
+        cur = 1;
+    }
+    right = cur;
+    sum = sum + max(left[i],cur);
+    }
+    return sum;
+    */
+    // Optimal
+    int i = 1;
+    int sum = 1;
+
+    while(i < n) {
+    if(ratings[i] == ratings[i-1]) {
+        sum += 1;
+        i++;
+        continue;
+    }
+
+    // Increasing Slope
+    int peak = 1;
+
+    while(i < n && ratings[i] > ratings[i-1]) {
+        peak += 1;
+        sum += peak;
+        i++;
+    }
+
+    // Decreasing Slope
+    int down = 1;
+
+    while(i < n && ratings[i] < ratings[i-1]) {
+        sum += down;
+        i++;
+        down++;
+    }
+
+    if(down > peak) {
+        sum += (down-peak);
+    }
+    }
+    return sum; // O(N)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
