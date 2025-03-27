@@ -69,6 +69,65 @@ int longestNonRepeatingSubstring(string& s){
     return maxLen; // O(N)
 }
 
+int longestOnes(vector<int>& nums, int k) {
+    /*
+    // Brute - O(N^2)
+    int n = nums.size();
+
+    int maxLen = 0, zeros = 0;
+
+    for(int i = 0; i<n; i++) {
+        zeros = 0;
+
+        for(int j = i; j<n; j++) {
+            if(nums[j] == 0) zeros++;
+
+            if(zeros <= k) {
+                int len = j - i + 1;
+                maxLen = max(maxLen, len);
+            } else break;
+        }
+    }
+    return maxLen;
+    
+    // Better - O(2N)
+    int n = nums.size();
+
+    int l = 0, r = 0, zeros = 0, maxLen = 0;
+
+    while(r < n) {
+        if(nums[r] == 0) zeros++;
+
+        while(zeros > k) {
+            if(nums[l] == 0) zeros--;
+            l++;
+        }
+        int len = r - l + 1;
+        maxLen = max(len,maxLen);
+        r++;
+    }
+    return maxLen;
+    */
+    // Optimal - O(N)
+    int n = nums.size();
+    int l = 0, r = 0, zeros = 0, maxLen = 0;
+
+    while(r < n) {
+        if(nums[r] == 0) zeros++;
+
+        if(zeros > k) {
+            if(nums[l] == 0) zeros--;
+            l++;
+        }
+        if(zeros <= k) {
+            int len = r - l + 1;
+            maxLen = max(len,maxLen);
+        }
+        r++;
+    }
+    return maxLen;
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
