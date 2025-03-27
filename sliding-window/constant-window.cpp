@@ -128,6 +128,74 @@ int longestOnes(vector<int>& nums, int k) {
     return maxLen;
 }
 
+int totalFruits(vector<int>& fruits){
+    /*
+    // Brute - O(N^2) , SC = O(3)
+    int n = fruits.size();
+    int maxLen = 0;
+
+    for(int i = 0; i<n; i++) {
+        unordered_set<int> set;
+        for(int j = i; j<n; j++) {
+            set.insert(fruits[j]);
+
+            if(set.size() <= 2) {
+                int len = j - i + 1;
+                maxLen = max(maxLen,len);
+            } else break;
+        }
+    }
+    return maxLen;
+    
+    // Better - O(2n), SC = O(3)
+    int n = fruits.size();
+    int l = 0, r = 0, maxLen = 0;
+    unordered_map<int,int> mpp;
+
+    while(r < n) {
+        mpp[fruits[r]]++;
+
+        if(mpp.size() > 2) {
+            while(mpp.size() > 2) {
+                mpp[fruits[l]]--;
+                if(mpp[fruits[l]] == 0) {
+                    mpp.erase(fruits[l]);
+                }
+                l++;
+            }
+        }
+
+        if(mpp.size() <= 2) {
+            maxLen = max(maxLen, r-l+1);
+        }
+        r++;
+    }
+    return maxLen;
+    */
+    // Optimal - O(N), SC = O(3)
+    int n = fruits.size();
+    int l = 0, r = 0, maxLen = 0;
+    unordered_map<int,int> mpp;
+
+    while(r < n) {
+        mpp[fruits[r]]++;
+
+        if(mpp.size() > 2) {
+            mpp[fruits[l]]--;
+            if(mpp[fruits[l]] == 0) {
+                mpp.erase(fruits[l]);
+            }
+            l++;
+        }
+
+        if(mpp.size() <= 2) {
+            maxLen = max(maxLen, r-l+1);
+        }
+        r++;
+    }
+    return maxLen;
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
