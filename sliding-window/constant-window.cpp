@@ -196,6 +196,79 @@ int totalFruits(vector<int>& fruits){
     return maxLen;
 }
 
+int kDistinctChar(string& s, int k) {
+    /*
+    //Brute - TC = O(N^2), SC = O(k)
+    int n = s.size();
+    int maxLen = 0;
+
+    unordered_map<char,int> mpp;
+
+    for(int i = 0; i<n; i++) {
+        mpp.clear();
+        for(int j = i; j<n; j++) {
+            mpp[s[j]]++;
+
+            if(mpp.size() <= k) {
+                maxLen = max(maxLen, j - i +1);
+            } else break;
+        }
+    }
+
+    return maxLen;
+    
+    // Better - TC = O(2N), SC = O(k)
+    int n = s.size();
+    int l = 0, r = 0, maxLen = 0;
+
+    unordered_map<char,int> mpp;
+
+    while(r < n) {
+        mpp[s[r]]++;
+
+        while(mpp.size() > k) {
+            mpp[s[l]]--;
+            if(mpp[s[l]] == 0) {
+                mpp.erase(s[l]);
+            }
+            l++;
+        }
+
+        if(mpp.size() <= k) {
+            maxLen = max(maxLen, r-l+1);
+        }
+
+        r++;
+    }
+    return maxLen;
+    */
+    // Optimal - O(N)
+    int n = s.size();
+    int l = 0, r = 0, maxLen = 0;
+
+    unordered_map<char,int> mpp;
+
+    while(r < n) {
+        mpp[s[r]]++;
+
+        if(mpp.size() > k) {
+            mpp[s[l]]--;
+            if(mpp[s[l]] == 0) {
+                mpp.erase(s[l]);
+            }
+            l++;
+        }
+
+        if(mpp.size() <= k) {
+            maxLen = max(maxLen, r - l + 1);
+        }
+
+        r++;
+    }
+    return maxLen;
+}
+
+
 
 int main() {
     ios_base::sync_with_stdio(false);
