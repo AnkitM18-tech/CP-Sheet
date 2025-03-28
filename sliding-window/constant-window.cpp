@@ -268,6 +268,67 @@ int kDistinctChar(string& s, int k) {
     return maxLen;
 }
 
+int characterReplacement(string s, int k) {
+    /*
+    //Brute - O(N^2) - TC and SC = O(26)
+    int maxLen = 0;
+    int maxfreq = 0;
+
+    for(int i = 0; i<s.size(); i++) {
+        int hash[26] = {0};
+        for(int j = i; j<s.size(); j++) {
+            hash[s[j] - 'A']++;
+            maxFreq = max(maxFreq,hash[s[j] - 'A']);
+
+            int changes = (j - i + 1) - maxFreq;
+
+            if(changes <= k) {
+                maxlen = max(maxLen, j - i + 1);
+            } else break;
+        }
+    }
+    return maxLen;
+    
+    // Better - O(2N * 26), O(26)
+    int maxLen = 0, l = 0, r = 0, maxFreq = 0;
+    int hash[26] = {0};
+
+    while(r < s.size()) {
+        hash[s[r]-'A']++;
+        maxFreq = max(maxFreq,hash[s[r]-'A']);
+
+        while((r-l+1) - maxFreq > k) {
+            hash[s[l]-'A']--;
+            // max freq for the new substring step
+            maxFreq = 0;
+            for(int i = 0; i<26; i++) {
+                maxFreq = max(maxFreq, hash[i]);
+            }
+            l++;
+        }
+        maxLen = max(maxLen, r-l+1);
+        r++;
+    }
+    return maxLen;
+    */
+    // Optimal - O(N) , O(26)
+    int l = 0, r = 0, maxLen = 0, maxFreq = 0;
+    int hash[26] = {0};
+
+    while(r < s.size()) {
+        hash[s[r]-'A']++;
+
+        maxFreq = max(maxFreq, hash[s[r]-'A']);
+        if((r - l + 1) - maxFreq > k) {
+            hash[s[l]-'A']--;
+            l++;
+        }
+
+        maxLen = max(maxLen, r-l+1);
+        r++;
+    }
+    return maxLen;
+}
 
 
 int main() {
