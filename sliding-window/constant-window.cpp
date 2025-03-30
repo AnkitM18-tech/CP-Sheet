@@ -330,6 +330,71 @@ int characterReplacement(string s, int k) {
     return maxLen;
 }
 
+string minWindow(string s, string t) {
+    /*
+    // Brute - O(N^2)
+    int minLen = INT_MAX;
+    int start = -1;
+
+    for(int i = 0; i<s.size(); i++) {
+        int hash[256] = {0};
+
+        for(char ch:t) {
+            hash[ch]++;
+        }
+
+        int count = 0;
+
+        for(int j = i; j<s.size(); j++) {
+            if(hash[s[j]] > 0) count++;
+            hash[s[j]]--;
+
+            if(count == t.size()) {
+                if(j-i+1 < minLen) {
+                    minLen = j-i+1;
+                    start = i;
+                }
+                break;
+            }
+        }
+    }
+    return start == -1 ? "" : s.substr(start,minLen);
+    */
+    // Optimal - O(2N + M), SC = O(256)
+    // N is the size of the string s and M is the size of the string t
+    int l = 0, r = 0, count = 0;
+    int minLen = INT_MAX, start = -1;
+
+    int hash[256] = {0};
+
+    for(char ch:t) {
+        hash[ch]++;
+    }
+
+    while(r < s.size()) {
+        if(hash[s[r]] > 0) {
+            count++;
+        }
+        hash[s[r]]--;
+        // If all characters from t 
+        // are found in current window
+        while(count == t.size()) {
+            if(r-l+1 < minLen) {
+                minLen = r-l+1;
+                start = l;
+            }
+
+            hash[s[l]]++;
+            if(hash[s[l]] > 0) {
+                count--;
+            }
+            l++;
+        }
+        r++;
+    }
+    return start == -1 ? "" : s.substr(start,minLen);
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
