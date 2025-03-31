@@ -427,6 +427,28 @@ int numberOfSubstrings(string s) {
     return count;
 }
 
+int subarraysWithSumLessEqualToK(vector<int>& nums, int K) {
+    if(K < 0) return 0;
+    int l = 0, r = 0, sum = 0, count = 0;
+
+    while(r < nums.size()) {
+        sum += nums[r];
+
+        while(sum > K) {
+            sum -= nums[l];
+            l++;
+        }
+        count += (r-l+1);
+        r++;
+    }
+    return count; // O(2N)
+}
+
+int numSubarraysWithSum(vector<int>& nums, int goal) {
+    // O(2*2N)
+    return subarraysWithSumLessEqualToK(nums,goal) - subarraysWithSumLessEqualToK(nums,goal-1);
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
