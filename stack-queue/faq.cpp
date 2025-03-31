@@ -80,6 +80,45 @@ public:
     // O(1) - TC and SC = O(N)
 };
 
+vector<int> maxSlidingWindow(vector<int> &arr, int k) {
+    /*
+    // Brute - TC = O((N-K)*K) and SC = O(N-K)
+    int n = arr.size();
+    vector<int> ans;
+
+    for(int i = 0; i <= n-k; i++) {
+        maxi = arr[i];
+        for(int j = i; j < i+k; j++) {
+            maxi = max(maxi,arr[j]);
+        }
+        ans.push_back(maxi);
+    }
+    return ans;
+    */
+    // Optimal - TC = O(2N) and SC = O(N-K) + O(K)
+    int n = arr.size();
+
+    vector<int> ans;
+    deque<int> dq;
+
+    for(int i = 0; i < n; i++) {
+        if(!dq.empty() && dq.front() <= (i-k)) {
+            dq.pop_front();
+        }
+
+        while(!dq.empty() && arr[dq.back()] <= arr[i]) {
+            dq.pop_back();
+        }
+
+        dq.push_back(i);
+
+        if(i >= (k-1)) {
+            ans.push_back(arr[dq.front()]);
+        }
+    }
+    return ans;
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
