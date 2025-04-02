@@ -184,6 +184,94 @@ int trap(vector<int> &height){
     return total;
 }
 
+vector<int> findNSE(vector<int>& arr) {
+    int n = arr.size();
+
+    vector<int> ans(n);
+    stack<int> st;
+
+    for(int i = n-1; i>=0; i--) {
+        int current = arr[i];
+
+        while(!st.empty() && arr[st.top()] >= arr[i]) {
+            st.pop();
+        }
+
+        ans[i] = !st.empty() ? st.top() : n;
+        st.push(i);
+    }
+    return ans;
+}
+
+vector<int> findPSE(vector<int>& arr) {
+    int n = arr.size();
+    vector<int> ans(n);
+
+    stack<int> st;
+
+    for(int i = 0; i<n; i++) {
+        while(!st.empty() && arr[st.top()] >= arr[i]) {
+            st.pop();
+        }
+
+        ans[i] = !st.empty() ? st.top() : -1;
+
+        st.push(i);
+    }
+    return ans;
+}
+
+
+int largestRectangleArea(vector<int> &heights) {
+    /*
+    // Brute - TC = O(3N) and SC = O(3N)
+    vector<int> nse = findNSE(heights);
+    vector<int> pse = findPSE(heights);
+
+    int largestArea = 0;
+    int currentArea = 0;
+
+    for(int i = 0; i < heights.size(); i++) {
+        currentArea = heights[i] * (nse[i] - pse[i] - 1);
+        largestArea = max(largestArea, currentArea);
+    }
+    return largestArea;
+    */
+    // Optimal - SC = O(N) and TC = O(2N)
+    int n = heights.size();
+
+    stack<int> st;
+    int largestArea = 0, area = 0;
+    int nse,pse;
+
+    for(int i = 0; i<n; i++) {
+        while(!st.empty() && heights[st.top()] >= heights[i]) {
+            int ind = st.top();
+            st.pop();
+
+            pse = st.empty() ? -1 : st.top();
+            nse = i;
+            area = heights[ind] * (nse-pse-1);
+
+            largestArea = max(largestArea, area);
+        }
+        st.push(i);
+    }
+
+    // Still there are elements
+    while(!st.empty()) {
+        nse = n;
+        int ind = st.top();
+        st.pop();
+        pse = st.empty() ? -1 : st.top();
+
+        area = heights[ind] * (nse-pse-1);
+        largestArea = max(largestArea,area);
+    }
+
+    return largestArea;
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
