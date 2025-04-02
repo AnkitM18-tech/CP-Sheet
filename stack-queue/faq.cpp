@@ -272,6 +272,39 @@ int largestRectangleArea(vector<int> &heights) {
     return largestArea;
 }
 
+int maximalAreaOfSubMatrixOfAll1(vector<vector<int>> &matrix){
+    int n = matrix.size();
+    int m = matrix[0].size();
+
+    vector<vector<int>> prefixSum(n,vector<int>(m));
+
+    // Fill up the prefix sum matrix column wise
+    for(int j = 0; j < m; j++) {
+        int sum = 0;
+        for(int i = 0; i<n; i++) {
+            sum += matrix[i][j];
+            
+            // If there is no base present
+            if(matrix[i][j] == 0) {
+                prefixSum[i][j] = 0;
+                sum = 0;
+            }
+            // Store the height
+            prefixSum[i][j] = sum;
+        }
+    }
+
+    int maxArea = 0;
+
+    for(int i = 0; i<n; i++) {
+        int area = largestRectangleArea(prefixSum[i]);
+        maxArea = max(area, maxArea);
+    }
+
+    return maxArea; // O(N*M) + O(2M * N) - TC, SC - O(N*M) + O(N)
+}
+
+
 
 int main() {
     ios_base::sync_with_stdio(false);
