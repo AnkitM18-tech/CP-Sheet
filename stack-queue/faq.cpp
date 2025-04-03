@@ -304,6 +304,51 @@ int maximalAreaOfSubMatrixOfAll1(vector<vector<int>> &matrix){
     return maxArea; // O(N*M) + O(2M * N) - TC, SC - O(N*M) + O(N)
 }
 
+vector<int> findPGE(vector<int>& arr) {
+    int n = arr.size();
+    vector<int> ans(n);
+    stack<int> st;
+
+    for(int i = 0; i<n; i++) {
+        while(!st.empty() && arr[st.top()] <= arr[i]) {
+            st.pop();
+        }
+
+        if(st.empty()) ans[i] = -1;
+        else ans[i] = st.top();
+
+        st.push(i);
+    }
+    return ans;
+}
+
+vector <int> stockSpan(vector<int> arr, int n) {
+    /*
+    // Brute = TC = O(N^2)
+    vector<int> ans(n);
+
+    for(int i = 0; i<n; i++) {
+        int currentSpan = 0;
+
+        for(int j = i; j >= 0; j--) {
+            if(arr[j] <= arr[i]) {
+                currentSpan++;
+            } else break;
+        }
+
+        ans[i] = currentSpan;
+    }
+    return ans;
+    */
+    // Optimal - O(2N), SC - O(N)
+    vector<int> PGE = findPGE(arr);
+    vector<int> ans(n);
+
+    for(int i = 0; i<n; i++) {
+        ans[i] = i - PGE[i];
+    }
+    return ans;
+}
 
 
 int main() {
