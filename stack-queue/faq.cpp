@@ -350,6 +350,70 @@ vector <int> stockSpan(vector<int> arr, int n) {
     return ans;
 }
 
+int celebrity(vector<vector<int>> &M){
+    /*
+    // Brute - TC = O(N^2) + O(N) and SC = O(2N)
+    int n = M.size();
+
+    vector<int> knowMe(n,0);
+    vector<int> iKnow(n,0);
+
+    for(int i = 0; i<n; i++) {
+        for(int j = 0; j<n; j++) {
+            // if person i knows j
+            if(M[i][j] == 1) {
+                knowMe[j]++;
+                iKnow[i]++;
+            }
+        }
+    }
+
+    for(int i = 0; i<n; i++) {
+        if(knowMe[i] == n-1 && iKnow[i] == 0) {
+            return i;
+        }
+    }
+
+    return -1;
+    */
+    // Optimal - TC = O(2N)
+    // there can only be one celebrity, as every one else 
+    // will know him
+    int n = M.size();
+    int top = 0, down = n-1;
+
+    while(top < down) {
+        // if top knows down, not celebrity
+        if(M[top][down] == 1) {
+            top += 1;
+        } 
+        // if down knows top, not celebrity
+        else if(M[down][top] == 1) {
+            down -= 1;
+        } 
+        // if both doesn't know each other, not celebrity
+        else {
+            top++;
+            down--;
+        }
+    }
+
+    if(top > down) return -1;
+    
+    for(int i = 0; i<n; i++) {
+        // i == j, we skip, because diagnal is 0
+        if(i == top) continue;
+
+        // not a celebrity
+        if(M[top][i] == 1 || M[i][top] == 0) {
+            return -1;
+        }
+    }
+
+    return top;
+}
+
+
 
 int main() {
     ios_base::sync_with_stdio(false);
