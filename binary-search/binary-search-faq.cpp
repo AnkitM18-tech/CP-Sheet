@@ -223,6 +223,41 @@ double median(vector<int> &arr1, vector<int> &arr2) {
     // As, binary search is being applied on the range [0, min(N1, N2)]
 }
 
+long double minimiseMaxDistance(vector<int> &arr, int k) {
+    int n = arr.size();
+    // Brute
+    vector<int> howMany(n-1,0);
+
+    for(int gasStations = 1; gasStations <= k; gasStations++) {
+        double maxSection = -1; int maxInd = -1;
+
+        for(int i = 0; i<n-1; i++) {
+        double diff = arr[i+1] - arr[i];
+        double sectionLength = diff / (howMany[i] + 1);
+
+        if(sectionLength > maxSection) {
+            maxSection = sectionLength;
+            maxInd = i;
+        }
+        }
+
+        howMany[maxInd]++;
+    }
+
+    double maxAns = -1;
+    for(int i = 0; i<n-1; i++) {
+        double diff = arr[i+1] - arr[i];
+        double sectionLength = diff / (howMany[i] + 1);
+        maxAns = max(maxAns, sectionLength);
+    }
+
+    return maxAns;
+    // O(k*N) + O(N), N is size of the given array, 
+    // k is number of gas stations to be placed. O(k*N) to insert k gas stations 
+    // between the existing stations with maximum distance. 
+    // Another O(N) for finding the answer i.e. the maximum distance.
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
