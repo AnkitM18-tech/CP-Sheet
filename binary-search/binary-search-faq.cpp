@@ -223,8 +223,23 @@ double median(vector<int> &arr1, vector<int> &arr2) {
     // As, binary search is being applied on the range [0, min(N1, N2)]
 }
 
+int numberOfGasStationsRequired(vector<int> &arr, long double dist) {
+    int n = arr.size();
+    int cnt = 0;
+    for(int i = 1; i<n; i++) {
+        int numberInBetween = ((arr[i] - arr[i-1]) / dist);
+        if((arr[i] - arr[i-1]) == (dist * numberInBetween)) {
+        numberInBetween--;
+        }
+
+        cnt += numberInBetween;
+    }
+    return cnt;
+}
+
 long double minimiseMaxDistance(vector<int> &arr, int k) {
     int n = arr.size();
+    /*
     // Brute
     vector<int> howMany(n-1,0);
 
@@ -256,6 +271,51 @@ long double minimiseMaxDistance(vector<int> &arr, int k) {
     // k is number of gas stations to be placed. O(k*N) to insert k gas stations 
     // between the existing stations with maximum distance. 
     // Another O(N) for finding the answer i.e. the maximum distance.
+    // O(N-1), As an array is used to keep track of placed gas stations
+    
+    // Better - SC = O(N-1)+O(N-1) and TC = O(NlogN + klogN)
+    vector<int> howMany(n - 1, 0);
+    priority_queue<pair<long double, int>> pq;
+
+    // Insert first n-1 elements into priority
+    // queue with respective distance values
+    for(int i = 0; i < n-1; i++) {
+        pq.push({(long double)(arr[i+1] - arr[i]),i});
+    }
+
+    for(int gasStations = 1; gasStations <= k; gasStations++) {
+        auto tp = pq.top();
+        pq.pop();
+
+        int secInd = tp.second;
+        howMany[secInd]++;
+
+        long double diff = (long double)(arr[secInd + 1] - arr[secInd]);
+        long double newSecLen = diff / (long double)(howMany[secInd] + 1);
+
+        pq.push({newSecLen, secInd});
+    }
+    return pq.top().first;
+    */
+    // Optimal - TC = O(N*log(Len)) + O(N)
+    long double low = 0, high = 0;
+
+    // Find the maximum distance between
+    // consecutive gas stations
+    for(int i = 0; i < n-1; i++) {
+        high = max(high, (long double)(arr[i+1] - arr[i]));
+    }
+
+    long double diff = 1e-6;
+    while(high - low > diff) {
+        long double mid = (low + high)/2.0;
+        int cnt = numberOfGasStationsRequired(arr, mid);
+
+        if(cnt > k) low = mid;
+        else high = mid;
+    }
+
+    return high;
 }
 
 
