@@ -344,6 +344,42 @@ int kthElement(vector<int> &a, vector<int>& b, int k) {
     // O(log(min(M, N))), where M and N are the sizes of two given arrays
 }
 
+int countPartitions(vector<int> &a, int maxSum) {
+    int n = a.size();
+    int partitions = 1;
+    long long subArraySum = 0;
+
+    for(int i = 0; i<n; i++) {
+        if(subArraySum + a[i] <= maxSum) {
+            subArraySum += a[i];
+        } else {
+            partitions++;
+            subArraySum = a[i];
+        }
+    }
+    return partitions;
+}
+
+int largestSubarraySumMinimized(vector<int> &a, int k) {
+    int low = *max_element(a.begin(), a.end());
+    int high = accumulate(a.begin(), a.end(), 0);
+
+    while(low <= high) {
+        int mid = (low + high) / 2;
+        int partitions = countPartitions(a,mid);
+
+        if(partitions > k) {
+            low = mid + 1;
+        } else {
+            high = mid- 1;
+        }
+    }
+    /* After binary search, 'low' will 
+    be the largest minimum subarray sum
+    with at most k partitions*/
+    return low;
+    // O(N * (log(sum - max) + 1))
+}
 
 
 int main() {
