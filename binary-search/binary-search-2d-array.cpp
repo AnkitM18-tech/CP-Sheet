@@ -165,6 +165,68 @@ vector<int> findPeakGrid(vector<vector<int>>& mat) {
     // O(N * log M)
 }
 
+int upperBound(vector<int> &matrix,int m, int x) {
+    int low = 0, high = m - 1;
+    int ans = m;
+
+    while(low <= high) {
+        int mid = (low + high) / 2 ;
+        if(matrix[mid] > x) {
+            ans = mid;
+            high = mid - 1;
+        } else {
+            low = mid + 1;
+        }
+    }
+    return ans;
+}
+
+int countSmallEqual(vector<vector<int>> &matrix, int n , int m, int x) {
+    int cnt = 0;
+    for(int i = 0 ; i<n; i++) {
+        cnt += upperBound(matrix[i],m,x);
+    }
+    return cnt;
+}
+
+int findMedian(vector<vector<int>>&matrix) {
+    int n = matrix.size();
+    int m = matrix[0].size();
+    /*
+    // Brute - 
+    // TC = O(N * M) + O(N*M log (N*M)), SC = O(N*M)
+    vector<int> lst;
+
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            lst.push_back(matrix[i][j]);
+        }
+    }
+
+    sort(lst.begin(), lst.end());
+
+    return lst[(n*m)/2];
+    }
+    */
+    // Optimal - O(log(max)) * O(N(log M))
+    int low = INT_MAX, high = INT_MIN;
+
+    for(int i = 0; i<n; i++) {
+        low = min(low,matrix[i][0]);
+        high = max(high,matrix[i][m-1]);
+    }
+
+    int req = (n * m)/2;
+
+    while(low <= high) {
+        int mid = low + (high - low) / 2;
+        int smallEqual = countSmallEqual(matrix, n, m, mid);
+        if(smallEqual <= req) low = mid + 1;
+        else high = mid - 1;
+    }
+    return low;
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
