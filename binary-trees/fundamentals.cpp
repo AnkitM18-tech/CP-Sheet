@@ -64,6 +64,13 @@ vector<int> inOrder(Node* root){
     return inOrder;
 }
 
+void recursivePreOrder(Node* node, vector<int>& arr) {
+    if(node == NULL) return;
+    arr.push_back(node->data);
+    recursivePreOrder(node->left, arr);
+    recursivePreOrder(node->right, arr);
+} 
+
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
