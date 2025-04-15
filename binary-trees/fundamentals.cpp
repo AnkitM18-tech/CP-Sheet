@@ -12,6 +12,29 @@ struct Node {
     }
 };
 
+void recursiveInorder(Node* root, vector<int> &arr) {
+    if(root == nullptr) {
+        return;
+    }
+    // travel the left subtree
+    recursiveInorder(root->left, arr);
+    // push current node value to array
+    // Inorder - In - Access the node in between traversal
+    // Preorder - Pre - Access the node before traversal
+    // Postoder - Post - Access the node after the traversal
+    arr.push_back(root->data);
+    // travel right subtree
+    recursiveInorder(root->right, arr);
+}
+
+// DFS Technique - at every node Left - Root - Right
+vector<int> inOrder(Node* root){
+    // Recursive Approach - O(N) - n number of nodes
+    // SC = O(h) - height of tree for recursion stack
+    vector<int> arr;
+    recursiveInorder(root, arr);
+    return arr;
+}
 
 int main() {
     ios_base::sync_with_stdio(false);
