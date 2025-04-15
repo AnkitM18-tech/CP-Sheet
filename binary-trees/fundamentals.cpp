@@ -29,11 +29,39 @@ void recursiveInorder(Node* root, vector<int> &arr) {
 
 // DFS Technique - at every node Left - Root - Right
 vector<int> inOrder(Node* root){
+    /*
     // Recursive Approach - O(N) - n number of nodes
     // SC = O(h) - height of tree for recursion stack
     vector<int> arr;
     recursiveInorder(root, arr);
     return arr;
+    */
+
+    stack<Node*> st;
+    Node* node = root;
+
+    vector<int> inOrder;
+
+    while(true) {
+        if(node != NULL) {
+            // Push the node and traverse left
+            st.push(node);
+            node = node->left;
+        } else {
+            if(st.empty()) {
+                break;
+            }
+            // Take the top element
+            node = st.top();
+            st.pop();
+            // Access
+            inOrder.push_back(node->data);
+            // Go right
+            node = node->right;
+        }
+    }
+
+    return inOrder;
 }
 
 int main() {
