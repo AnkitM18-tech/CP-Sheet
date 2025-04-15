@@ -71,7 +71,6 @@ void recursivePreOrder(Node* node, vector<int>& arr) {
     recursivePreOrder(node->right, arr);
 }
 
-
 vector<int> preorder(Node* root){
     /*
     // Recursive - TC & SC = O(N) - N = number of nodes
@@ -83,27 +82,28 @@ vector<int> preorder(Node* root){
     vector<int> arr;
     // if root is null, return empty result
     if(root == nullptr) {
-    return arr;
+        return arr;
     }
     stack<Node*> st;
     st.push(root);
 
     while(!st.empty()) {
-    root = st.top();
-    st.pop();
-    // Access the node
-    arr.push_back(root->data);
-    // Push Right
-    if(root->right != NULL) {
-        st.push(root->right);
-    }
-    // Push Left
-    if(root->left != NULL) {
-        st.push(root->left);
-    }
+        root = st.top();
+        st.pop();
+        // Access the node
+        arr.push_back(root->data);
+        // Push Right
+        if(root->right != NULL) {
+            st.push(root->right);
+        }
+        // Push Left
+        if(root->left != NULL) {
+            st.push(root->left);
+        }
     }
     return arr;
 }
+
 
 int main() {
     ios_base::sync_with_stdio(false);
