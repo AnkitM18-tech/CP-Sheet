@@ -104,6 +104,14 @@ vector<int> preorder(Node* root){
     return arr;
 }
 
+void recursivePostOrder(Node* root, vector<int> &arr) {
+    if(root == NULL) return;
+    recursivePostOrder(root->left, arr);
+    recursivePostOrder(root->right, arr);
+    arr.push_back(root->data);
+}
+
+
 
 int main() {
     ios_base::sync_with_stdio(false);
