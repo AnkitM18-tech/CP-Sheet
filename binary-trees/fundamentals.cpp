@@ -165,6 +165,37 @@ vector<vector<int>> levelOrder(Node* root) {
     // TC = O(N), SC = O(N)  N = number of nodes
 }
 
+vector<vector<int>> treeTraversal(Node* root){
+    vector<int> preOrder, inOrder, postOrder;
+    if(root == nullptr) return { inOrder, preOrder, postOrder };
+    stack<pair<Node*, int>> st;
+
+    st.push({root,1});
+
+    while(!st.empty()) {
+        auto [node,state] = st.top();
+        st.pop();
+
+        if(state == 1) {
+            preOrder.push_back(node->data);
+            st.push({node,2});
+
+            if(node->left) st.push({node->left,1});
+        } else if(state == 2) {
+            inOrder.push_back(node->data);
+            st.push({node,3});
+
+            if(node->right) st.push({node->right,1});
+        } else {
+            postOrder.push_back(node->data);
+        }
+    }
+    return {inOrder,preOrder,postOrder};
+    // TC = O(3N), SC = O(4N), N - number of nodes
+}
+// num == 1 - preorder, num++, left
+// num == 2 - inorder, nums++, right
+// num == 3 - postorder
 
 int main() {
     ios_base::sync_with_stdio(false);
