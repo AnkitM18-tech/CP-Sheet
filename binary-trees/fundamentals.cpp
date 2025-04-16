@@ -111,6 +111,59 @@ void recursivePostOrder(Node* root, vector<int> &arr) {
     arr.push_back(root->data);
 }
 
+vector<int> postorder(Node* root){
+    vector<int> postOrder;
+    // Recursive Approach - SC & TC = O(N), number of nodes
+    /*
+    recursivePostOrder(root,postOrder);
+    return postOrder;
+    */
+    // Iterative Approach - O(2N) - TC and SC
+    if(root == NULL) return postOrder;
+    stack<Node*> st;
+    st.push(root);
+
+    while(!st.empty()) {
+        root = st.top();
+        st.pop();
+        postOrder.push_back(root->data);
+        if(root->left) st.push(root->left);
+        if(root->right) st.push(root->right);
+    }
+
+    reverse(postOrder.begin(), postOrder.end());
+    return postOrder;
+}
+
+vector<vector<int>> levelOrder(Node* root) {
+    vector<vector<int>> ans;
+    if(root == NULL) return ans;
+
+    queue<Node*> q;
+    q.push(root);
+
+    while(!q.empty()) {
+        int size = q.size();
+        vector<int> level;
+
+        for(int i = 0; i<size; i++) {
+            Node* node = q.front();
+            q.pop();
+            level.push_back(node->data);
+
+            if(node->left) {
+                q.push(node->left);
+            }
+
+            if(node->right) {
+                q.push(node->right);
+            }
+        }
+        ans.push_back(level);
+    }
+    return ans;
+    // TC = O(N), SC = O(N)  N = number of nodes
+}
 
 
 int main() {
