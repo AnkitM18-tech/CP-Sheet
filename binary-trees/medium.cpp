@@ -51,6 +51,37 @@ bool isSameTree(TreeNode* p, TreeNode* q) {
     // TC = O(N), SC = O(h)
 }
 
+int getHeight(TreeNode *root) {
+    if(root == NULL) {
+        return 0;
+    }
+
+    int leftHeight = getHeight(root->left);
+    int rightHeight = getHeight(root->right);
+
+    return max(leftHeight,rightHeight) + 1;
+}
+
+bool isBalanced(TreeNode *root){
+    // for every node of tree - heights of left and right
+    // subtrees is <= 1
+    //Brute - TC = O(N^2) SC = O(N)
+    //  For each node in the Binary Tree, 
+    // all other nodes are traversed to calculate its height, 
+    // resulting in a nested traversal structure, 
+    // leading to O(N) operations for each of the N nodes, 
+    // hence O(N * N) = O(N^2)
+    if(root == NULL) return true;
+
+    int leftHeight = getHeight(root->left);
+    int rightHeight = getHeight(root->right);
+
+    if(abs(leftHeight - rightHeight) <= 1 && isBalanced(root->left) && isBalanced(root->right)) {
+        return true;
+    }
+    return false;
+}
+
 
 
 int main() {
