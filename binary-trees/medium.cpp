@@ -101,6 +101,45 @@ int dfsHeight(TreeNode* root) {
     return max(leftHeight,rightHeight) + 1;
 }
 
+int getHeight(TreeNode* root) {
+    if(root == nullptr) return 0;
+    return 1 + max(getHeight(root->left), getHeight(root->right));
+}
+
+int height(TreeNode* root, int& diameter) {
+    if(!root) return 0;
+
+    int lh = height(root->left, diameter);
+    int rh = height(root->right, diameter);
+
+    diameter = max(diameter, lh+rh);
+    return 1 + max(lh,rh);
+}
+
+int diameterOfBinaryTree(TreeNode* root) {
+    /*
+    // Brute - O(N^2) - TC and SC - O(H)
+
+    int leftHeight = getHeight(root->left);
+    int rightHeight = getHeight(root->right);
+
+    int currentDiameter = leftHeight + rightHeight;
+
+    int leftDiameter = diameterOfBinaryTree(root->left);
+    int rightDiameter = diameterOfBinaryTree(root->right);
+
+    return max(currentDiameter, max(leftDiameter, rightDiameter));
+    */
+    // Optimal - O(N)
+    // each node is visited once, and 
+    // its height is calculated during the postorder traversal.
+    int diameter = 0;
+    height(root, diameter);
+    return diameter;
+}
+
+
+
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
