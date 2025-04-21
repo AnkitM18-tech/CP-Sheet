@@ -163,6 +163,22 @@ int maxPathSum(TreeNode* root) {
     // TC = O(N)
 }
 
+bool symmetry(TreeNode* left, TreeNode* right) {
+    // Both nodes are null, so symmetric
+    if(left == NULL && right == NULL) return true;
+    // One of the nodes is null, so not symmetric
+    if(left == NULL || right == NULL) return false;
+
+    if(left->data != right->data) return false;
+
+    return symmetry(left->left, right->right) && symmetry(left->right, right->left);
+}
+bool isSymmetric(TreeNode* root) {
+    if(root == NULL) return true;
+    return symmetry(root->left, root->right);
+    // TC = O(N), SC = O(h)
+}
+
 
 int main() {
     ios_base::sync_with_stdio(false);
