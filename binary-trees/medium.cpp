@@ -138,6 +138,30 @@ int diameterOfBinaryTree(TreeNode* root) {
     return diameter;
 }
 
+int findMaxPathSum(TreeNode* root, int& maxi) {
+    if(root == NULL) return 0;
+
+    // Calculate max path sum for left and right subtree
+    // taking care of negative sum, in that case we take 0
+    int leftMaxPath = max(0, findMaxPathSum(root->left,maxi));
+    int rightMaxPath = max(0, findMaxPathSum(root->right,maxi));
+
+    // update the overall maximum path sum including current node
+    maxi = max(maxi,leftMaxPath + rightMaxPath + root->data);
+
+    // return the max sum considering only one branch - left or right 
+    // with current node
+    return max(leftMaxPath,rightMaxPath) + root->data;
+}
+
+int maxPathSum(TreeNode* root) {
+    int maxi = INT_MIN;
+
+    findMaxPathSum(root,maxi);
+
+    return maxi;
+    // TC = O(N)
+}
 
 
 int main() {
