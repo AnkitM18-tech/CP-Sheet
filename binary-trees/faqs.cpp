@@ -46,6 +46,70 @@ vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
     // TC - O(N) and SC - O(N)
 }
 
+bool isLeaf(TreeNode* root) {
+    return (!root->left && !root->right);
+}
+
+void addLeftBoundary(TreeNode* root, vector<int>& res) {
+    TreeNode* current = root->left;
+    while(current) {
+        if(!isLeaf(current)) {
+            res.push_back(current->data);
+        }
+        if(current->left) {
+            current = current->left;
+        } else {
+            current  =current->right;
+        }
+    }
+}
+
+void addRightBoundary(TreeNode* root, vector<int>& res) {
+    TreeNode* current = root->right;
+    vector<int> temp;
+    while(current) {
+        if(!isLeaf(current)) {
+            temp.push_back(current->data);
+        }
+        if(current->right) {
+            current = current->right;
+        } else {
+            current = current->left;
+        }
+    }
+    for(int i = temp.size()-1; i>=0; i--) {
+        res.push_back(temp[i]);
+    }
+}
+
+void addLeaves(TreeNode* root, vector<int>& res) {
+    if(isLeaf(root)) {
+        res.push_back(root->data);
+        return;
+    }
+    if(root->left) {
+        addLeaves(root->left, res);
+    }
+    if(root->right) {
+        addLeaves(root->right, res);
+    }
+}
+
+vector <int> boundary(TreeNode* root){
+    vector<int> result;
+    if(!root) {
+        return result;
+    }
+    if(!isLeaf(root)) {
+        result.push_back(root->data);
+    }
+    addLeftBoundary(root, result);
+    addLeaves(root,result);
+    addRightBoundary(root,result);
+
+    return result;
+    // TC = O(N) and SC = O(N)
+}
 
 int main() {
     ios_base::sync_with_stdio(false);
