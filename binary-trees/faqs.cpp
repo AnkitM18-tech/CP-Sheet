@@ -111,6 +111,54 @@ vector <int> boundary(TreeNode* root){
     // TC = O(N) and SC = O(N)
 }
 
+vector<vector<int>> verticalTraversal(TreeNode* root) {
+    vector<vector<int>> result;
+
+    if(root == NULL) return result;
+    // Map to store the nodes at each vertical distance and level
+    map<int, map<int, priority_queue<int,vector<int>, greater<int>>>> nodesMap;
+
+    queue<pair<TreeNode* , pair<int,int>>> q;
+    q.push({root, {0,0}}); // {node,{x,y}}
+
+    // Perform BFS
+    while(!q.empty()) {
+        auto p = q.front();
+        q.pop();
+        TreeNode* node = p.first;
+        int x = p.second.first;
+        int y = p.second.second;
+
+        // Add the node's value to the map at the correct x and y
+        nodesMap[x][y].push(node->data);
+
+        if(node->left != NULL) {
+            q.push({node->left, {x-1,y+1}});
+        }
+
+        if(node->right != NULL) {
+            q.push({node->right, {x+1,y+1}});
+        }
+    }
+
+    // Prepare the result by sorting keys and compiling nodes
+    for(auto& p: nodesMap) {
+        vector<int> column;
+        for(auto& q : p.second) {
+            while(!q.second.empty()) {
+                column.push_back(q.second.top());
+                q.second.pop();
+            }
+        }
+        result.push_back(column);
+    }
+    return result;
+    // TC = O(N * log2N * log2N * log2N)
+    // SC = O(N + N/2)
+}
+
+
+
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
