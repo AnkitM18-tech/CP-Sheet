@@ -168,6 +168,35 @@ vector<vector<int>> verticalTraversal(TreeNode* root) {
     // SC = O(N + N/2)
 }
 
+vector<int> topView(TreeNode *root){
+    vector<int> ans;
+    if(root == NULL) return ans;
+
+    // Map to store the top view nodes based on their vertical positions
+    map<int,int> mpp;
+    // Queue for BFS traversal, each element is a pair containing 
+    // node and its vertical position
+    queue<pair<TreeNode*, int>> q;
+    q.push({root,0});
+
+    while(!q.empty()) {
+        auto it = q.front();
+        q.pop();
+        TreeNode* node = it.first;
+        int line = it.second;
+
+        if(mpp.find(line) == mpp.end()) {
+            mpp[line] = node->data;
+        }
+
+        if(node->left) q.push({node->left, line-1});
+        if(node->right) q.push({node->right, line+1});
+    }
+
+    for(auto it : mpp) ans.push_back(it.second);
+    return ans;
+    // TC = O(N*log N), SC = O(N)
+}
 
 
 int main() {
