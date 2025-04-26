@@ -116,7 +116,8 @@ vector<vector<int>> verticalTraversal(TreeNode* root) {
 
     if(root == NULL) return result;
     // Map to store the nodes at each vertical distance and level
-    map<int, map<int, priority_queue<int,vector<int>, greater<int>>>> nodesMap;
+    // map<int, map<int, priority_queue<int,vector<int>, greater<int>>>> nodesMap;
+    map<int, map<int,multiset<int>>> nodes;
 
     queue<pair<TreeNode* , pair<int,int>>> q;
     q.push({root, {0,0}}); // {node,{x,y}}
@@ -130,7 +131,8 @@ vector<vector<int>> verticalTraversal(TreeNode* root) {
         int y = p.second.second;
 
         // Add the node's value to the map at the correct x and y
-        nodesMap[x][y].push(node->data);
+        // nodesMap[x][y].push(node->data);
+        nodes[x][y].insert(node->data);
 
         if(node->left != NULL) {
             q.push({node->left, {x-1,y+1}});
@@ -142,6 +144,7 @@ vector<vector<int>> verticalTraversal(TreeNode* root) {
     }
 
     // Prepare the result by sorting keys and compiling nodes
+    /*
     for(auto& p: nodesMap) {
         vector<int> column;
         for(auto& q : p.second) {
@@ -151,6 +154,14 @@ vector<vector<int>> verticalTraversal(TreeNode* root) {
             }
         }
         result.push_back(column);
+    }
+    */
+    for(auto &p: nodes) {
+        vector<int> col;
+        for(auto &q: p.second) {
+            col.insert(col.end(), q.second.begin(),q.second.end());
+        }
+        result.push_back(col);
     }
     return result;
     // TC = O(N * log2N * log2N * log2N)
