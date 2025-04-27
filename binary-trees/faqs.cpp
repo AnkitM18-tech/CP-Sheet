@@ -303,7 +303,49 @@ vector<int> leftSideView(TreeNode* root) {
     return ans;
 }
 
+bool getPathToCertainNode(TreeNode* root, vector<int>& arr, int x) {
+    if(!root) return false;
 
+    arr.push_back(root->data);
+
+    if(root->data == x) return true;
+    if(getPathToCertainNode(root->left, arr, x) || getPathToCertainNode(root->right, arr, x)) {
+        return true;
+    }
+
+    arr.pop_back();
+    return false;
+}
+
+vector<vector<int>> allRootToLeaf(TreeNode* root) {
+    vector<vector<int>> allPaths;
+    vector<int> currentPath;
+
+    dfs(root, currentPath, allPaths);
+
+    return allPaths;
+    // TC = O(N) and SC = O(N) - skewed tree
+    /*
+        vector<int> arr;
+        if(root == NULL) return arr;
+        getPathToCertainNode(root, arr, x);
+        return arr;
+    */
+}
+
+void dfs(TreeNode* node, vector<int>& path, vector<vector<int>>& allPaths) {
+    if(!node) return;
+    path.push_back(node->data);
+
+    if(!node->left && !node->right) {
+        allPaths.push_back(path);
+    } else {
+        dfs(node->left, path, allPaths);
+        dfs(node->right, path, allPaths);
+    }
+    // backtrack by removing the last node from path
+    path.pop_back();
+}
 
 int main() {
     ios_base::sync_with_stdio(false);
