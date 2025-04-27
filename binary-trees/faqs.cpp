@@ -224,7 +224,87 @@ vector <int> bottomView(TreeNode *root){
     // TC = O(N), SC = O(N)
     }
 
-    
+vector<vector<int>> levelOrder(TreeNode* root) {
+    vector<vector<int>> ans;
+    if(!root) return ans;
+    queue<TreeNode*> q;
+    q.push(root);
+
+    while(!q.empty()) {
+    int size = q.size();
+    vector<int> level;
+
+    for(int i = 0; i<size; i++) {
+        TreeNode* node = q.front();
+        level.push_back(node->data);
+        q.pop();
+
+        if(node->left) q.push(node->left);
+        if(node->right) q.push(node->right);
+    }
+    ans.push_back(level);
+    }
+    return ans;
+    // TC = O(N), SC = O(N)
+}
+
+void recursionLeft(TreeNode* root, int level, vector<int>& ans) {
+    if(root == NULL) return;
+
+    if(ans.size() == level) {
+    ans.push_back(root->data);
+    }
+    recursionLeft(root->left, level+1, ans);
+    recursionLeft(root->right, level+1, ans);
+}
+
+void recursionRight(TreeNode* root, int level, vector<int>& ans) {
+    if(root == NULL) return;
+
+    if(ans.size() == level) {
+    ans.push_back(root->data);
+    }
+    recursionRight(root->right, level+1, ans);
+    recursionRight(root->left, level+1, ans);
+    // TC = O(N) and SC = O(H)
+}
+
+vector<int> rightSideView(TreeNode* root) {
+    // Brute
+    vector<int> ans;
+    /*
+    vector<vector<int>> levelTraversal = levelOrder(root);
+
+    for(auto level : levelTraversal) {
+        ans.push_back(level.back());
+    }
+
+    return ans;
+    */
+    // Optimal
+    recursionRight(root,0,ans);
+    return ans;
+}
+
+vector<int> leftSideView(TreeNode* root) {
+    // Brute
+    vector<int> ans;
+    /*
+    vector<vector<int>> levelTraversal = levelOrder(root);
+
+    for(auto level : levelOrder) {
+    ans.push_back(level.front());
+    }
+
+    return ans;
+    */
+    // Optimal
+    recursionLeft(root,0,ans);
+    return ans;
+}
+
+
+
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
