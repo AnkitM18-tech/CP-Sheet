@@ -347,6 +347,26 @@ void dfs(TreeNode* node, vector<int>& path, vector<vector<int>>& allPaths) {
     path.pop_back();
 }
 
+TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+    if(root == NULL || root == p || root == q) {
+        return root;
+    }
+
+    TreeNode* left = lowestCommonAncestor(root->left,p,q);
+    TreeNode* right = lowestCommonAncestor(root->right,p,q);
+
+    if(left == NULL) {
+        return right;
+    } else if(right == NULL) {
+        return left;
+    } else {
+        // Both left and right are not null, we found our result
+        return root;
+    }
+    // TC = O(N) and SC = O(N)
+}
+
+
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
