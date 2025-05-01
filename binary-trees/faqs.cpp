@@ -538,6 +538,54 @@ int findMaxDistance(unordered_map<TreeNode*, TreeNode*>& mpp, TreeNode* target) 
     return maxi;
 }
 
+void inorder(TreeNode* root, int& count) {
+    if(!root) return;
+    count++;
+    inorder(root->left, count);
+    inorder(root->right, count);
+}
+
+int findLeftHeight(TreeNode* node) {
+    int height = 0;
+    while(node) {
+        height++;
+        node = node->left;
+    }
+    return height;
+}
+
+int findRightHeight(TreeNode* node) {
+    int height = 0;
+    while(node) {
+        height++;
+        node = node->right;
+    }
+    return height;
+}
+
+int countNodes(TreeNode* root) { 
+    if(!root) return 0;
+
+    /*
+    // brute - O(N) - TC and SC - O(h)
+    int count = 0;
+    inorder(root, count);
+    return count;
+    */
+    // optimal
+    int lh = findLeftHeight(root);
+    int rh = findRightHeight(root);
+
+    // If so, use the formula for
+    // total nodes in a perfect
+    // binary tree i.e. 2^h - 1
+    if(lh == rh) return (1<<lh) - 1;
+
+    return 1 + countNodes(root->left) + countNodes(root->right);
+    // TC = O(log N * log N) and SC = O(h), worst case h = log N
+    // at any point the height can't be more than log N, because 
+    // the right part might be lh = rh, will be solved by formula
+}
 
 
 int main() {
