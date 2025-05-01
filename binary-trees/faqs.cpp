@@ -469,6 +469,75 @@ vector<int> distanceK(TreeNode* root, TreeNode* target, int k){
     // TC = O(N) and SC = O(3N)
 }
 
+int timeToBurnTree(TreeNode* root, int start){
+    unordered_map<TreeNode*, TreeNode*> mpp;
+    TreeNode* target = bfsToMapParents(root,mpp, start);
+    int maxi = findMaxDistance(mpp,target);
+    return maxi;
+    // TC = O(2N) and SC = O(N)
+}
+
+TreeNode* bfsToMapParents(TreeNode* root, unordered_map<TreeNode*, TreeNode*>& mpp, int start) {
+    queue<TreeNode*> q;
+    q.push(root);
+    TreeNode* res = new TreeNode(-1);
+
+    while(!q.empty()) {
+        TreeNode* node = q.front();
+        q.pop();
+        // checking if this is the start node
+        if(node->data == start) res = node;
+        if(node->left) {
+            mpp[node->left] = node;
+            q.push(node->left);
+        }
+        if(node->right) {
+            mpp[node->right] = node;
+            q.push(node->right);
+        }
+    }
+    return res;
+}
+
+int findMaxDistance(unordered_map<TreeNode*, TreeNode*>& mpp, TreeNode* target) {
+    queue<TreeNode*> q;
+    q.push(target);
+
+    unordered_map<TreeNode*,int> vis;
+    vis[target] = 1;
+    int maxi = 0;
+
+    while(!q.empty()) {
+        int size = q.size();
+        int fl = 0;
+
+        for(int i = 0; i<size; i++) {
+            TreeNode* node = q.front();
+            q.pop();
+
+            if(node->left && !vis[node->left]) {
+                fl = 1;
+                vis[node->left] = 1;
+                q.push(node->left);
+            }
+            
+            if(node->right && !vis[node->right]) {
+                fl = 1;
+                vis[node->right] = 1;
+                q.push(node->right);
+            }
+
+            if(mpp[node] && !vis[mpp[node]]) {
+                fl = 1;
+                vis[mpp[node]] = 1;
+                q.push(mpp[node]);
+            }
+        }
+        if(fl == 1) maxi++;
+    }
+    return maxi;
+}
+
 
 
 int main() {
