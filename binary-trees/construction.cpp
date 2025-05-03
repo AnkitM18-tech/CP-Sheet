@@ -1,6 +1,13 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+struct TreeNode {
+    int data;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int val) : data(val) , left(nullptr) , right(nullptr) {}
+};
+
 bool uniqueBinaryTree(int a, int b){
     // Return false if both traversals are the same 
     // or if they are preorder and postorder
@@ -40,7 +47,43 @@ bool uniqueBinaryTree(int a, int b){
     */
 }
 
+TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+    unordered_map<int,int> inMap;
 
+    // Populate the map with indices
+    // of elements in the inorder traversal
+    for(int i = 0; i<inorder.size(); i++) {
+        inMap[inorder[i]] = i;
+    }
+
+    return buildTree(preorder, 0, preorder.size() - 1, inorder, 0, inorder.size() - 1, inMap);
+    // O(N) -TC and SC = O(N + H)
+}
+
+TreeNode* buildTree(vector<int>& preorder, int preStart, int preEnd, vector<int>& inorder, int inStart, int inEnd, unordered_map<int,int>& inMap) {
+    // Base case: If the start indices
+    // exceed the end indices, return null
+    if(preStart > preEnd || inStart > inEnd) {
+        return nullptr;
+    }
+
+    // Create a new TreeNode with value
+    // at the current preorder index
+    TreeNode* root = new TreeNode(preorder[preStart]);
+
+    // Find the index of the current root
+    // value in the inorder traversal
+    int inRoot = inMap[root->data];
+
+    // Calculate the number of
+    // elements in the left subtree
+    int numsLeft = inRoot - inStart;
+
+    root->left = buildTree(preorder, preStart + 1, preStart + numsLeft, inorder, inStart, inRoot - 1, inMap);
+    root->right = buildTree(preorder, preStart + numsLeft + 1, preEnd, inorder, inRoot + 1, inEnd, inMap);
+
+    return root;
+}
 
 int main() {
     ios_base::sync_with_stdio(false);
