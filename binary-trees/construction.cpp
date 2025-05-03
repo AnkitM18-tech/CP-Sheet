@@ -85,6 +85,34 @@ TreeNode* buildTree(vector<int>& preorder, int preStart, int preEnd, vector<int>
     return root;
 }
 
+TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+    unordered_map<int,int> inorderMap;
+    for(int i = 0; i < inorder.size(); i++) {
+        inorderMap[inorder[i]] = i;
+    }
+
+    return buildTreeHelper(inorder, 0, inorder.size() - 1, postorder, 0, postorder.size() - 1, inorderMap);
+    // TC = O(N * log N) and SC = O(N + log N)
+}
+
+TreeNode* buildTreeHelper(vector<int>& inorder, int inStart, int inEnd, vector<int>& postorder, int postStart, int postEnd, unordered_map<int,int>& inorderMap) {
+    if(inStart > inEnd || postStart > postEnd) {
+        return NULL;
+    }
+
+    int rootValue = postorder[postEnd];
+    TreeNode* root = new TreeNode(rootValue);
+
+    int rootIndexInorder = inorderMap[rootValue];
+    int leftSubtreeSize = rootIndexInorder - inStart;
+
+    root->left = buildTreeHelper(inorder,inStart,rootIndexInorder - 1, postorder,postStart, postStart+leftSubtreeSize-1,inorderMap);
+    root->right = buildTreeHelper(inorder,rootIndexInorder + 1, inEnd, postorder, postStart + leftSubtreeSize, postEnd - 1, inorderMap);
+
+    return root;
+}
+
+
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
