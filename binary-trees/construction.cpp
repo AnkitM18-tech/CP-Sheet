@@ -112,6 +112,71 @@ TreeNode* buildTreeHelper(vector<int>& inorder, int inStart, int inEnd, vector<i
     return root;
 }
 
+string serialize(TreeNode* root) {
+    if(root == NULL) return "";
+    stringstream ss;
+    queue<TreeNode*> q;
+    q.push(root);
+
+    while(!q.empty()) {
+        TreeNode* current = q.front();
+        q.pop();
+
+        if(current == NULL) {
+            ss << "#,";
+        } else {
+            ss << current->data << ",";
+            q.push(current->left);
+            q.push(current->right);
+        }
+    }
+    return ss.str();
+}
+
+TreeNode* deserialize(string data) {
+    if(data.empty()) return NULL;
+
+    stringstream s(data);
+    string str;
+    getline(s, str, ',');
+    // Read the root value from the serialized data
+    TreeNode* root = new TreeNode(stoi(str));
+    queue<TreeNode*> q;
+    q.push(root);
+
+    while(!q.empty()) {
+        TreeNode* node = q.front();
+        q.pop();
+        // Read the value of the left child from the serialized data
+        getline(s, str, ',');
+        if(str != "#") {
+            TreeNode* leftNode = new TreeNode(stoi(str));
+            node->left = leftNode;
+            q.push(leftNode);
+        }
+        // Read the value of the right child from the serialized data
+        getline(s, str, ',');
+        if(str != "#") {
+            TreeNode* rightNode = new TreeNode(stoi(str));
+            node->right = rightNode;
+            q.push(rightNode);
+        }
+    }
+    // Return the reconstructed root of the tree
+    return root;
+    // TC = O(N) = SC
+}
+
+static void inorder(TreeNode* root) {
+    if (root == nullptr) {
+        return;
+    }
+    inorder(root->left);
+    cout << root->data << " ";
+    inorder(root->right);
+}
+
+
 
 int main() {
     ios_base::sync_with_stdio(false);
