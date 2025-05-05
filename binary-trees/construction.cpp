@@ -176,6 +176,39 @@ static void inorder(TreeNode* root) {
     inorder(root->right);
 }
 
+vector<int> getInorder(TreeNode* root) {
+    vector<int> inorder;
+    TreeNode* current = root;
+
+    while(current != nullptr) {
+        if(current->left == nullptr) {
+            // Add current node's value and move to right child
+            inorder.push_back(current->data); 
+            current = current->right;
+        } else {
+            // Find predecessor
+            TreeNode* prev = current->left;
+            while(prev->right && prev->right != current) {
+                prev = prev->right;
+            }
+            /* Establish a temporary link and move to the
+            left child */
+            if(prev->right == NULL) {
+                prev->right = current;
+                current = current->left;
+            } else {
+                /* Remove the temporary link, add current node's value
+                and move to the right child */ 
+                prev->right = NULL;
+                inorder.push_back(current->data);
+                current = current->right;
+            }
+        }
+    }
+    return inorder;
+    // TC = O(2N), SC = O(1)
+}
+
 
 
 int main() {
