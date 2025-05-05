@@ -209,7 +209,49 @@ vector<int> getInorder(TreeNode* root) {
     // TC = O(2N), SC = O(1)
 }
 
-
+vector<int> preorder(TreeNode* root) {
+    vector<int> Preorder;
+    TreeNode* current = root;
+    while (current != NULL) {
+        /* 
+    Iterate until the current node becomes null
+    If the current node has no left child
+    Add the value of the current node to the preorder list
+    */
+        if (current->left == NULL) {
+            Preorder.push_back(current->data);
+            current = current->right;
+        } else {
+            /* 
+    If the current node has a left child create a pointer 
+    to traverse to the rightmost node in the left subtree
+    or until we find a node whose right child is not yet processed
+    */ 
+            TreeNode* prev = current->left;
+            while (prev->right && prev->right != current) {
+                prev = prev->right;
+            }
+            /* 
+    If the right child of the rightmost node is null 
+    set the right child of the rightmost node to the current node
+    Add the value of the current node to the preorder list
+    and move to the left child
+    */
+            if (prev->right == NULL) {
+                prev->right = current;
+                Preorder.push_back(current->data);
+                current = current->left;
+            } else {
+                /* If the right child of the rightmost node is not null
+    Reset the right child to null and move to the right child */
+                prev->right = NULL;
+                current = current->right;
+            }
+        }
+    }
+    return Preorder;
+    // TC = O(2N), SC = O(1)
+}
 
 int main() {
     ios_base::sync_with_stdio(false);
