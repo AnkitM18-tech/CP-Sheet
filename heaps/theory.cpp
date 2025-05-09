@@ -29,6 +29,47 @@ Range of Non-leaf Node Indices: Non-leaf Nodes start from the index 0 to âŒŠN/2â
 
 */
 
+void heapify(vector<int> &nums, int ind, int val) {
+    // If the current value is replaced with a smaller value
+    if(nums[ind] > val) {
+        nums[ind] = val;
+        heapifyUp(nums,ind);
+    } else {
+        // Else if the current value is replaced with a larger value
+        nums[ind] = val;
+        heapifyDown(nums,ind);
+    }
+}
+
+void heapifyDown(vector<int> &arr, int ind) {
+    int n = arr.size();
+    int smallest_ind = ind;
+    int leftChild_ind = 2 * ind + 1, rightChild_ind = 2*ind + 2;
+
+    if(leftChild_ind < n && arr[leftChild_ind] < arr[smallest_ind]) {
+        smallest_ind = leftChild_ind;
+    }
+
+    if(rightChild_ind < n && arr[rightChild_ind] < arr[smallest_ind]) {
+        smallest_ind = rightChild_ind;
+    }
+
+    if(smallest_ind != ind) {
+        swap(arr[smallest_ind], arr[ind]);
+        heapifyDown(arr, smallest_ind);
+    }
+    return;
+}
+
+void heapifyUp(vector<int> &arr, int ind) {
+    int parent_ind = (ind-1)/2;
+    if(ind > 0 && arr[ind] < arr[parent_ind]) {
+        swap(arr[ind], arr[parent_ind]);
+        heapifyUp(arr,parent_ind);
+    }
+    return;
+}
+// TC = O(logN) SC = O(logN)
 
 int main() {
     ios_base::sync_with_stdio(false);
