@@ -321,6 +321,43 @@ bool isHeap(vector<int>& nums) {
     // TC = O(N/2), SC = O(1)
 }
 
+void heapifyDown(vector<int> &arr, int ind) {
+    int n = arr.size();
+    int largestInd = ind;
+    int leftChildInd = 2 * ind + 1, rightChildInd = 2 * ind + 2;
+
+    if(leftChildInd < n && arr[leftChildInd] > arr[largestInd]) largestInd = leftChildInd;
+    if(rightChildInd < n && arr[rightChildInd] > arr[largestInd]) largestInd = rightChildInd;
+
+    if(largestInd != ind) {
+        swap(arr[largestInd], arr[ind]);
+        heapifyDown(arr,largestInd);
+    }
+    return;
+}
+
+vector<int> minToMaxHeap(vector<int> &nums) {
+    int n = nums.size();
+
+    for(int i = n/2 - 1; i >= 0; i--) {
+        heapifyDown(nums,i);
+    }
+    return nums;
+}
+/*
+Time Complexity: O(N) (where N is the number of elements in the array)
+Each heapify call has a time complexity of O(h), 
+where h is the height of the subtree, h = log(N). 
+The heapify operation is performed for approximately N/2 non-leaf nodes.
+
+Due the variable height for all the subtrees, summing the total work done 
+for all the nodes results in an overall time complexity of O(N) for building a heap.
+
+Space Complexity: O(logN)
+The recursive calls during heapify require stack space proportional to the height of 
+the heap which will be of the order of log(N) in the worst-case.
+*/
+
 
 
 int main() {
