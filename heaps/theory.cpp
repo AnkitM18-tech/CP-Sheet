@@ -107,6 +107,111 @@ void buildMinHeap(vector<int> &nums) {
     // SC = O(logN)
 }
 
+void buildMaxHeap(vector<int> &nums) {
+    int n = nums.size();
+    for(int i = n - 1; i >= 0; i--) {
+        // Heapify each node downwards
+        heapifyDown(nums,i);
+    }
+    // changes in heapifyDown - 
+    // arr[leftChild_ind] > arr[smallest_ind]
+    // arr[rightChild_ind] > arr[smallest_ind]
+}
+
+class MinHeap{
+    private:
+        vector<int> arr;
+        int count;
+
+        void heapifyUp(vector<int> &arr, int ind) {
+            int parentInd = (ind - 1) / 2;
+
+            if (ind > 0 && arr[parentInd] > arr[ind]) {
+                swap(arr[parentInd], arr[ind]);
+                heapifyUp(arr, parentInd);
+            }
+            return;
+        }
+
+        void heapifyDown(vector<int> &arr, int ind) {
+            int n = arr.size();
+            int smallestInd = ind;
+            int leftChildInd = 2 * ind + 1, rightChildInd = 2 * ind + 2;
+
+            if (leftChildInd < n && arr[leftChildInd] < arr[smallestInd]) {
+                smallestInd = leftChildInd;
+            }
+
+            if (rightChildInd < n && arr[rightChildInd] < arr[smallestInd]) {
+                smallestInd = rightChildInd;
+            }
+
+            if (smallestInd != ind) {
+                swap(arr[smallestInd], arr[ind]);
+                heapifyDown(arr, smallestInd);
+            }
+            return;
+        }
+
+        /*
+        Time Complexity:
+
+        Insert(val): Inserting and Heapifying upwards contribute to O(logN) time.
+        Get Minimum(): Constant time operation, i.e., O(1).
+        Extract Minimum(): Involves Heapifying downwards contributing to O(logN)
+        time. Heap Size(): Constant time operation, i.e., O(1). Is Empty(): Constant
+        time operation, i.e., O(1). Change Key(ind, val): Involves heapifying which
+        takes O(logN) time.
+
+        Space Complexity:
+
+        O(N), because of the array used to store the elements.
+        */
+
+    public:
+        void initializeHeap() {
+            arr.clear();
+            count = 0;
+        }
+
+        void insert(int key) {
+            arr.push_back(key);
+            heapifyUp(arr, count);
+            count += 1;
+            return;
+        }
+
+        void changeKey(int index, int new_val) {
+            if (arr[index] > new_val) {
+                arr[index] = new_val;
+                heapifyUp(arr, index);
+            } else {
+                arr[index] = new_val;
+                heapifyDown(arr, index);
+            }
+            return;
+        }
+
+        void extractMin() {
+            int ele = arr[0];
+
+            // Swap the top value with the value at last index
+            swap(arr[0], arr[count - 1]);
+
+            arr.pop_back();
+            count = count - 1;
+            heapifyDown(arr, 0);
+            return;
+        }
+
+        bool isEmpty() { return count == 0; }
+
+        int getMin() { return arr[0]; }
+
+        int heapSize() { return count; }
+};
+
+
 
 int main() {
     ios_base::sync_with_stdio(false);
