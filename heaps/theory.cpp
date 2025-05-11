@@ -71,6 +71,41 @@ void heapifyUp(vector<int> &arr, int ind) {
 }
 // TC = O(logN) SC = O(logN)
 
+void heapifyDown(vector<int> &arr, int ind) {
+    int n = arr.size();
+    int smallest_ind = ind;
+    int leftChild_ind = 2 * ind + 1, rightChild_ind = 2 * ind + 2;
+
+    if(leftChild_ind < n && arr[leftChild_ind] < arr[smallest_ind]) {
+        smallest_ind = leftChild_ind;
+    }
+
+    if(rightChild_ind < n && arr[rightChild_ind] < arr[smallest_ind]) {
+        smallest_ind = rightChild_ind;
+    }
+
+    if(smallest_ind != ind) {
+        swap(arr[smallest_ind], arr[ind]);
+        heapifyDown(arr, smallest_ind);
+    }
+    return;
+}
+
+void buildMinHeap(vector<int> &nums) {
+    int n = nums.size();
+    // Iterate backwards on the non-leaf nodes
+    for(int i = n/2 - 1; i >= 0; i--) {
+        // Heapify each node downwards
+        heapifyDown(nums,i);
+    }
+    return;
+    // TC = O(N)
+    // Each heapify call has a time complexity of O(h), where h is the height of the subtree, 
+    // h = log(N). The heapify operation is performed for approximately N/2 non-leaf nodes.
+    // Due to the variable height for all the subtrees, summing the total work done for all the 
+    // nodes results in an overall time complexity of O(N) for building a heap.
+    // SC = O(logN)
+}
 
 
 int main() {
