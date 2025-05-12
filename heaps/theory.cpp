@@ -407,7 +407,87 @@ void heapSort(vector<int>&nums) {
     */
 }
 
+int kthLargestElement(vector<int>& nums, int k) {
+    // Brute Force - sort the array in descending order and return arr[k-1]
+    // TC = O(N * log N), SC = O(1)
+    // Better
+    /*
+    priority_queue<int, vector<int>, greater<int>> pq;
+    for(int i = 0; i < k; i++) pq.push(nums[i]);
 
+    for(int i = k; i < nums.size(); i++) {
+        if(nums[i] > pq.top()) {
+            pq.pop();
+            pq.push(nums[i]);
+        }
+    }
+    return pq.top();
+    // TC = O(N * log K), SC = O(K)
+    */
+    // Optimal - Quick Select and Partition Algorithm
+    if(k > nums.size()) return -1;
+
+    int l = 0, r = nums.size() - 1;
+
+    while(true) {
+        int pivot = randomIndex(l,r);
+        pivot = partitionAndReturnIndex(nums, pivot, l, r);
+
+        if(pivot == k-1) return nums[pivot];
+        else if(pivot > k-1) r = pivot - 1;
+        else l = pivot + 1;
+    }
+
+    return -1;
+}
+
+int randomIndex(int &left, int &right) {
+    int len = right - left + 1;
+    return (rand() % len) + left;
+}
+
+int partitionAndReturnIndex(vector<int>& nums, int pivotIndex, int left, int right) {
+    int pivot = nums[pivotIndex];
+    // Swap the pivot with the left
+    swap(nums[left], nums[pivotIndex]);
+
+    // Index to mark the start of right portion
+    int ind = left + 1;
+
+    for(int i = left + 1; i <= right; i++) {
+        if(nums[i] > pivot) {
+            // Place the current element in the left portion
+            swap(nums[ind], nums[i]);
+            // Move the right portion index
+            ind++;
+        }
+    }
+
+    // Place the pivot at the correct index
+    swap(nums[left], nums[ind-1]);
+    // Return the index of pivot now
+    return ind - 1;
+    /*
+        Time Complexity: O(N), where N is the size of the given array.
+        In the average case (when the pivot is chosen randomly):
+        Assuming the array gets divided into two equal parts, with every 
+        partitioning step, 
+        the search range is reduced by half. Thus, the time complexity is 
+        O(N + N/2 + N/4 + ... + 1) = O(N).
+
+        In the worst-case scenario (when the element at the left or right index are chosen 
+        as pivot):
+        In such cases, the array is divided into two unequal halves, and the search range 
+        is reduced by one element with every partitioning step. Thus, the time complexity 
+        is O(N + N-1 + N-2 + ... + 1) = O(N2). However, the probability of this worst-case 
+        scenario is negligible.
+
+        Space Complexity: O(1), as we are modifying the input array 
+        in place and using only a constant amount of extra space.
+    */
+}
+
+// left (elements > pivot) > pivot >= right (elements <= pivot)
 
 int main() {
     ios_base::sync_with_stdio(false);
