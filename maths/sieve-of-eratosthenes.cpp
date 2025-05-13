@@ -150,7 +150,78 @@ class PrimeFactorisationOfNumber{
         }
 };
 
+class CountPrimesInRange{
+    private:
+        bool isPrime(int n) {
+            if(n <= 1) return false;
+            for(int i = 2; i*i <= n; i++) {
+                if(n % i == 0) return false;
+            }
+            return true;
+        }
+    public:
+        vector<int> primesInRange(vector<vector<int>>& queries){
+            vector<int> result;
+            /*
+                // Brute - TC = O(Q * (R-L+1) * √R)
+                for(auto& query: queries) {
+                    int l = query.first;
+                    int r = query.second;
+                    int count = 0;
 
+                    for(int j = l; j <= r; j++) {
+                        if(isPrime(j)) count++;
+                    }
+                    result.push_back(count);
+                }
+                return result;
+            */
+            // Optimal - TC = O(N log (log N)), SC = O(N)
+            if (queries.empty()) return {};
+
+            // Find the maximum value in the queries 
+            // to determine the sieve range
+            int maxVal = 0;
+            for(const auto& query : queries) {
+                maxVal = max(maxVal, query[1]);
+            }
+
+            // Step 1: Use the Sieve of Eratosthenes 
+            // to find all primes up to maxVal
+            vector<bool> isPrime(maxVal + 1, true);
+            isPrime[0] = isPrime[1] = false;
+            for(int i = 2; i * i <= maxVal; i++) {
+                if(isPrime[i]) {
+                    for(int j = i * i; j <= maxVal; j += i) {
+                        isPrime[j] = false;
+                    }
+                }
+            }
+
+            // Step 2: Create a prefix sum array 
+            // to count primes up to each number
+            vector<int> primeCount(maxVal + 1, 0);
+            for(int i = 1; i<= maxVal; i++) {
+                primeCount[i] = primeCount[i-1];
+                if(isPrime[i]) {
+                    primeCount[i]++;
+                }
+            }
+
+            // Step 3: Process each query to find the number of primes 
+            // in the given range
+            for(const auto& query : queries) {
+                int start = query[0];
+                int end = query[1];
+                if(start == 0) {
+                    result.push_back(primeCount[end]);
+                } else {
+                    result.push_back(primeCount[end] - primeCount[start - 1]);
+                }
+            }
+            return result;
+        }
+};
 
 int main() {
     ios_base::sync_with_stdio(false);
