@@ -489,6 +489,35 @@ int partitionAndReturnIndex(vector<int>& nums, int pivotIndex, int left, int rig
 
 // left (elements > pivot) > pivot >= right (elements <= pivot)
 
+class KthLargest {
+    private:
+      int k;
+      priority_queue<int, vector<int>, greater<int>> pq;
+    public:
+      KthLargest(int k, vector<int>& nums) {
+        // O(N log k)
+        this->k = k;
+        for(int i = 0; i < nums.size(); i++) {
+          if(pq.size() < k) pq.push(nums[i]);
+          else if(nums[i] > pq.top()) {
+            pq.pop();
+            pq.push(nums[i]);
+          }
+        }
+      }
+    
+      int add(int val) {
+        // O(log k)
+        if(pq.size() < k) {
+          pq.push(val);
+        } else if(val > pq.top()){
+          pq.pop();
+          pq.push(val);
+        }
+        return pq.top();
+      }
+    };
+
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
