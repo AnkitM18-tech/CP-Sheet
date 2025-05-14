@@ -26,7 +26,39 @@ TreeNode* searchBST(TreeNode* root, int val) {
     // TC = O(logN)
 }
 
+vector<int> floorCeilOfBST(TreeNode* root,int key){
+    int floor = -1, ceil = -1;
+    TreeNode* current = root;
 
+    // Floor
+    while(current) {
+        if(current->data == key) {
+            floor = current->data;
+            break;
+        } else if(current->data < key) {
+            floor = current->data;
+            current = current->right;
+        } else {
+            current = current->left;
+        }
+    }
+
+    // Ceil
+    current = root;
+    while(current) {
+        if(current->data == key) {
+            ceil = current->data;
+            break;
+        } else if(current->data > key){
+            ceil = current->data;
+            current = current->left;
+        } else {
+            current = current->right;
+        }
+    }
+    return {floor,ceil};
+    // TC = O(H)
+}
 
 int main() {
     ios_base::sync_with_stdio(false);
