@@ -18,6 +18,13 @@ struct TreeNode {
     TreeNode(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
+TreeNode* searchBST(TreeNode* root, int val) {
+    while(root && root->data != val) {
+        root = (root->data > val) ? root->left : root->right;
+    }
+    return root;
+    // TC = O(logN)
+}
 
 
 
