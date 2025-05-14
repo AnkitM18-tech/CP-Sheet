@@ -60,6 +60,21 @@ vector<int> floorCeilOfBST(TreeNode* root,int key){
     // TC = O(H)
 }
 
+TreeNode* insertIntoBST(TreeNode* root, int val) {
+    if(root == NULL) return new TreeNode(val);
+
+    if(val < root->data) {
+        root->left = insertIntoBST(root->left, val);
+    } else if(val > root->data) {
+        root->right = insertIntoBST(root->right, val);
+    }
+
+    return root;
+    // TC = O(H), for balanced BST O(log N)
+}
+
+
+
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
