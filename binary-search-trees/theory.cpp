@@ -73,6 +73,58 @@ TreeNode* insertIntoBST(TreeNode* root, int val) {
     // TC = O(H), for balanced BST O(log N)
 }
 
+TreeNode* connector(TreeNode* root) {
+    // Case 1: If the node has no left child,
+    // return the right subtree to bypass the node.
+    if(!root->left) return root->right;
+    // Case 2: If the node has no right child,
+    // return the left subtree to bypass the node.
+    else if(!root->right) return root->right;
+
+    TreeNode* leftchild = root->left;
+    TreeNode* leftmost_child_in_right_subtree = root->right;
+
+    // Traverse to the leftmost node in the right subtree.
+    while(leftmost_child_in_right_subtree->left) {
+        leftmost_child_in_right_subtree = leftmost_child_in_right_subtree->left;
+    }
+
+    // Attach the left subtree to the leftmost node in the right subtree.
+    leftmost_child_in_right_subtree->left = leftchild;
+
+    // Return the right subtree as the new root of the modified tree.
+    return root->right;
+}
+
+TreeNode* deleteNode(TreeNode* root, int key) {
+    if(!root) return NULL;
+
+    // If the node to be deleted is the root node,
+    // use the connector function to replace the root.
+    if(root->data == key) return connector(root);
+
+    TreeNode* node = root;
+    while(node) {
+        if(node->data > key) {
+            if(node->left && node->left->data == key) {
+                node->left = connector(node->left);
+                break;
+            } else {
+                node = node->left;
+            }
+        } else {
+            if(node->right && node->right->data == key) {
+                node->right = connector(node->right);
+                break;
+            } else {
+                node = node->right;
+            }
+        }
+    }
+    return root;
+    // TC = O(H) = SC
+}
+
 
 
 int main() {
