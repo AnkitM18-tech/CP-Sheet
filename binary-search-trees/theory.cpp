@@ -191,6 +191,22 @@ public:
     }
 };
 
+bool validate(TreeNode* node, long min, long max) {
+    if(!node) return true;
+
+    if(node->data <= min || node->data >= max) return false;
+
+    bool leftIsValid = validate(node->left, min, node->data);
+    bool rightIsValid = validate(node->right, node->data, max);
+
+    return leftIsValid && rightIsValid;
+}
+
+bool isBST(TreeNode* root){
+    return validate(root, LONG_MIN, LONG_MAX);
+    // TC = O(N), SC = O(N) - recursive stack
+}
+
 
 
 int main() {
