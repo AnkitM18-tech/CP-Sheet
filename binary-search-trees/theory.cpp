@@ -125,6 +125,72 @@ TreeNode* deleteNode(TreeNode* root, int key) {
     // TC = O(H) = SC
 }
 
+class KthLargestSmallest {
+private:
+    int k;
+    int result;
+
+    void inorder(TreeNode* node) {
+        if(node) {
+            inorder(node->left);
+            if(--k == 0) {
+                result = node->data;
+                return;
+            }
+            inorder(node->right);
+        }
+    }
+
+    void reverseInorder(TreeNode* node) {
+        if(node) {
+            reverseInorder(node->right);
+            if(--k == 0) {
+                result = node->data;
+                return;
+            }
+            reverseInorder(node->left);
+        }
+    }
+
+    int kthSmallest(TreeNode* root, int k) {
+        this->k = k;
+        this->result = -1;
+        inorder(root);
+        return result;
+    }
+
+    int kthLargest(TreeNode* root, int k) {
+        this->k = k;
+        this->result = -1;
+        reverseInorder(root);
+        return result;
+    }
+
+public:
+    void inorderTraversal(TreeNode* node, vector<int>& values) {
+        if(node) {
+            inorderTraversal(node->left, values);
+            values.push_back(node->data);
+            inorderTraversal(node->right, values);
+        }
+    }
+    // Inorder traversal of a BST is always sorted
+    vector<int> kLargesSmall(TreeNode* root,int k){
+        /*
+        // Brute - TC = O(N) and SC = O(N)
+        vector<int> values;
+        inorderTraversal(root, values);
+
+        int kthSmallest = values[k-1];
+        int kthLargest = values[values.size() - k];
+
+        return {kthSmallest, kthLargest};
+        */
+        // Optimal - O(N) - TC, SC = O(H)
+        return {kthSmallest(root, k), kthLargest(root, k)};
+    }
+};
+
 
 
 int main() {
