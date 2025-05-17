@@ -207,6 +207,47 @@ bool isBST(TreeNode* root){
     // TC = O(N), SC = O(N) - recursive stack
 }
 
+bool getPath(TreeNode* root, vector<int>& path, int x) {
+    if(!root) return false;
+
+    path.push_back(root->data);
+    if(root->data == x) return true;
+
+    if(getPath(root->left, path, x) || getPath(root->right, path, x)) return true;
+
+    path.pop_back();
+    return false;
+}
+
+TreeNode* lca(TreeNode* root, int p, int q){
+    /*
+    // Brute
+    // TC = O(N + log(2N)), where N is the number of nodes. 
+    // Finding the root-to-node paths using DFS is O(N), 
+    // and iterating through arrays is O(min(P1, P2)).
+    // O(log2 N) = SC
+
+    vector<int> path1, path2;
+
+    if(!getPath(root, path1, p) || !getPath(root, path2, q)) return NULL;
+
+    int i = 0;
+    while(i < path1.size() && i < path2.size() && path1[i] == path2[i]) i++;
+    return new TreeNode(path1[i-1]);
+    */
+    
+    // Optimal - TC = O(H) and SC = O(H)
+    if(root == NULL) return NULL;
+    int curr = root->data;
+
+    if(curr < p && curr < q) return lca(root->right, p, q);
+
+    if(curr > p && curr > q) return lca(root->left, p, q);
+
+    return root;
+
+}
+
 
 
 int main() {
