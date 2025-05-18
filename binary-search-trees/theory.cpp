@@ -322,6 +322,121 @@ TreeNode* bstFromPreorderHelper(vector<int>& preorder, int bound, int& index) {
     return root;
 }
 
+vector<int> succPredBST(TreeNode* root, int key) {
+    /*
+                // Brute - TC = SC = O(N)
+    vector<int> sortedList;
+    inorderTraversal(root, sortedList);
+
+    int predecessor = -1, successor = -1;
+
+    for(int i = 0; i < sortedList.size(); i++) {
+        if(sortedList[i] < key) predecessor = sortedList[i];
+        else if (sortedList[i] > key) {
+            successor = sortedList[i];
+            break;
+        }
+    }
+    return {predecessor, successor};
+
+    // Better - TC = O(H) and SC = O(1)
+    vector<int> result;
+    TreeNode* succ = NULL;
+    TreeNode* pred = NULL;
+
+    while(root) {
+        if(root->data == key) {
+            if(root->right != NULL) {
+                succ = findMin(root->right);
+            }
+            if(root->left) {
+                pred = findMax(root->left);
+            }
+            break;
+        } else if(root->data < key) {
+            pred = root;
+            root = root->right;
+        } else {
+            succ = root;
+            root = root->left;
+        }
+    }
+
+    if(pred) result.push_back(pred->data);
+    else result.push_back(-1);
+
+    if(succ) result.push_back(succ->data);
+    else result.push_back(-1);
+
+    return result;
+    */
+    // Optimal - O(N)
+    int predecessor = -1;
+    int successor = numeric_limits<int>::max();
+
+    // Lambda function to traverse the tree and find successor and
+    // predecessor
+    function<void(TreeNode*)> traverse = [&](TreeNode* node) {
+        if (node == nullptr) {
+            return;
+        }
+
+        if (node->data < key) {
+            // Update predecessor and move to the right subtree
+            predecessor = max(predecessor, node->data);
+            traverse(node->right);
+        } else if (node->data > key) {
+            // Update successor and move to the left subtree
+            successor = min(successor, node->data);
+            traverse(node->left);
+        } else {
+            // If node's value equals key, find predecessor and successor in
+            // subtrees
+            if (node->left != nullptr) {
+                // Find maximum value in left subtree for predecessor
+                TreeNode* temp = node->left;
+                while (temp->right != nullptr) {
+                    temp = temp->right;
+                }
+                predecessor = temp->data;
+            }
+
+            if (node->right != nullptr) {
+                // Find minimum value in right subtree for successor
+                TreeNode* temp = node->right;
+                while (temp->left != nullptr) {
+                    temp = temp->left;
+                }
+                successor = temp->data;
+            }
+        }
+    };
+
+    traverse(root);
+
+    // Return the result as a vector with predecessor and successor
+    return {predecessor == -1 ? -1 : predecessor,
+            successor == numeric_limits<int>::max() ? -1 : successor};
+}
+
+void inorderTraversal(TreeNode* node, vector<int>& sortedList) {
+    if (!node) return;
+
+    inorderTraversal(node->left, sortedList);
+    sortedList.push_back(node->data);
+    inorderTraversal(node->right, sortedList);
+}
+
+TreeNode* findMin(TreeNode* node) {
+    while (node->left) node = node->left;
+    return node;
+}
+
+TreeNode* findMax(TreeNode* node) {
+    while (node->right) node = node->right;
+    return node;
+}
+
 
 
 int main() {
