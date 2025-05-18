@@ -248,6 +248,79 @@ TreeNode* lca(TreeNode* root, int p, int q){
 
 }
 
+TreeNode* bstFromPreorder(vector<int>& preorder) {
+    /*
+    // Brute
+    if(preorder.empty()) return nullptr;
+
+    TreeNode* root = new TreeNode(preorder[0]);
+
+    stack<TreeNode*> s;
+    s.push(root);
+
+    for(int i = 1; i < preorder.size(); i++) {
+        TreeNode* node = s.top();
+        TreeNode* child = new TreeNode(preorder[i]);
+        
+        // Adjust the stack and place the node in the right position
+        while(!s.empty() && s.top()->data < preorder[i]) {
+            node = s.top();
+            s.pop();
+        }
+
+        // Insert node as left or right child
+        if(node->data < preorder[i]) node->right = child;
+        else node->left = child;
+
+        s.push(child);
+    }
+    return root;
+    // TC = O(N) = SC
+    
+    // Better - TC = O(N log N) + O(N), SC = O(N)
+    vector<int> inorder = preorder;
+    sort(inorder.begin(), inorder.end());
+    
+    unordered_map<int,int> inMap;
+    for(int i = 0; i < inorder.size(); i++) {
+        inMap[inorder[i]] = i;
+    }
+
+    return buildTree(preorder, inMap, 0, preorder.size() - 1, 0, inorder.size() - 1);
+    */
+    // Optimal - TC = O(N), SC = O(h)
+    int index = 0;
+    return bstFromPreorderHelper(preorder, INT_MAX, index);
+}
+
+TreeNode* buildTree(const vector<int>& preorder, unordered_map<int,int>& inMap, int preStart, int preEnd, int inStart, int inEnd) {
+    if(preStart > preEnd || inStart > inEnd) return NULL;
+
+    TreeNode* root = new TreeNode(preorder[preStart]);
+    int inRoot = inMap[root->data];
+    int numsLeft = inRoot - inStart;
+
+    root->left = buildTree(preorder, inMap, preStart + 1, preStart + numsLeft, inStart, inRoot - 1);
+    root->right = buildTree(preorder, inMap, preStart + numsLeft + 1, preEnd, inRoot + 1, inEnd);
+
+    return root;
+}
+
+TreeNode* bstFromPreorderHelper(vector<int>& preorder, int bound, int& index) {
+    if(index == preorder.size() || preorder[index] > bound) return NULL;
+
+    TreeNode* root = new TreeNode(preorder[index]);
+    index++;
+
+    // Recursively construct the left subtree
+    // with the current value as the new bound
+    root->left = bstFromPreorderHelper(preorder, root->data, index);
+    // Recursively construct the right subtree
+    // with the same bound as the parent's bound
+    root->right = bstFromPreorderHelper(preorder, bound, index);
+
+    return root;
+}
 
 
 
