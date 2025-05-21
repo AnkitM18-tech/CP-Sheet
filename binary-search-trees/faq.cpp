@@ -126,6 +126,63 @@ class TwoSumBST{
         }
 };
 
+class BSTWithTwoNodesSwapped {
+public:
+    void recoverTree(TreeNode* root) {
+        /*
+       // Brute - TC = O(2N + N*log N), SC = O(N) + O(H)
+       collectInorder(root);
+       sort(inorderValues.begin(), inorderValues.end());
+       restoreInorder(root);
+       */
+       // Optimal - O(N) = TC and SC
+        TreeNode* first = NULL, *middle = NULL, *last = NULL, *prev = NULL;
+
+        function<void(TreeNode*)> inorder = [&](TreeNode* node) {
+            if(!node) return;
+
+            inorder(node->left);
+
+            if(prev && prev->data > node->data) {
+                if(!first) {
+                    first = prev;
+                    middle = node;
+                } else {
+                    last = node;
+                }
+            }
+
+            prev = node;
+            inorder(node->right);
+        };
+
+        inorder(root);
+
+        if(first && last) {
+            swap(first->data, last->data); // Non-adjacent
+        } else if(first && middle) {
+            swap(first->data, middle->data); // adjacent
+        }
+    }
+private:
+    vector<int> inorderValues;
+    int index = 0;
+
+    void collectInorder(TreeNode* root) {
+        if(!root) return;
+        collectInorder(root->left);
+        inorderValues.push_back(root->data);
+        collectInorder(root->right);
+    }
+
+    void restoreInorder(TreeNode* root) {
+        if(!root) return;
+        restoreInorder(root->left);
+        root->data = inorderValues[index++];
+        restoreInorder(root->right);
+    }
+};
+
 
 
 int main() {
