@@ -53,6 +53,79 @@ class BSTIterator{
 };
 
 
+class BSTIterator {
+    private:
+        stack<TreeNode*> st;
+        bool reverse;
+
+        void pushAll(TreeNode* node) {
+            while(node) {
+                st.push(node);
+                node = reverse ? node->right : node->left;
+            }
+        }
+    public:
+        BSTIterator(TreeNode* root, bool isReverse) {
+            reverse = isReverse;
+            pushAll(root);
+        }
+
+        bool hasNext() {
+            return !st.empty();
+        }
+
+        int next() {
+            TreeNode* node = st.top();
+            st.pop();
+            if(!reverse) pushAll(node->right);
+            else pushAll(node->left);
+            return node->data;
+        }
+};
+
+class TwoSumBST{	
+	public:
+		bool twoSumBST(TreeNode* root, int k){
+            /*
+			// Brute force - TC = O(2N), SC = O(N)
+            vector<int> sortedElements;
+            inorderTraversal(root, sortedElements);
+
+            int left = 0, right = sortedElements.size() - 1;
+
+            while(left < right) {
+                int sum = sortedElements[left] + sortedElements[right];
+                if(sum == k) return true;
+                else if(sum < k) left++;
+                else right--;
+            }
+            return false;
+            */
+            // Optimal - TC = O(N), SC = O(2 * H)
+            if(!root) return false;
+
+            BSTIterator left(root, false); // normal inorder
+            BSTIterator right(root, true); // reverse inorder
+
+            int i = left.next();
+            int j = right.next();
+
+            while(i < j) {
+                if(i + j == k) return true;
+                else if (i + j < k) i = left.next();
+                else j = right.next();
+            }
+            return false;
+		}
+    private:
+        void inorderTraversal(TreeNode* node, vector<int>& inorder) {
+            if(!node) return;
+            inorderTraversal(node->left, inorder);
+            inorder.push_back(node->data);
+            inorderTraversal(node->right, inorder);
+        }
+};
+
 
 
 int main() {
