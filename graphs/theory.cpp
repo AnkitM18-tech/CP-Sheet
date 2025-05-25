@@ -112,6 +112,74 @@ For adjacency list: Earlier in the adjacency list, a list of integers was stored
 
 */
 
+class ConnectedComponents {
+    public:
+      // Function for BFS traversal
+      void bfs(int node, vector<int> adjsList[], int vis[]) {
+        // Mark the node as visited
+        vis[node] = 1;
+        queue<int> q;
+  
+        q.push(node);
+  
+        while(!q.empty()) {
+          int i = q.front();
+          q.pop();
+  
+          // Traverse its unvisited neighbours
+          for(auto adjNodes: adjsList[i]) {
+            if(vis[adjNodes] != 1) {
+              // Mark the node as visited
+              vis[adjNodes] = 1;
+              // Add the node to queue
+              q.push(adjNodes);
+            }
+          }
+        }
+      }
+  
+      // Function for DFS traversal
+      void dfs(int node, vector<int> adjsList[], int vis[]) {
+        vis[node] = 1;
+  
+        for(auto it: adjsList[node]) {
+          if(!vis[it]) {
+            dfs(it, adjsList, vis);
+          }
+        }
+      }
+      
+      int findNumberOfComponent(int E, int V, vector<vector<int>> &edges) {
+        vector<int> adjsList[V];
+  
+        for(int i = 0; i < E; i++) {
+          adjsList[edges[i][0]].push_back(edges[i][1]);
+          adjsList[edges[i][1]].push_back(edges[i][0]);
+        }
+  
+        int vis[V] = {0};
+  
+        // count of components
+        int cnt = 0;
+  
+        for(int i = 0; i < V; i++) {
+          if(!vis[i]) {
+            cnt++;
+  
+            /* Start traversal from current 
+            node using any traversal */
+            bfs(i, adjsList, vis); 
+            //dfs(i, adjLs, vis);
+          }
+        }
+  
+        return cnt;
+        // TC = O(E + V)
+        // SC = O(E + V)
+      }
+  };
+
+
 
 int main() {
     ios_base::sync_with_stdio(false);
