@@ -63,6 +63,77 @@ public:
     // TC = O(V^2) + O(V + E), SC = O(V + E)
 };
 
+class NumberOfIslands{
+private:
+    /* Function to determine if the cell
+        is valid (within grid's boundaries) */
+    bool isValid(int i, int j, int n, int m) {
+        if(i < 0 || i >= n) return false;
+        if(j < 0 || j >= m) return false;
+
+        return true;
+    }
+
+    void bfs(int i ,int j, vector<vector<bool>>& vis, vector<vector<char>>& grid) {
+        vis[i][j] = true;
+
+        queue<pair<int, int>> q;
+
+        q.push({i,j});
+
+        int n = grid.size();
+        int m = grid[0].size();
+
+        while(!q.empty()) {
+            pair<int,int> cell = q.front();
+            q.pop();
+
+            int row = cell.first;
+            int col = cell.second;
+
+            for(int delRow = -1; delRow <= 1; delRow++) {
+                for(int delCol = -1; delCol <= 1; delCol++) {
+                    int newRow = row + delRow;
+                    int newCol = col + delCol;
+
+                    if(isValid(newRow, newCol,n,m) && grid[newRow][newCol] == '1' && !vis[newRow][newCol]) {
+                        vis[newRow][newCol] = true;
+                        q.push({newRow, newCol});
+                    }
+                }
+            }
+        }
+    }
+public:
+    int numIslands(vector<vector<char>> &grid){
+        int n = grid.size();
+        int m = grid[0].size();
+
+        vector<vector<bool>> vis(n, vector<bool>(m, false));
+
+        int count = 0;
+
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++) {
+                if(!vis[i][j] && grid[i][j] == '1') {
+                    count++;
+                    bfs(i, j, vis, grid);
+                }
+            }
+        }
+        return count;
+
+        // TC = O(N * M)
+        /*
+        Running a nested loop to traverse every cell of grid takes O(N*M) time.
+        In total, the traversal will be performed on grids taking overall at 
+        most of O(9*N*M) time.
+
+        SC = O(N*M)
+        */
+    }
+};
+
 
 
 int main() {
