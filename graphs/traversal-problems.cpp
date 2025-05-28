@@ -134,6 +134,56 @@ public:
     }
 };
 
+class FloodFill{
+    private:
+        vector<int> delRow = {-1, 0, 1, 0};
+        vector<int> delCol = {0, 1, 0, -1};
+
+        bool isValid(int i, int j, int n, int m) {
+            if(i < 0 || i >= n) return false;
+            if(j < 0 || j >= m) return false;
+
+            return true;
+        }
+
+        void dfs(int row, int col, vector<vector<int>>& ans, vector<vector<int>>& image, int newColor, int initialColor) {
+            ans[row][col] = newColor;
+
+            int n = image.size();
+            int m = image[0].size();
+
+            for(int i = 0; i < 4; i++) {
+                int nRow = row + delRow[i];
+                int nCol = col + delCol[i];
+
+                if(isValid(nRow, nCol, n, m) && image[nRow][nCol] == initialColor && ans[nRow][nCol] != newColor) {
+                    dfs(nRow, nCol, ans, image, newColor, initialColor);
+                }
+            }
+        }
+    public:
+        vector<vector<int>> floodFill(vector<vector<int>> &image, int sr, int sc, int newColor) {
+            int initialColor = image[sr][sc];
+
+            vector<vector<int>> ans = image;
+
+            dfs(sr, sc, ans, image, newColor, initialColor);
+
+            return ans;
+
+            /*
+                Time Complexity: O(N*M) (where N and M are the dimensions of image)
+                In the worst case, all the pixel will have same color, DFS call will 
+                be made for (N*M) nodes.
+                For every pixel, its four neighbors are traversed, taking O(4*N*M) time.
+                
+                Space Complexity: O(N*M)
+                Extra space for new image takes O(N*M) space.
+                Recusive stack space for DFS calls will take at most O(N*M) space
+            */
+        }
+};
+
 
 
 int main() {
