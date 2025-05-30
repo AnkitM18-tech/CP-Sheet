@@ -184,6 +184,82 @@ class FloodFill{
         }
 };
 
+class NumberOfEnclaves{
+private:
+    vector<int> delRow = {-1, 0, 1, 0};
+    vector<int> delCol = {0, 1, 0, -1};
+
+    bool isValid(int& i, int& j, int& n, int& m) {
+        if(i < 0 || i >= n) return false;
+        if(j < 0 || j >= m) return false;
+
+        return true;
+    }
+
+    void bfs(vector<vector<int>>& grid, queue<pair<int,int>>& q, vector<vector<int>>& vis) {
+        int n = grid.size();
+        int m = grid[0].size();
+
+        while(!q.empty()) {
+            auto cell = q.front();
+            q.pop();
+
+            int row = cell.first;
+            int col = cell.second;
+
+            for(int i = 0; i < 4; i++) {
+                int nRow = row + delRow[i];
+                int nCol = col + delCol[i];
+
+                if(isValid(nRow, nCol, n, m) && grid[nRow][nCol] == 1 && !vis[nRow][nCol]) {
+                    vis[nRow][nCol] = 1;
+                    q.push({nRow, nCol});
+                }
+            }
+        }
+    }
+public:
+    int numberOfEnclaves(vector<vector<int>> &grid) {
+        queue<pair<int,int>> q;
+        int n = grid.size();
+        int m = grid[0].size();
+
+        vector<vector<int>> vis(n, vector<int>(m, 0));
+
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++) {
+                /* If the land cell is at
+                border, add it to queue */
+                if((i == 0 || i == n - 1 || j == 0 || j == m - 1) && grid[i][j] == 1) {
+                    vis[i][j] = 1;
+                    q.push({i,j});
+                }
+            }
+        }
+
+        bfs(grid, q, vis);
+
+        int count = 0;
+
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++) {
+                if(grid[i][j] == 1 && !vis[i][j]) count++;
+            }
+        }
+
+        return count;
+        /*
+            Time Complexity: O(N*M) (where N and M are the dimensions of image)
+
+            In the worst case, all the cell will have land, and BFS call will be made for (N*M) nodes.
+            For every cell, its four neighbors are traversed, taking O(4*N*M) time.
+            Space Complexity: O(N*M)
+
+            Visited array takes O(N*M) space.
+            In worst scenario, the queue takes up O(N*M) space.
+        */
+    }
+};
 
 
 
