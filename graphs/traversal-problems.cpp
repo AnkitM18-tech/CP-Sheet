@@ -261,6 +261,80 @@ public:
     }
 };
 
+class RottenOranges{
+private:
+    vector<int> delRow = {-1, 0, 1, 0};
+    vector<int> delCol = {0, 1, 0, -1};
+
+    bool isValid(int& i, int& j, int& n, int& m) {
+        if(i < 0 || i >= n) return false;
+        if(j < 0 || j >= m) return false;
+
+        return true;
+    }
+
+public:
+    int orangesRotting(vector<vector<int>> &grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+
+    // store time taken to get all oranges rotten
+        int time = 0;
+    // store total count of oranges
+        int total = 0;
+    // store count of rotten oranges
+        int count = 0; 
+
+        queue<pair<int,int>> q;
+
+        for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            if(grid[i][j] != 0) total++;
+
+            if(grid[i][j] == 2) q.push({i,j});
+        }
+        }
+
+        while(!q.empty()) {
+            int k = q.size();
+            count += k;
+
+            while(k--) {
+                auto cell = q.front();
+                q.pop();
+
+                int row = cell.first;
+                int col = cell.second;
+
+                for(int i = 0; i < 4; i++) {
+                    int nRow = row + delRow[i];
+                    int nCol = col + delCol[i];
+
+                    if(isValid(nRow, nCol, n, m) && grid[nRow][nCol] == 1) {
+                        grid[nRow][nCol] = 2;
+                        q.push({nRow, nCol});
+                    }
+                }
+            }
+
+            if(!q.empty()) time++;
+        }
+        if(total == count) return time;
+
+        return -1;
+    }
+    /*
+    Time Complexity: O(N*M) (where N and M are the dimensions of grid)
+    In the worst case, each fresh orange in the grid will be rotten 
+    and for each rotten orange, 
+    its 4 neighbors are checked taking O(4*N*M) time.
+
+    Space Complexity: O(N*M)
+    Using a queue data structure, which will store all cells if a grid is 
+    full of rotten oranges taking O(N*M) space.
+    */
+};
+
 
 
 int main() {
