@@ -335,6 +335,71 @@ public:
     */
 };
 
+class NearestOne{
+private:
+    vector<int> delRow = {-1, 0, 1, 0};
+    vector<int> delCol = {0, 1, 0, -1};
+
+    bool isValid(int& i, int& j, int& n, int& m) {
+        if(i < 0 || i >= n) return false;
+        if(j < 0 || j >= m) return false;
+
+        return true;
+    }
+public:
+    vector<vector<int>> nearest(vector<vector<int>> grid){
+        int n = grid.size();
+        int m = grid[0].size();
+
+        vector<vector<int>> vis(n, vector<int>(m, 0));
+        vector<vector<int>> dist(n, vector<int>(m, 0));
+
+        // Queue to store the pair {coordinates, steps}
+        queue<pair<pair<int,int>, int>> q;
+
+        for(int i = 0; i<n; i++) {
+            for(int j = 0; j<m; j++) {
+                if(grid[i][j] == 1) {
+                    q.push({{i,j}, 0});
+                    vis[i][j] = 1;
+                } else {
+                    vis[i][j] = 0;
+                }
+            }
+        }
+
+        while(!q.empty()) {
+            int row = q.front().first.first;
+            int col = q.front().first.second;
+            int steps = q.front().second;
+            q.pop();
+
+            dist[row][col] = steps;
+
+            for(int i = 0; i < 4; i++) {
+                int nRow = row + delRow[i];
+                int nCol = col + delCol[i];
+
+                if(isValid(nRow, nCol, n, m) && vis[nRow][nCol] == 0) {
+                    vis[nRow][nCol] = 1;
+                    q.push({{nRow, nCol}, steps+1});
+                }
+            }
+        }
+        return dist;
+        /*
+        Time Complexity: O(N*M) (where N and M are the dimensions of grid)
+        For the worst case, the BFS function will be called for (N x M) nodes, and 
+        for every node, we are traversing for 4 neighbors, 
+        so it will take O(N x M x 4) time.
+
+        Space Complexity: O(N*M) The visited array and distance matrix will 
+        take O(N*M) space each, and the queue will store at maximum of O(N*M) 
+        cells (in case of grid having all cells as 1).
+        */
+    }
+};
+
 
 
 int main() {
