@@ -400,6 +400,94 @@ public:
     }
 };
 
+class SurroundedRegions {
+private:
+    vector<int> delRow = {-1, 0, 1, 0};
+    vector<int> delCol = {0, 1, 0, -1};
+
+    bool isValid(int& i, int& j, int& n, int& m) {
+        if (i < 0 || i >= n) return false;
+        if (j < 0 || j >= m) return false;
+
+        return true;
+    }
+
+    void dfs(int row, int col, vector<vector<int>>& vis,
+            vector<vector<char>>& mat, int& n, int& m) {
+        vis[row][col] = 1;
+
+        for (int i = 0; i < 4; i++) {
+            int nRow = row + delRow[i];
+            int nCol = col + delCol[i];
+
+            if (isValid(nRow, nCol, n, m) && mat[nRow][nCol] == 'O' &&
+                !vis[nRow][nCol]) {
+                dfs(nRow, nCol, vis, mat, n, m);
+            }
+        }
+    }
+
+public:
+    vector<vector<char>> fill(vector<vector<char>> mat) {
+        int n = mat.size();
+        int m = mat[0].size();
+
+        vector<vector<int>> vis(n, vector<int>(m, 0));
+
+        // boundary row traversal
+        for (int j = 0; j < m; j++) {
+            // first row
+            if (!vis[0][j] && mat[0][j] == 'O') {
+                dfs(0, j, vis, mat, n, m);
+            }
+
+            // last row
+            if (!vis[n - 1][j] && mat[n - 1][j] == 'O') {
+                dfs(n - 1, j, vis, mat, n, m);
+            }
+        }
+
+        // boundary col traversal
+        for (int i = 0; i < n; i++) {
+            // first col
+            if (!vis[i][0] && mat[i][0] == 'O') {
+                dfs(i, 0, vis, mat, n, m);
+            }
+            // last col
+            if (!vis[i][m - 1] && mat[i][m - 1] == 'O') {
+                dfs(i, m - 1, vis, mat, n, m);
+            }
+        }
+
+        /* Traverse the matrix and convert
+        the unvisited 'O's into 'X' */
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (mat[i][j] == 'O' && !vis[i][j]) {
+                    mat[i][j] = 'X';
+                }
+            }
+        }
+
+        return mat;
+    }
+    /*
+
+    Time Complexity: O(N*M) (where N and M are the dimensions of matrix)
+
+    In the worst case, when all the elements in the matrix will be 'O',
+    DFS call will be made for O(N*M) cells, and for each cell traversing its 4
+    neighbors will contribute to O(4*N*M) time.
+    Traversal of boundary (rows and columns) takes O(N+M) time.
+    Traversal of matrix to update the unvisited 'O' takes O(N*M) time.
+    Hence, O(4*N*M) + O(N+M) + O(N*M) contribute to overall O(N*M) time.
+    Space Complexity: O(N*M)
+    O(N*M) for visited array, and O(N*M) as recursive stack space for DFS
+    traversal in worst case.
+
+    */
+};
+
 
 
 int main() {
