@@ -488,6 +488,67 @@ public:
     */
 };
 
+class NumberOfDistinctIslands {
+    private:
+        vector<int> delRow = {-1, 0, 1, 0};
+        vector<int> delCol = {0, 1, 0, -1};
+
+        bool isValid(int& i, int& j, int& n, int& m) {
+            if(i < 0 || i >= n) return false;
+            if(j < 0 || j >= m) return false;
+
+            return true;
+        }
+
+        void dfs(int row, int col, vector<vector<int>>& grid, vector<vector<int>>& vis, vector<pair<int,int>>& path, int& baseRow, int& baseCol) {
+            int n = grid.size(), m = grid[0].size();
+
+            /* Add relative position of current 
+            cell with respect to the base cell */
+            path.push_back({row - baseRow, col - baseCol});
+
+            for(int i = 0; i < 4; i++) {
+                int nRow = row + delRow[i];
+                int nCol = col + delCol[i];
+
+                if(isValid(nRow, nCol, n , m) && grid[nRow][nCol] == 1 && !vis[nRow][nCol]) {
+                    vis[nRow][nCol] = 1;
+                    dfs(nRow, nCol, grid, vis, path, baseRow, baseCol);
+                }
+            }
+            return;
+        }
+    public:
+    int countDistinctIslands(vector<vector<int>> &grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+
+        vector<vector<int>> vis(n, vector<int>(m , 0));
+        set<vector<pair<int,int>>> st;
+
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++) {
+                if(grid[i][j] == 1 && !vis[i][j]) {
+                    vis[i][j] = 1;
+                    vector<pair<int,int>> path;
+                    dfs(i, j, grid, vis, path, i , j);
+                    st.insert(path);
+                }
+            }
+        }
+        return st.size();
+    }
+    /*
+    Time Complexity: O(N*M*log(N*M)) (where N and M are dimensions of grid)
+
+    In the worst case, the DFS call will be made for N*M cells taking O(N*M) time.
+    In worst case, the set will store O(N*M) entries that takes O(N*M*log(N*M)) time.
+    
+    Space Complexity: O(N*M)
+    The visited array takes O(N*M) space and the set will store a maximum of O(N*M) cells.
+    */
+};
+
 
 
 int main() {
