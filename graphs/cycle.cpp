@@ -74,6 +74,67 @@ public:
     */
 };
 
+class BipartiteGraph{
+    private:
+        bool bfs(int start, vector<int> adj[], vector<int>& color) {
+            queue<int> q;
+            // Add initial node to queue
+            q.push(start);
+    
+            color[start] = 0;
+    
+            while(!q.empty()) {
+                int node = q.front();
+                q.pop();
+    
+                for(auto it : adj[node]) {
+                    // If not already colored
+                    if(color[it] == -1) {
+                        // Color it with opposite color.
+                        color[it] = !color[node];
+                        q.push(it);
+                    } else if(color[it] == color[node]) return false;
+                }
+            }
+            return true;
+        }
+    
+        bool dfs(int node, int col, vector<int> adj[], vector<int>& color) {
+            color[node] = col;
+    
+            for(auto it : adj[node]) {
+                if(color[it] == -1) {
+                    if(!dfs(it, !col, adj, color)) return false;
+                } else if(color[it] == col) return false;
+            }
+            return true;
+        }
+    public:
+        bool isBipartite(int V, vector<int> adj[])  {
+            vector<int> color(V, -1);
+    
+            for(int i = 0; i < V; i++) {
+                // If not colored, start the traversal
+                if(color[i] == -1) {
+                    // Return false if graph is not bipartite
+                    // if(!bfs(i, adj, color)) return false;
+    
+                    if(!dfs(i, 0, adj, color)) return false;
+                }
+            }
+            /* Return true if each 
+            component is bipartite */
+            return true;
+        }
+        /*
+        Time Complexity: O(V+E) (where V is the number of nodes and E is the number of edges in the graph)
+        The BFS Traversal takes O(V+E) time.
+    
+        Space Complexity: O(V)
+        The color array takes O(V) space and queue space for BFS is O(V) for the worst case.
+        */
+};
+
 
 
 int main() {
