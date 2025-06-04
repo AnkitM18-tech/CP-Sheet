@@ -207,7 +207,85 @@ class TopologicalSort{
         */
 };
 
-
+class DetectCycleInDirectedGraph{
+    private:
+        bool dfs(int node, vector<int> adj[], vector<int>& vis, vector<int>& pathVisited) {
+            vis[node] = 1;
+            pathVisited[node] = 1;
+    
+            for(auto it : adj[node]) {
+                /* If the neighbor is already visited 
+                in the path, a cycle is detected */
+                if(pathVisited[it]) return true;
+                /* Else if the node is unvisited, 
+                perform DFS recursively from this node */
+                else if(!vis[it]) {
+                    if(dfs(it, adj, vis, pathVisited)) return true;
+                }
+            }
+    
+            pathVisited[node] = 0;
+            return false;
+        }
+    
+        vector<int> topoSort(int V, vector<int> adj[]) {
+            vector<int> ans;
+            vector<int> inDegree(V, 0);
+    
+            for(int i = 0; i < V; i++) {
+                for(auto it : adj[i]) inDegree[it]++;
+            }
+    
+            queue<int> q;
+            for(int i = 0; i < V; i++) {
+                if(inDegree[i] == 0) q.push(i);
+            }
+    
+            while(!q.empty()) {
+                int node = q.front();
+                ans.push_back(node);
+                q.pop();
+    
+                for(auto it: adj[node]) {
+                    inDegree[it]--;
+    
+                    if(inDegree[it] == 0) q.push(it);
+                }
+            }
+    
+            return ans;
+        }
+    public:
+        bool isCyclic(int N, vector<int> adj[]) {
+            vector<int> vis(N, 0);
+            vector<int> pathVisited(N, 0);
+    
+            for(int i = 0; i < N; i++) {
+                if(!vis[i]) {
+                    if(dfs(i, adj, vis, pathVisited)) return true;
+                }
+            }
+    
+            /*
+            // BFS Implementation
+            vector<int> topo;
+    
+            topo = topoSort(N, adj);
+            if(topo.size() < N) return true;
+            */
+    
+            return false;
+        }
+        /*
+            Time Complexity: O(V+E) 
+            (where V and E represent the number of nodes and edges in the graph)
+            A simple DFS traversal takes O(V+E) time.
+    
+            Space Complexity: O(V)
+            The visited array and Path Visited array take O(V) space each and the 
+            recursion stack space during DFS traversal will be O(V).
+        */
+};  
 
 int main() {
     ios_base::sync_with_stdio(false);
