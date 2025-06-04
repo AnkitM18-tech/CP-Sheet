@@ -135,6 +135,78 @@ class BipartiteGraph{
         */
 };
 
+class TopologicalSort{
+    private:
+        void dfs(int node, vector<int> adj[], vector<int>& vis, stack<int>& st) {
+            vis[node] = 1;
+    
+            for(auto it : adj[node]) {
+                if(vis[it] == 0) dfs(it, adj, vis, st);
+            }
+    
+            /* Add the current node to stack 
+            once all the nodes connected to it 
+            have been processed */
+            st.push(node);
+        }
+    public:
+        vector<int> topoSort(int V, vector<int> adj[]){
+            vector<int> vis(V, 0);
+            vector<int> ans;
+            stack<int> st;
+    
+            for(int i = 0; i < V; i++) {
+                if(!vis[i]) dfs(i, adj, vis, st);
+            }
+    
+            while(!st.empty()) {
+                ans.push_back(st.top());
+                st.pop();
+            }
+    
+            return ans;
+            /*
+                // BFS - Kahn's Algorithm
+    
+                vector<int> inDegree(V, 0);
+    
+                for(int i = 0; i < V; i++) {
+                    for(auto it : adj[i]) inDegree[it]++;
+                }
+    
+                queue<int> q;
+    
+                for(int i = 0; i < V; i++) {
+                    if(inDegree[i] == 0) q.push(i);
+                }
+    
+                while(!q.empty()) {
+                    int node = q.front();
+                    ans.push_back(node);
+                    q.pop();
+    
+                    for(auto it : adj[node]) {
+                        inDegree[it]--;
+                        if(inDegree[it] == 0) q.push(it);
+                    }
+                }
+    
+                return ans;
+            */
+        }
+        /*
+    
+        Time Complexity: O(V+E) (where V and E represent the number of nodes and 
+        edges in the graph)
+        A simple DFS traversal takes O(V+E) time.
+    
+        Space Complexity: O(V)
+        The stack will store at most V nodes taking O(V) space and the array to 
+        store the topological sort takes O(V) space.
+        
+        */
+};
+
 
 
 int main() {
