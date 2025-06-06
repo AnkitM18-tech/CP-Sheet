@@ -93,6 +93,93 @@ public:
     */
 };
 
+#define P pair<int,int>
+
+class PrintShortestPath{
+public:
+    vector<int> shortestPath(int n, int m, vector<vector<int>> &edges) {
+        vector<P> adj[n+1];
+
+        for(auto it : edges) {
+        adj[it[0]].push_back({it[1], it[2]});
+        adj[it[1]].push_back({it[0], it[2]});
+        }
+
+        priority_queue<P, vector<P>, greater<P>> pq;
+        vector<int> dist(n + 1, 1e9);
+        vector<int> parent(n + 1);
+
+        /* Marking each node as 
+        its own parent initially */
+        for (int i = 1; i <= n; i++) {
+            parent[i] = i;
+        }
+
+        dist[1] = 0;
+
+        pq.push({0, 1});
+
+        while(!pq.empty()) {
+            auto it = pq.top();
+            pq.pop();
+
+            int dis = it.first;
+            int node = it.second;
+
+            for(auto it : adj[node]) {
+                int adjNode = it.first;
+                int edgeWt = it.second;
+
+                if(dis + edgeWt < dist[adjNode]) {
+                    dist[adjNode] = dis + edgeWt;
+                    pq.push({dis + edgeWt, adjNode});
+                    parent[adjNode] = node;
+                }
+            }
+        }
+
+        if(dist[n] == 1e9) return {-1};
+
+        vector<int> path;
+        // Start from the destination node
+        int node = n;
+
+        /* Iterate backwards from destination 
+        to source through the parent array */
+        while(parent[node] != node) {
+            path.push_back(node);
+            node = parent[node];
+        }
+
+        path.push_back(1);
+
+        reverse(path.begin(), path.end());
+        path.insert(path.begin(), dist[n]);
+
+        return path;
+
+        /*
+            Time Complexity: O((N+M)*logN)
+
+            Each node is processed once in the priority queue and deletion and 
+            insertion operation takes O(logN) time making it overall O(N*logN) in the 
+            worst case.
+            For each vertex, all its edges are relaxed. This operation involves 
+            updating the priority queue, which takes O(logV) making it overall O(M*logN) 
+            for E edges in the worst case.
+            Reconstructing the path involves tracing the parent array, which takes O(N) 
+            in the worst case (since we may trace back through all vertices).
+
+            Space Complexity: O(N)
+
+            The priority queue will store distances to all nodes in worst case leading 
+            to O(N) space.
+            The distance array and parent array takes O(N) space each.
+            The path array will store O(N) nodes in the worst case.
+        */
+    }
+};
+
 
 
 int main() {
