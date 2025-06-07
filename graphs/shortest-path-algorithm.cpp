@@ -180,6 +180,69 @@ public:
     }
 };
 
+class ShortestDistanceInBinaryMaze{
+private:
+    vector<int> delRow = {-1, 0 ,1, 0};
+    vector<int> delCol = {0, -1, 0, 1};
+
+    bool isValid(int& row, int& col, int& n, int& m) {
+        if(row < 0 || row >= n) return false;
+        if(col < 0 || col >= m) return false;
+
+        return true;
+    }
+public:
+    int shortestPath(vector<vector<int>> &grid, pair<int, int> source,pair<int, int> destination) {
+        // edge case
+        if(source.first == destination.first && source.second == destination.second) return 0;
+
+        // uniform 1 step increment, so we don't need priority_queue. thus removing logV complexity
+        queue<pair<int, pair<int,int>>> q;
+
+        int n = grid.size(), m = grid[0].size();
+
+        vector<vector<int>> dist(n, vector<int>(m, 1e9));
+        // Distane of source from itself is zero
+        dist[source.first][source.second] = 0;
+
+        q.push({0, {source.first, source.second}});
+
+        while(!q.empty()) {
+            auto it = q.front();
+            q.pop();
+
+            int dis = it.first;
+            int row = it.second.first;
+            int col = it.second.second;
+
+            for(int i = 0; i < 4; i++) {
+                int newRow = row + delRow[i];
+                int newCol = col + delCol[i];
+
+                /* Checking the validity of the cell and 
+                updating if a shorter distance is found */
+                if(isValid(newRow, newCol, n, m) && grid[newRow][newCol] == 1 && dis + 1 < dist[newRow][newCol]) {
+                    dist[newRow][newCol] = dis + 1;
+
+                    // Return the distance is the destination is reached
+                    if(newRow == destination.first && newCol == destination.second) return dis + 1;
+                    q.push({1 + dis, {newRow, newCol}});
+                }
+            }
+        }
+        return -1;
+    }
+    /*
+        Time Complexity: O(N*M) (where N and M are the dimensions of the grid)
+        A simple BFS traversal takes O(V+E) time where V and E represent the number of 
+        cells and number of edges.
+        Because, V = N*M and E = 4*N*M, the overall time complexity is O(N*M).
+
+        Space Complexity: O(N*M) The distance array takes O(N*M) space and the queue 
+        space can go upto O(N*M) in the worst case.
+    */
+};
+
 
 
 int main() {
