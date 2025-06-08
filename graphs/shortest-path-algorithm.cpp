@@ -443,6 +443,62 @@ public:
     */
 };
 
+class NumberOfWaysToArriveAtDestination{
+public:
+    int countPaths(int n, vector<vector<int>> &roads) {
+        vector<pair<int,int>> adj[n];
+        for(auto it : roads) {
+        adj[it[0]].push_back({it[1], it[2]});
+        adj[it[1]].push_back({it[0], it[2]});
+        }
+
+    // Priority queue to store: {time, node}
+        priority_queue<pair<int,int>, vector<pair<int,int>>,greater<pair<int,int>>> pq;
+        vector<int> dist(n, 1e9);
+        vector<int> ways(n, 0);
+
+    //Initial configuration
+        dist[0] = 0;
+        ways[0] = 1;
+        pq.push({0,0});
+
+        int mod = (int)(1e9 + 7);
+
+        while(!pq.empty()) {
+        auto p = pq.top();
+        int dis = p.first;
+        int node = p.second;
+        pq.pop();
+
+        for(auto it : adj[node]) {
+            int adjNode = it.first;
+            int edgeWt = it.second;
+
+            if(dis + edgeWt < dist[adjNode]) {
+                dist[adjNode] = dis + edgeWt;
+                pq.push({dis + edgeWt, adjNode});
+                ways[adjNode] = ways[node];
+            } else if(dis + edgeWt == dist[adjNode]) {
+                ways[adjNode] = (ways[adjNode] + ways[node]) % mod;
+            }
+        }
+        }
+
+        return ways[n-1] % mod;
+    }
+    /*
+        Time Complexity: O(M*logN) A simple Dijkstra's algorithm is used which 
+        takes O(E*logV) time (where V and E represents the number of nodes and 
+        edges in the graph respectively).
+
+        Space Complexity: O(N)
+
+        Dijkstra's Algorithm will take extra O(N) space due to priority queue and 
+        array to store minimum time to reach nodes.
+        The array to store the number of ways take O(N) space.
+    */
+};
+
 
 
 int main() {
