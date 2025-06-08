@@ -381,6 +381,68 @@ public:
     */
 };
 
+#define P pair<int, int>
+
+class MinMultiplications{
+public:
+    int minimumMultiplications(vector<int> &arr,int start, int end) {
+        if(start == end) return 0;
+
+        int n = arr.size();
+        int mod = 100000;
+
+        /* Array to store minimum 
+        steps (distance array) */
+        vector<int> minSteps(1e5, INT_MAX);
+
+        /* Queue to implement 
+        Dijkstra's algorithm */
+        queue <P> q;
+
+        minSteps[start] = 0;
+
+        q.push({0, start});
+
+        while(!q.empty()) {
+            auto p = q.front();
+            q.pop();
+
+            int steps = p.first;
+            int value = p.second;
+
+            for(int i = 0; i < n; i++) {
+                int num = (value * arr[i]) % mod;
+
+                // If end is reached, return steps taken
+                if(num == end) return steps + 1;
+
+                /* Check if the current steps taken is 
+                less than earlier known steps */
+                if(steps + 1 < minSteps[num]) {
+                    // Update the known steps
+                    minSteps[num] = steps + 1;
+                    q.push({steps + 1, num});
+                }
+            }
+        }
+        return -1;
+    }
+
+    /*
+        Time Complexity: O(100000*N) (where N is the length of given array)
+        A simple BFS traversal is performed taking O(V+E) time, where V represents 
+        nodes (which can be 100000 in the worst case) and E represents the number of 
+        edges (transitions) (which can be 100000*N, since for every value, N edges are 
+        formed). This makes the overall time complexity as O(100000*N).
+
+        Space Complexity: O(100000*N)
+
+        Queue space will store all the transitions possible in worst-case resulting in 
+        O(100000*N) space.
+        The array to store minimum steps takes O(100000) space.
+    */
+};
+
 
 
 int main() {
