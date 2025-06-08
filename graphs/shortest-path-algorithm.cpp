@@ -309,6 +309,78 @@ public:
     */
 };
 
+#define P pair<int, pair<int,int>>
+
+class CheapestFlightsWithinKStops {
+public:
+    int CheapestFlight(int n, vector<vector<int>> &flights,int src, int dst, int K) {
+        
+        vector<pair<int, int>> adj[n];
+
+        // storing graph
+        for(auto it : flights) {
+            adj[it[0]].push_back({it[1], it[2]});
+        }
+
+        // storing distance
+        vector<int> minDist(n, 1e9);
+        /* Queue storing the elements of 
+        the form {stops, {node, dist}} */
+        queue<P> q;
+
+        q.push({0, {src, 0}});
+
+        while(!q.empty()) {
+            auto p = q.front();
+            q.pop();
+
+            int stops = p.first;
+            int node = p.second.first;
+            int dist = p.second.second;
+
+            if(stops > K) continue;
+
+            for(auto it : adj[node]) {
+                int adjNode = it.first;
+                int edgeWt = it.second;
+
+                /* If the tentative distance to 
+                reach adjacent node is smaller 
+                than the known distance and number 
+                of stops doesn't exceed k */
+                if(dist + edgeWt < minDist[adjNode] && stops <= K) {
+                    minDist[adjNode] = dist + edgeWt;
+                    q.push({stops + 1, {adjNode, dist + edgeWt}});
+                }
+            }
+        }
+        /* If the destination is 
+        unreachable, return -1 */
+        if(minDist[dst] == 1e9) 
+            return -1;
+        
+        // Otherwise return the result
+        return minDist[dst];
+    }
+
+    /*
+        Time Complexity: O((N+M*K)) (where N is the number of cities, M is the number 
+        of flight (edges), and K is the max. number of stops allowed)
+
+        Creating the graph takes O(M) time.
+        Each node can be inserted into the queue up to k+1 times (0 stops, 1 stop, ..., 
+        up to k stops) making it take O(N*k).
+        For each node processed in the queue, we iterate over all its adjacent nodes 
+        (edges). If there are E edges in total and each edge can be considered at most 
+        k+1 times, the total number of edge considerations takes O(M*k) time.
+        Space Complexity: O(M+N*K)
+
+        Storing the graph takes O(M) space.
+        Array to store minimum distance takes O(N) space.
+        Queue will store N*K elements in the worst case taking O(N*K) space.
+    */
+};
+
 
 
 int main() {
