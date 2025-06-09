@@ -499,6 +499,56 @@ public:
     */
 };
 
+class BellManFordAlgorithm {
+    public:
+        vector<int> bellman_ford(int V, vector<vector<int>>& edges, int S) {
+            vector<int> dist(V, 1e9);
+    
+            dist[S] = 0;
+            for(int i = 0; i < V-1; i++) {
+                for(auto it : edges) {
+                    int u = it[0];
+                    int v = it[1];
+                    int wt = it[2];
+    
+                    if(dist[u] != 1e9 && dist[u] + wt < dist[v]) {
+                        dist[v] = dist[u] + wt;
+                    }
+                }
+            }
+    
+            /* An extra relaxation to check if the 
+            graph consists of a negative cycle */
+            for(auto it : edges) {
+                int u = it[0];
+                int v = it[1];
+                int wt = it[2];
+    
+                if(dist[u] != 1e9 && dist[u] + wt < dist[v]) {
+                    return {-1};
+                }
+            }
+    
+            return dist;
+        }
+        // Relax all edges N - 1 times sequentially
+        // Relax = dist[u] + edge_wt < dist[v] => dist[v] = dist[u] + edge_wt
+        // Since in a graph of N nodes, in worst case, we will take N - 1 edges
+        // to reach from the first to the last, thereby we iterate for N - 1 iterations.
+        // How to detect negative cycles ? - on the Nth iteration after relaxation,
+        // if the dist still gets reduced, then there is a negative cycle
+    
+        /*
+        Time Complexity: O(V*E)
+        All the E edges are relaxed for a total of V-1 times. 
+        And an extra iteration is performed to detect negative cycle, 
+        making the algorithm take O(V*E) time.
+    
+        Space Complexity: O(V)
+        The distance array takes O(V) time.
+        */
+};    
+
 
 
 int main() {
