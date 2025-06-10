@@ -630,6 +630,72 @@ class FloydWarshallAlgorithmWithNegativeCycle {
         */
 };
 
+class CityWithSmallestNumberOfNeighborsAtDistanceThreshold {
+    public:
+        int findCity(int n, int m, vector<vector<int>>& edges,int distanceThreshold) {
+            // Adjacency matrix to store the graph
+            vector<vector<int>> adjMat(n, vector<int>(n, 1e9));
+    
+            for(auto it : edges) {
+                adjMat[it[0]][it[1]] = it[2];
+                adjMat[it[1]][it[0]] = it[2];
+            }
+    
+            // Floyd Warshall
+            // for intermediate node k
+            for(int k = 0; k < n; k++) {
+                // node i --> node j
+                for(int i = 0; i < n; i++) {
+                    for(int j = 0; j < n; j++) {
+                        if(adjMat[i][k] == 1e9 || adjMat[k][j] == 1e9) continue;
+                        adjMat[i][j] = min(adjMat[i][j], adjMat[i][k] + adjMat[k][j]);
+                    }
+                }
+            }
+    
+            // to store the minimum count of neighbors
+            int minCount = 1e9;
+            /* To store the answer (city having 
+            smallest number of neighbors) */
+            int ans;
+    
+            // Check every city
+            for(int i = 0; i < n; i++) {
+                /* To count the neighbors of given city 
+                having distance lesser than threshold */
+                int count = 0;
+    
+                for(int j = 0; j < n; j++) {
+                    /* If the distance to reach city j from 
+                    city i is less than threshold */
+                    if(i != j && adjMat[i][j] <= distanceThreshold) {
+                        count++;
+                    }
+                }
+    
+                // if current count is less than minimum count
+                if(count < minCount) {
+                    minCount = count;
+                    ans = i;
+                } else if(count == minCount) {
+                    ans = i;
+                }
+            }
+            return ans;
+        }
+        /*
+            Time Complexity: O(N^3) (where N is the number of nodes(cities) in graph)
+    
+            The Floyd Warshall algorithm takes O(N3) time to compute shortest distance 
+            between every pair of nodes.
+            Finding the city having smallest number of neighbors takes O(N2) time.
+    
+            Space Complexity: O(N^2)
+            The only space used is for the distance matrix taking O(N2) space and for a 
+            couple of variables taking O(1) space.
+        */
+};    
+
 
 
 int main() {
