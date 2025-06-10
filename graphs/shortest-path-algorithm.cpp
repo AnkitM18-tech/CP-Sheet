@@ -549,6 +549,43 @@ class BellManFordAlgorithm {
         */
 };    
 
+class FloydWarshallAlgorithm {
+    public:
+        void shortestDistance(vector<vector<int>>&matrix) {
+            int n = matrix.size();
+    
+            // For each intermediate node k - via
+            for(int k = 0; k < n; k++) {
+                for(int i = 0; i < n; i++) {
+                    for(int j = 0; j < n; j++) {
+                        /* If k is not an intermediate 
+                        node, skip the iteration */
+                        if(matrix[i][k] == -1 || matrix[k][j] == -1) continue;
+    
+                        /* If no direct edge from 
+                        i to j is present */
+                        if(matrix[i][j] == -1) {
+                            matrix[i][j] = matrix[i][k] + matrix[k][j];
+                        } else {
+                            /* Else update the distance to 
+                            minimum of both paths */
+                            matrix[i][j] = min(matrix[i][j], matrix[i][k] + matrix[k][j]);
+                        }
+                    }
+                }
+            }
+        }
+        // multi source shortest path algorithm
+        // helps you detect negative cycle as well
+        /*
+            Time Complexity: O(N^3) (where N repesents the number of nodes in graph) 
+            Because of three nested loops.
+    
+            Space Complexity: O(N^2) The algorithm uses a space of O(N2) to store shortest 
+            distance between every pair of nodes possible.
+        */
+};
+
 
 
 int main() {
