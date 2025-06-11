@@ -1,6 +1,78 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+class DisjointSet {
+    private:
+        vector<int> rank, size, parent;
+    public:
+        DisjointSet(int n) {
+            rank.resize(n + 1, 0);
+            parent.resize(n + 1);
+            size.resize(n + 1, 1);
+    
+            for(int i = 0; i <= n; i++) {
+                parent[i] = i;
+            }
+        }
+    
+        int findUltimateParent(int node) {
+            if(node == parent[node]) return node;
+    
+            return parent[node] = findUltimateParent(parent[node]);
+        }
+    
+        bool find(int u, int v) {
+            return (findUltimateParent(u) == findUltimateParent(v));
+        }
+    
+        void unionByRank(int u, int v) {
+            // Get the ultimate parents of both nodes
+            int ulp_u = findUltimateParent(u);
+            int ulp_v = findUltimateParent(v);
+    
+            // Return if nodes already belong to the same component
+            if(ulp_u == ulp_v) return;
+    
+            /* Otherwise, join the node to the other 
+            node having higher ranks among the two */
+            if(rank[ulp_u] < rank[ulp_v]) {
+                parent[ulp_u] = ulp_v;
+            } else if(rank[ulp_v] < rank[ulp_u]) {
+                parent[ulp_v] = ulp_u;
+            } else {
+                /* If both have same rank, join any node to the 
+                other and increment the rank of the parent node */
+                parent[ulp_v] = ulp_u;
+                rank[ulp_u]++;
+            }
+        }
+    
+        void unionBySize(int u, int v) {
+            int ulp_u = findUltimateParent(u);
+            int ulp_v = findUltimateParent(v);
+    
+            if(ulp_u == ulp_v) return;
+    
+            if(size[ulp_u] < size[ulp_v]) {
+                parent[ulp_u] = ulp_v;
+                size[ulp_v] += size[ulp_u];
+            } else {
+                parent[ulp_v] = ulp_u;
+                size[ulp_u] += size[ulp_v];
+            }
+        }
+};
+
+/*
+    Time Complexity: O(1)
+    The actual time complexity of UnionByRank() and findPar() methods is O(4α), 
+    which is very small and close to 1. This 4α term has a long mathematical derivation 
+    not required for an interview.
+
+    Space Complexity: O(2N) (where N is the number of nodes)
+    The Disjoint Set Data structure uses a parent and a rank array each of size N.
+*/
+
 
 
 int main() {
