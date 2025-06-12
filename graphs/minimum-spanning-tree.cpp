@@ -73,6 +73,58 @@ class DisjointSet {
     The Disjoint Set Data structure uses a parent and a rank array each of size N.
 */
 
+#define P pair<int,int>
+
+class PrimsAlgorithm{
+    public:
+    int spanningTree(int V, vector<vector<int>> adj[]) {
+        priority_queue<P, vector<P>, greater<P>> pq;
+        vector<int> visited(V, 0);
+
+        pq.push({0,0});
+
+        int sum = 0;
+
+        // run for all edges at worst case - e
+        while(!pq.empty()) {
+            // TC = log (pq-size)
+            auto p = pq.top();
+            pq.pop();
+
+            int node = p.second;
+            int wt = p.first;
+
+            if(visited[node] == 1) continue;
+            visited[node] = 1;
+
+            sum += wt;
+
+            // E
+            for(auto it : adj[node]) {
+                int adjNode = it[0];
+                int edgeWt = it[1];
+
+                if(visited[adjNode] == 0) {
+                    // log E
+                    pq.push({edgeWt, adjNode});
+                }
+            }
+        }
+
+        return sum;
+    }
+    /*
+        Time Complexity: O(ElogE) (where E is the number of edges in the graph)
+        In the worst case, the min-heap will store all the E edges, and insertion 
+        operation on 
+        the min-heap takes O(logE) time taking overall O(ElogE) time.
+
+        Space Complexity: O(E + V) (where V is the number of nodes in the graph)
+        The min-heap will store all edges in worst-case taking O(E) space and the 
+        visited array takes O(V) space.
+    */
+};
+
 
 
 int main() {
