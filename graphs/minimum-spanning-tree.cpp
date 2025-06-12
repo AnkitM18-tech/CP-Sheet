@@ -229,6 +229,88 @@ class KrushkalAlgorithm {
     */
 };
 
+class KosarajuAlgorithm {
+    private:
+        /* Function to perform DFS for storing the 
+        nodes in stack based on their finishing time */
+        void dfs(int node, vector<int>& vis, vector<int> adj[], stack<int>& st) {
+            vis[node] = 1;
+    
+            for(auto it : adj[node]) {
+                if(!vis[it]) {
+                    dfs(it, vis, adj, st);
+                }
+            }
+    
+            st.push(node);
+        }
+    
+        /* Helper function to perform DFS for finding
+        number of Strongly connected components */
+        void helperDFS(int node, vector<int>& vis, vector<int> adjT[]) {
+            vis[node] = 1;
+    
+            for(auto it : adjT[node]) {
+                if(!vis[it]) {
+                    helperDFS(it, vis, adjT);
+                }
+            }
+        }
+    
+    public:
+        int kosaraju(int V, vector<int> adj[]){
+            // visited array
+            vector<int> vis(V, 0);
+            stack<int> st;
+    
+            /* Perform initial DFS to store the nodes 
+            in stack based on their finishing time */
+            for(int i = 0; i < V; i++) {
+                if(!vis[i]) {
+                    dfs(i, vis, adj, st);
+                }
+            }
+    
+            // To store the reversed graph
+            vector<int> adjT[V];
+    
+            /* Reverse all the edges of original 
+            graph to the reversed graph */
+            for(int i = 0; i < V; i++) {
+                // so that we can reuse the visited array later step
+                vis[i] = 0;
+    
+                for(auto it : adj[i]) {
+                    // i -> it => it -> i
+                    adjT[it].push_back(i);
+                }
+            }
+    
+            int scc = 0;
+            while(!st.empty()) {
+                int node = st.top();
+                st.pop();
+                if(!vis[node]) {
+                    scc++;
+                    helperDFS(node, vis, adjT);
+                }
+            }
+    
+            return scc;
+        }
+        // strongly connected components - SCC only valid for directed graphs
+        /*
+            Time Complexity: O(V+E) (where E represent the number of edges)
+            Two DFS traversals are made each taking an O(V+E) time. Reversing all the 
+            edges in the graph takes O(E) time.
+    
+            Space Complexity: O(V+E)
+            Storing the transposed graph takes O(V+E) space and the space due to the stack 
+            and visited array will be O(V) each.
+        */
+};    
+
+
 
 int main() {
     ios_base::sync_with_stdio(false);
