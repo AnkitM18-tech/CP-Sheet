@@ -372,6 +372,67 @@ public:
     */
 };
 
+class ArticulationPointsInGraph {
+private:
+    int timer = 0;
+    void dfs(int node, int parent, vector<int>& vis, int tin[], int low[], vector<int>& mark, vector<int> adj[]) {
+        vis[node] = 1;
+        tin[node] = low[node] = timer;
+        timer++;
+
+        int child = 0;
+        for(auto it : adj[node]) {
+            if(it == parent) continue;
+            if(!vis[it]) {
+                dfs(it, node, vis, tin, low, mark, adj);
+                low[node] = min(low[node], low[it]);
+                if(low[it] >= tin[node] && parent != -1) {
+                    mark[node] = 1;
+                }
+                child++;
+            } else {
+                low[node] = min(low[node], tin[it]);
+            }
+        }
+
+        if(child > 1 && parent == -1) {
+            mark[node] = 1;
+        }
+    }
+public:
+    vector<int> articulationPoints(int n, vector<int>adj[]) {
+        vector<int> vis(n, 0);
+        int tin[n];
+        int low[n];
+        vector<int> mark(n, 0);
+        
+        for(int i = 0; i < n; i++) {
+            if(!vis[i]) {
+                dfs(i, -1, vis, tin, low, mark, adj);
+            }
+        }
+
+        vector<int> ans;
+        for(int i = 0; i < n; i++) {
+            if(mark[i]) {
+                ans.push_back(i);
+            }
+        }
+
+        if(ans.size() == 0) return {-1};
+        return ans;
+    }
+    // Nodes on whose removal the graph breaks into multiple components
+    /*
+        Time Complexity: O(V+E) (where E represents the number of edges in the graph)
+        A DFS traversal is performed which takes O(V+E) time.
+
+        Space Complexity: O(V) The algorithm uses two arrays to store the discovery time, 
+        lowest time of insertion taking O(V) space. A visited array is used taking O(V) 
+        space and an array is used to mark the nodes as articulation points taking O(V) 
+        space.
+    */
+};
 
 int main() {
     ios_base::sync_with_stdio(false);
