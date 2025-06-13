@@ -310,6 +310,67 @@ class KosarajuAlgorithm {
         */
 };    
 
+class BridgesInGraph {
+private:
+    int timer = 1;
+    void dfs(int node, int parent, vector<int>& vis, vector<int> adj[], int tin[], int low[], vector<vector<int>>& bridges) {
+        // Mark the node as visited
+        vis[node] = 1;
+        /* Time of insertion and the lowest time of 
+        insert for node will be the current time */
+        tin[node] = low[node] = timer;
+        // Increment the current time
+        timer++;
+
+        // Traverse all its neighbors
+        for(auto it : adj[node]) {
+            if(it == parent) continue;
+            // If a neighbor is not visited
+            if(!vis[it]) {
+                dfs(it, node, vis, adj, tin, low, bridges);
+                /* Once the recursive DFS call returns, update
+                the lowest time of insertion for the node */
+                low[node] = min(low[node], low[it]);
+
+                /* If the lowest time of insertion of the 
+                node is found to be greater than the 
+                time of insertion of the neighbor */
+                if(low[it] > tin[node]) {
+                    bridges.push_back({it, node});
+                }
+            } else {
+                // Update the lowest time of insertion of the node
+                low[node] = min(low[node], low[it]);
+            }
+        }
+    }
+public:
+    vector<vector<int>> criticalConnections(int V,vector<vector<int>>& E) {
+        vector<int> adj[V];
+        for(auto it : E) {
+            adj[it[0]].push_back(it[1]);
+            adj[it[1]].push_back(it[0]);
+        }
+
+        vector<int> vis(V, 0);
+        int tin[V];
+        int low[V];
+        vector<vector<int>> bridges;
+        dfs(0, -1, vis, adj, tin, low, bridges);
+        return bridges;
+    }
+    // on removal of the edge the graph is broken into 2 or more components - that 
+    // edge is called a bridge
+    /*
+        Time Complexity: O(V+E) (where E represents the number of edges in the graph)
+        A DFS traversal is performed which takes O(V+E) time.
+
+        Space Complexity: O(V) The algorithm uses two arrays to store the discovery 
+        time and lowest time of insertion taking O(V) space. The list of bridges 
+        returned will take O(E) space in worst-case when all the edges are bridges 
+        in the graph.
+    */
+};
 
 
 int main() {
