@@ -83,6 +83,69 @@ class ClimbingStairs {
         */
 };
 
+class FrogJump {
+public:
+    int solve(int ind, vector<int>& heights, vector<int>& dp) {
+        if(ind == 0) return 0;
+
+        if(dp[ind] != -1) return dp[ind];
+
+        int jumpOne = solve(ind - 1, heights, dp) + abs(heights[ind] - heights[ind-1]);
+        int jumpTwo = INT_MAX;
+        if(ind > 1) {
+            jumpTwo = solve(ind - 2, heights, dp) + abs(heights[ind] - heights[ind-2]);
+        }
+        return dp[ind] = min(jumpOne, jumpTwo);
+    }
+
+    int frogJump(vector<int>& heights, int ind) {
+        if(ind == 0) return 0;
+
+        int jumpOne = frogJump(heights, ind - 1) + abs(heights[ind] - heights[ind - 1]);
+        int jumpTwo = INT_MAX;
+
+        if(ind > 1) {
+            jumpTwo = frogJump(heights, ind - 2) + abs(heights[ind] - heights[ind - 2]);
+        }
+
+        return min(jumpOne, jumpTwo);
+    }
+
+    int frogJump(vector<int>& heights) {
+        int n = heights.size();
+        vector<int> dp(n , -1);
+        // return frogJump(heights, n - 1);
+        // return solve(n - 1, heights, dp);
+        /*
+        dp[0] = 0; // Base Case
+
+        for(int ind = 1; ind < n; ind++) {
+            int jumpOne = dp[ind - 1] + abs(heights[ind] - heights[ind - 1]);
+            int jumpTwo = INT_MAX;
+
+            if(ind > 1) {
+                jumpTwo = dp[ind - 2] + abs(heights[ind] - heights[ind - 2]);
+            }
+
+            dp[ind] = min(jumpOne, jumpTwo);
+        }
+        return dp[n - 1];
+        */
+        int prev2 = 0, prev = 0;
+        for(int i = 1; i < n; i++) {
+            int jumpOne = prev + abs(heights[i] - heights[i - 1]);
+            int jumpTwo = INT_MAX;
+            if(i > 1) {
+                jumpTwo = prev2 + abs(heights[i] - heights[i - 2]);
+            }
+            int cur_i = min(jumpOne, jumpTwo);
+            prev2 = prev;
+            prev = cur_i;
+        }
+        return prev;
+    }
+};
+
 
 
 int main() {
