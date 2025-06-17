@@ -146,7 +146,42 @@ public:
     }
 };
 
-
+class FrogJumpWithKSteps {
+    private:
+        int func(int ind, vector<int>& heights, int k, vector<int>& dp) {
+            if(ind == 0) return 0;
+    
+            if(dp[ind] != -1) return dp[ind];
+    
+            int minSteps = INT_MAX;
+    
+            for(int i = 1; i <= k; i++) {
+                if(ind - i >= 0) {
+                    int jump = func(ind - i, heights, k, dp) + abs(heights[ind] - heights[ind - i]);
+                    minSteps = min(jump, minSteps);
+                }
+            }
+            return dp[ind] = minSteps;
+        }
+    public:
+        int frogJump(vector<int>& heights, int k) {
+            int ind = heights.size() - 1;
+            vector<int> dp(ind + 1, -1);
+    
+            return func(ind, heights, k, dp);
+        }
+    
+        /*
+            Time Complexity: O(k*N),The function is called recursively for each index 
+            from N-1 down to 0. For each index, the function explores up to k possible 
+            jumps, where N is the length of the heights array.
+    
+            Space Complexity:O(N)+O(N), We are using a recursion stack space O(N) and an 
+            array (again O(N)). Therefore total space complexity 
+            will be O(N) + O(N) ≈ O(N).
+        */
+    };
+    
 
 int main() {
     ios_base::sync_with_stdio(false);
