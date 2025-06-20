@@ -266,7 +266,75 @@ class MaxSumWithoutAdjacentElements {
         }
 };
 
-
+class HouseRobber {
+    private:
+        // Memoization
+        int func(int ind, vector<int>& arr, vector<int>& dp) {
+            if(ind == 0) return arr[ind];
+            if(ind < 0) return 0;
+    
+            if(dp[ind] != -1) return dp[ind];
+    
+            int pick = arr[ind] + func(ind - 2, arr, dp);
+            int nonPick = 0 + func(ind - 1, arr, dp);
+    
+            return dp[ind] = max(pick, nonPick);
+        }
+    
+        // Tabulation
+        int func(vector<int>& nums) {
+            int ind = nums.size();
+            /*
+            vector<int> dp(ind, 0);
+    
+            dp[0] = nums[0];
+            for(int i = 1; i < ind; i++) {
+                int pick = nums[i];
+                if(i > 1) pick += dp[i - 2];
+                int nonPick = 0 + dp[i - 1];
+    
+                dp[i] = max(pick, nonPick);
+            }
+    
+            return dp[ind - 1];
+            */
+            int prev = nums[0], prev2 = 0;
+    
+            for(int i = 1; i < ind; i++) {
+                int pick = nums[i];
+                if(i > 1) pick += prev2;
+    
+                int nonPick = 0 + prev;
+    
+                int cur_i = max(pick, nonPick);
+                prev2 = prev;
+                prev = cur_i;
+            }
+            return prev;
+        }
+    public:
+        int houseRobber(vector<int>& money) {
+            int n = money.size();
+            vector<int> arr1, arr2;
+    
+            if(n == 1) return money[0];
+    
+            for(int i = 0; i < n; i++) {
+                if(i != n - 1) arr1.push_back(money[i]);
+                if(i != 0) arr2.push_back(money[i]);
+            }
+    
+            // vector<int> dp(n, -1);
+            // int ans1 = func(arr1.size() - 1, arr1, dp);
+            // vector<int> dp1(n, -1);
+            // int ans2 = func(arr2.size() - 1, arr2, dp1);
+    
+            int ans1 = func(arr1);
+            int ans2 = func(arr2);
+    
+            return max(ans1, ans2);
+        }
+};
 
 int main() {
     ios_base::sync_with_stdio(false);
