@@ -217,6 +217,55 @@ public:
     */
 };
 
+class MaxSumWithoutAdjacentElements {
+    private:
+        int func(int ind, vector<int>& arr, vector<int>& dp) {
+            if(ind == 0) return arr[ind];
+            if(ind < 0) return 0;
+    
+            if(dp[ind] != -1) return dp[ind];
+    
+            int pick = arr[ind] + func(ind - 2, arr, dp);
+            int nonPick = 0 + func(ind - 1, arr, dp);
+    
+            return dp[ind] = max(pick, nonPick);
+        }
+    public:
+        int nonAdjacent(vector<int>& nums) {
+            int n = nums.size();
+    
+            // vector<int> dp(n, -1);
+    
+            // return func(n - 1, nums, dp);
+            /*
+            dp[0] = nums[0];
+    
+            for(int i = 1; i < n; i++) {
+                int pick = nums[i];
+                if(i > 1) pick += dp[i - 2];
+                int notPick = 0 + dp[i - 1];
+    
+                dp[i] = max(pick, notPick);
+            }
+    
+            return dp[n - 1];
+            */
+            int prev = nums[0];
+            int prev2 = 0;
+    
+            for(int i = 1; i < n; i++) {
+                int pick = nums[i];
+                if(i > 1) pick += prev2;
+                int nonPick = 0 + prev;
+    
+                int cur_i = max(pick, nonPick);
+                prev2 = prev;
+                prev = cur_i;
+            }
+            return prev;
+        }
+};
+
 
 
 int main() {
