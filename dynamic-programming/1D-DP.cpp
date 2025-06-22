@@ -336,7 +336,48 @@ class HouseRobber {
         }
 };
 
-
+class NinjaTraining {
+    private:
+        int func(int day, int last, vector<vector<int>>& points, vector<vector<int>>& dp) {
+            if(dp[day][last] != -1) return dp[day][last];
+    
+            // Base Case
+            if(day == 0) {
+                int maxi = 0;
+                for(int i = 0; i <= 2; i++) {
+                    if(i != last) maxi = max(maxi, points[0][i]);
+                }
+                return dp[day][last] = maxi;
+            }
+    
+            int maxi = 0;
+            for(int i = 0; i <= 2; i++) {
+                if(i != last) {
+                    int activity = points[day][i] + func(day - 1, i, points, dp);
+                    maxi = max(maxi, activity);
+                }
+            }
+    
+            return dp[day][last] = maxi;
+        }
+    public:
+        int ninjaTraining(vector<vector<int>>& matrix) {
+            int day = matrix.size();
+            vector<vector<int>> dp(day, vector<int>(4, -1));
+            // int last = 3;
+            // return func(day-1, last, matrix, dp);
+    
+        }
+        /*
+            // Memoization
+            Time Complexity: O(N*4*3). There are N*4 states and for every state, 
+            we are running a for loop iterating three times.
+    
+            Space Complexity:O(N) + O(N*4), We are using a recursion stack space(O(N)) 
+            and a 2D array (again O(N*4)). Therefore total space complexity 
+            will be O(N) + O(N) ≈ O(N)
+        */
+};
 
 int main() {
     ios_base::sync_with_stdio(false);
