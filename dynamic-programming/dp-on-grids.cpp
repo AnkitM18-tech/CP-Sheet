@@ -95,6 +95,90 @@ class GridUniquePaths {
         */
     };
 
+class UniquePathsWithObstacles {
+    private:
+        int func(int i, int j, vector<vector<int>>& matrix, vector<vector<int>>& dp) {
+            if(i < 0 || j < 0 || matrix[i][j] == 1) return 0;
+            else if(i == 0 && j == 0) return 1;
+    
+            if(dp[i][j] != -1) return dp[i][j];
+    
+            int up = func(i - 1, j, matrix, dp);
+            int left = func(i, j - 1, matrix, dp);
+    
+            return dp[i][j] = up + left;
+        }
+    
+        int func2(int m, int n, vector<vector<int>>& matrix, vector<vector<int>>& dp) {
+            for(int i = 0; i < m; i++) {
+                for(int j = 0; j < n; j++) {
+                    if(matrix[i][j] == 1) {
+                        dp[i][j] = 0;
+                        continue;
+                    }
+    
+                    if(i == 0 && j == 0) {
+                        dp[i][j] = 1;
+                        continue;
+                    }
+    
+                    int up = 0, left = 0;
+    
+                    if(i > 0) up = dp[i - 1][j];
+                    if(j > 0) left = dp[i][j - 1];
+    
+                    dp[i][j] = up + left;
+                }
+            }
+    
+            return dp[m - 1][n - 1];
+        }
+    
+        int func(int m, int n, vector<vector<int>>& matrix) {
+            vector<int> prev(n, 0), curr(n, 0);
+    
+            for(int i = 0 ; i < m; i++) {
+                for(int j = 0; j < n; j++) {
+                    if(matrix[i][j] == 1) {
+                        curr[j] = 0;
+                    } else if(i == 0 && j == 0) {
+                        curr[j] = 1;
+                    } else {
+                        int up = 0, left = 0 ;
+                        if(i > 0) up = prev[j];
+                        if(j > 0) left = curr[j - 1];
+    
+                        curr[j] = up + left;
+                    }
+                }
+                prev = curr;
+            }
+            return prev[n - 1];
+        }
+    
+    public:
+        int uniquePathsWithObstacles(vector<vector<int>>& matrix) {
+            int m = matrix.size();
+            int n = matrix[0].size();
+    
+            // vector<vector<int>> dp(m, vector<int>(n, -1));
+    
+            // return func(m - 1, n - 1, matrix, dp);
+            // vector<vector<int>> dp(m, vector<int>(n , 0));
+            // return func2(m, n, matrix, dp);
+            return func(m, n, matrix);
+        }
+        /*
+            Space Optimization
+    
+            Time Complexity: O(M*N), where M is the number of row and N is the number of 
+            column in 2D array. As the whole matrix is traversed once using two nested loops.
+    
+            Space Complexity:O(N), We are using an external array of size ‘N’ to store 
+            only one row.
+        */
+};
+
 
 
 int main() {
