@@ -179,6 +179,132 @@ class UniquePathsWithObstacles {
         */
 };
 
+class MinimumFallingPathSum {
+    private:
+        int func(int i, int j, int m, vector<vector<int>>& matrix, vector<vector<int>>& dp) {
+            if(j < 0 || j >= m) return 1e9;
+            if(i == 0) return matrix[0][j];
+    
+            if(dp[i][j] != -1) return dp[i][j];
+    
+            int up = matrix[i][j] + func(i - 1, j, m, matrix, dp);
+            int leftDiagonal = matrix[i][j] + func(i - 1, j - 1, m, matrix, dp);
+            int rightDiagonal = matrix[i][j] + func(i - 1, j + 1, m, matrix, dp);
+    
+            return dp[i][j] = min(up, min(leftDiagonal, rightDiagonal));
+        }
+    public:
+        int minFallingPathSum(vector<vector<int>>& matrix) {
+            int n = matrix.size();
+            int m = matrix[0].size();
+    
+            /*
+            vector<vector<int>> dp(n, vector<int>(m, -1));
+    
+            int mini = INT_MAX;
+    
+            for(int j = 0; j < m; j++) {
+                int ans = func(n - 1, j, m, matrix, dp);
+                mini = min(mini, ans);
+            }
+            return mini;
+            */
+            /*
+            vector<vector<int>> dp(n, vector<int>(m, 0));
+    
+            for(int j = 0; j < m; j++) {
+                dp[0][j] = matrix[0][j];
+            }
+    
+            for(int i = 1; i < n; i++) {
+                for(int j = 0; j < m; j++) {
+                    int up = matrix[i][j] + dp[i-1][j];
+    
+                    int leftDiagonal = matrix[i][j];
+                    if(j - 1 >= 0) leftDiagonal += dp[i-1][j-1];
+                    else leftDiagonal += 1e9;
+    
+                    int rightDiagonal = matrix[i][j];
+                    if(j + 1 < m) rightDiagonal += dp[i-1][j+1];
+                    else rightDiagonal += 1e9;
+                    
+                    dp[i][j] = min(up, min(leftDiagonal, rightDiagonal));
+                }
+            }
+    
+            int mini = INT_MAX;
+            for(int j = 0; j < m; j++) {
+                mini = min(mini, dp[n-1][j]);
+            }
+    
+            return mini;
+            */
+            vector<int> prev(m, 0);
+            vector<int> cur(m, 0);
+    
+            for(int j = 0; j < m; j++) {
+                prev[j] = matrix[0][j];
+            }
+    
+            for(int i = 1; i < n; i++) {
+                for(int j = 0; j < m; j++) {
+                    int up = matrix[i][j] + prev[j];
+    
+                    int leftDiagonal = matrix[i][j];
+                    if(j - 1 >= 0) leftDiagonal += prev[j - 1];
+                    else leftDiagonal += 1e9;
+    
+                    int rightDiagonal = matrix[i][j];
+                    if(j + 1 < m) rightDiagonal += prev[j + 1];
+                    else rightDiagonal += 1e9;
+    
+                    cur[j] = min(up, min(leftDiagonal, rightDiagonal));
+                }
+    
+                prev = cur;
+            }
+    
+            int mini = INT_MAX;
+            for(int j = 0; j < m; j++) {
+                mini = min(mini, prev[j]);
+            }
+    
+            return mini;
+        }
+    
+        /*
+            // Recursion
+            Time Complexity: O(3^N*M), where N and M are the number of rows and columns. 
+            For each cell (total cells are M) in the starting row, 3 choices are made, 
+            and at max, the number of subproblems can be N.
+    
+            Space Complexity:O(N), The depth of the recursion is proportional to the 
+            height of the triangle N. Therefore, the space used by the call stack is O(N).
+    
+            // Memoization
+            Time Complexity: O(N*M), where N is the number of rows and M is the number 
+            of columns in the given 2D array. At max, there will be NxM calls of 
+            recursion as the subproblems can go upto N*M.
+    
+            Space Complexity: O(N*M), An external DP Array of size NxM is used, and 
+            the recursion stack space takes O(N).
+    
+            // Tabulation
+            Time Complexity: O(N*M), where N is the number of rows and M is the number 
+            of columns in the given 2D array. As the whole matrix is traversed once 
+            using two nested loops.
+    
+            Space Complexity:O(N*M), As an external DP Array of size NxM is used to 
+            store the intermediate calculations.
+    
+            // Space Optimization
+            Time Complexity: O(N*M), where N is the number of rows and M is the number 
+            of columns in the given 2D array. As the whole matrix is traversed once 
+            using two nested loops.
+    
+            Space Complexity: O(M), as two external arrays of size M are used.
+        */
+};
 
 
 
