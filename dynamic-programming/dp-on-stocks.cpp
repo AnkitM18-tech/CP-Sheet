@@ -168,6 +168,88 @@ class StockBuySell3{
         // Space Optimaization - TC = O(N*2*3), SC = O(1)
 };    
 
+class StockBuySell4{
+    private:
+        int func(int ind, int buy, int cap, int n, vector<int>& arr, vector<vector<vector<int>>>& dp) {
+            if(ind == n || cap == 0) {
+                return 0;
+            }
+    
+            if(dp[ind][buy][cap] != -1) return dp[ind][buy][cap];
+    
+            int profit = 0;
+    
+            if(buy == 0) {
+                profit = max(0 + func(ind + 1, 0, cap, n, arr, dp), (-1)* arr[ind] + func(ind + 1, 1, cap, n, arr, dp));
+            }
+    
+            if(buy == 1) {
+                profit = max(0 + func(ind + 1, 1, cap, n, arr, dp), arr[ind] + func(ind + 1, 0, cap-1, n, arr, dp));
+            }
+    
+            return dp[ind][buy][cap] = profit;
+        }
+    
+        int func(vector<int>& arr, int n, int k) {
+            vector<vector<vector<int>>> dp(n+1, vector<vector<int>>(2, vector<int>(k+1, 0)));
+            /* Base case: dp array is already initialized
+            to 0, covering the base case.*/
+    
+            for(int ind = n - 1; ind >= 0; ind--) {
+                for(int buy = 0; buy <= 1; buy++) {
+                    for(int cap = 1; cap <= k; cap++) {
+                        if(buy == 0) {
+                            dp[ind][buy][cap] = max(0 + dp[ind + 1][0][cap], (-1)* arr[ind] + dp[ind + 1][1][cap]);
+                        }
+    
+                        if(buy == 1) {
+                            dp[ind][buy][cap] = max(0 + dp[ind + 1][1][cap], arr[ind] + dp[ind + 1][0][cap-1]);
+                        }
+                    }
+                }
+            }
+    
+            return dp[0][0][k];
+        }
+    
+        int func2(vector<int>& arr, int n, int k) {
+            vector<vector<int>> ahead(2, vector<int>(k+1, 0));
+            vector<vector<int>> cur(2, vector<int>(k+1, 0));
+    
+            for(int ind = n - 1; ind >= 0; ind--) {
+                for(int buy = 0; buy <=1; buy++) {
+                    for(int cap = 1; cap <= k; cap++) {
+                        if(buy == 0) {
+                            cur[buy][cap] = max(0 + ahead[0][cap], -arr[ind] + ahead[1][cap]);
+                        }
+    
+                        if(buy == 1) {
+                            cur[buy][cap] = max(0 + ahead[1][cap], arr[ind] + ahead[0][cap-1]);
+                        }
+                    }
+                }
+                ahead = cur;
+            }
+    
+            return ahead[0][k];
+        }
+    public:
+        int stockBuySell(vector<int> arr, int n, int k){
+            // if(n == 0) return 0;
+    
+            // vector<vector<vector<int>>> dp(n, vector<vector<int>>(2, vector<int>(k+1, -1)));
+    
+            // int ans = func(0, 0, k, n, arr, dp);
+            // return ans;
+            // return func(arr, n, k);
+            return func2(arr, n, k);
+        }
+        // Recursion - TC = O(2^N), SC = O(N)
+        // Memoization - TC = O(N*2*k), SC = O(N*2*k) + O(N)
+        // Tabulation - TC = O(N*2*k), SC = O(N*2*k)
+        // Space Optimization - TC - O(N*2*k), SC - O(1)
+};    
+
 
 
 int main() {
