@@ -250,7 +250,80 @@ class StockBuySell4{
         // Space Optimization - TC - O(N*2*k), SC - O(1)
 };    
 
-
+class StockBuySellWithTransactionFee {
+    private:
+        int func(int ind, int buy, int fee, int n, vector<int>& arr, vector<vector<int>>& dp) {
+            if(ind == n) return 0;
+    
+            if(dp[ind][buy] != -1) return dp[ind][buy];
+    
+            int profit = 0;
+    
+            if(buy == 0) {
+                profit = max(0 + func(ind + 1, 0, fee, n, arr, dp), -arr[ind] + func(ind + 1, 1, fee,n, arr, dp));
+            }
+    
+            if(buy == 1) {
+                profit = max(0 + func(ind + 1, 1, fee, n, arr, dp), arr[ind] - fee + func(ind + 1, 0, fee, n, arr, dp));
+            }
+    
+            return dp[ind][buy] =  profit;
+        }
+    
+        int func(vector<int>& arr, int n, int fee) {
+            vector<vector<int>> dp(n + 1, vector<int>(2, 0));
+    
+            for(int ind = n - 1; ind >= 0; ind--) {
+                for(int buy = 0; buy <= 1; buy++) {
+                    if(buy == 0) {
+                        dp[ind][buy] = max(0 + dp[ind + 1][0], -arr[ind] + dp[ind + 1][1]);
+                    }
+    
+                    if(buy == 1) {
+                        dp[ind][buy] = max(0 + dp[ind + 1][1], arr[ind] - fee + dp[ind + 1][0]);
+                    }
+                }
+            }
+    
+            return dp[0][0];
+        }
+    
+        int func2(vector<int>& arr, int n, int fee) {
+            vector<int> ahead(2, 0);
+            vector<int> cur(2, 0);
+    
+            for(int ind = n - 1; ind >= 0; ind--) {
+                for(int buy = 0; buy <= 1; buy++) {
+                    if(buy == 0) {
+                        cur[buy] = max(0 + ahead[0], -arr[ind] + ahead[1]);
+                    }
+    
+                    if(buy == 1) {
+                        cur[buy] = max(0 + ahead[1], arr[ind] - fee + ahead[0]);
+                    }
+                }
+                ahead = cur;
+            }
+            return cur[0];
+        }
+    public:
+        int stockBuySell(vector<int> arr, int n, int fee){
+            // if(n == 0) return 0;
+    
+            // vector<vector<int>> dp(n, vector<int>(2, -1));
+    
+            // int ans = func(0, 0, fee, n, arr, dp);
+    
+            // return ans;
+    
+            // return func(arr, n, fee);
+            return func2(arr, n, fee);
+        }
+        // Recursion - TC = O(2^N), SC = O(N)
+        // Memoization - TC = O(N*2), SC = O(N*2) + O(N)
+        // Tabulation - TC = O(N*2), SC = O(N*2)
+        // Space Optimization - TC = O(N*2), SC = O(1)
+};    
 
 int main() {
     ios_base::sync_with_stdio(false);
