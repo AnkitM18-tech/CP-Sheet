@@ -178,7 +178,110 @@ class PartitionEqualSubsetSum {
         // Space Optimization - TC = O(N*target), SC = O(target)
 };    
 
+class PartitionSubsetSumMinDiff {
+    private:
+        bool func(int ind, int target, vector<int>& arr, vector<vector<int>>& dp) {
+            if(target == 0) return true;
 
+            if(ind == 0) return arr[0] == target;
+
+            if(dp[ind][target] != -1) return dp[ind][target];
+
+            bool notTaken = func(ind - 1, target, arr, dp);
+            bool taken = false;
+
+            if(arr[ind] <= target) {
+                taken = func(ind - 1, target - arr[ind], arr, dp);
+            }
+
+            return dp[ind][target] = notTaken || taken;
+        }
+    public:
+        int minDifference(vector<int>&arr, int n)  { 
+            int totalSum = 0;
+
+            for(int i = 0; i < n; i++) totalSum += arr[i];
+
+            /*
+            vector<vector<int>> dp(n, vector<int>(totalSum + 1, -1));
+            for (int i = 0; i <= totalSum; i++) {
+                bool dummy = func(n - 1, i, arr, dp);
+            }
+
+            int mini = 1e9;
+            for(int i = 0; i <= totalSum; i++) {
+                // if(func(n-1, i, arr) == true) {
+                if(dp[n-1][i] == true) {
+                    int diff = abs(i - (totalSum - i));
+                    mini = min(mini, diff);
+                }
+            }
+            return mini;
+            
+            vector<vector<bool>> dp(n, vector<bool>(totalSum + 1, false));
+
+            for(int i = 0; i < n; i++) {
+                dp[i][0] = true;
+            }
+
+            if(arr[0] <= totalSum) dp[0][arr[0]] = true;
+
+            for(int ind = 1; ind <= n; ind++) {
+                for(int target = 1; target <= totalSum; target++) {
+                    bool notTaken = dp[ind-1][target];
+                    bool taken = false;
+                    if(arr[ind] <= target) {
+                        taken = dp[ind-1][target-arr[ind]];
+                    }
+                    dp[ind][target] = notTaken || taken;
+                }
+            }
+
+            int mini = 1e9;
+            for(int i = 0; i <= totalSum; i++) {
+                if(dp[n-1][i] == true) {
+                    int diff = abs(i - (totalSum - i));
+                    mini = min(mini, diff);
+                }
+            }
+            return mini;
+            */
+            vector<bool> prev(totalSum + 1, false);
+            prev[0] = true;
+
+            if(arr[0] <= totalSum) prev[arr[0]] = true;
+
+            for(int ind = 1; ind < n; ind++) {
+                vector<bool> cur(totalSum + 1, false);
+                cur[0] = true;
+
+                for(int target = 1; target <= totalSum; target++) {
+                    bool notTaken = prev[target];
+                    bool taken = false;
+
+                    if(arr[ind] <= target) {
+                        taken = prev[target - arr[ind]];
+                    }
+                    cur[target] = notTaken || taken;
+                }
+
+                prev = cur;
+            }
+
+            int mini = 1e9;
+            for(int i = 0; i <= totalSum; i++) {
+                if(prev[i] == true) {
+                    int diff = abs(i - (totalSum - i));
+                    mini = min(mini, diff);
+                }
+            }
+            return mini;
+        }
+    // Recursion - TC = O(2^N) + O(N) + O(N), SC = O(N)
+    // Memoization - TC = O(N*sum) + O(N) + O(N), SC = O(N*sum) + O(N)
+    // Tabulation - TC = O(N*sum) + O(N) + O(N), SC = O(N*sum)
+    // Space Optimization - TC = O(N*sum) + O(N) + O(N), SC = O(sum)
+};
 
 
 
