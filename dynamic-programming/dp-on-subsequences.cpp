@@ -283,6 +283,85 @@ class PartitionSubsetSumMinDiff {
     // Space Optimization - TC = O(N*sum) + O(N) + O(N), SC = O(sum)
 };
 
+class CountOfSubsetsWithSumK {
+    private:
+    int mod = 1e9+7;
+    int findWaysUtil(int ind, int target, vector<int>& arr, vector<vector<int>>& dp) {
+        /* Base case: If the target sum 
+        is 0, we found a valid subset*/
+        if(target == 0) return 1;
+    
+        /* Base case: If we have considered all elements
+        and the target is still not 0, return 0*/
+        if(ind == 0) return (arr[0] == target) ? 1 : 0;
+    
+        if(dp[ind][target] != -1) return dp[ind][target];
+    
+        int notTaken = findWaysUtil(ind - 1, target, arr, dp);
+    
+        /* Include the current element if
+        it doesn't exceed the target*/
+        int taken = 0;
+        if(arr[ind] <= target) {
+            taken = findWaysUtil(ind - 1, target - arr[ind], arr, dp);
+        }
+    
+        return dp[ind][target] = (notTaken + taken) % mod;
+    }
+    
+    public:
+    int perfectSum(vector<int>&arr, int K){
+        int n = arr.size();
+        // vector<vector<int>> dp(n, vector<int>(K + 1, -1));
+        // return findWaysUtil(n - 1, K, arr, dp);
+        /*
+        vector<vector<int>> dp(n, vector<int>(K + 1, 0));
+    
+        for(int i = 0; i < n; i++) dp[i][0] = 1;
+    
+        if(arr[0] <= K) dp[0][arr[0]] = 1;
+    
+        for(int ind = 1; ind < n; ind++) {
+            for(int target = 1; target <= K; target++) {
+                int notTaken = dp[ind-1][target];
+    
+                int taken = 0;
+                if(arr[ind] <= target) {
+                    taken = (dp[ind-1][target - arr[ind]]) % mod;
+                }
+    
+                dp[ind][target] = (notTaken + taken) % mod;
+            }
+        }
+        return dp[n-1][K];
+        */
+        vector<int> prev(K+1, 0);
+        prev[0] = 1;
+        
+        if(arr[0] <= K) prev[arr[0]] = 1;
+    
+        for(int ind = 1; ind < n; ind++) {
+            vector<int> cur(K+1, 0);
+            cur[0] = 1;
+            for(int target = 1; target <= K; target++) {
+                int notTaken = prev[target];
+                int taken = 0;
+                if(arr[ind] <= target) {
+                    taken = prev[target - arr[ind]];
+                }
+    
+                cur[target] = (notTaken + taken) % mod;
+            }
+            prev = cur;
+        }
+        return prev[K];
+    }
+    // Recursion - TC = O(2^N), SC = O(N)
+    // Memoization - TC = O(N*target), SC = O(N*target) + O(N)
+    // Tabulation - TC = O(N*target), SC = O(N*target)
+    // Space Optimization - TC = O(N*target), SC = O(target)
+};
+
 
 
 int main() {
