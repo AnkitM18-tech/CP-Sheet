@@ -362,6 +362,106 @@ class CountOfSubsetsWithSumK {
     // Space Optimization - TC = O(N*target), SC = O(target)
 };
 
+class CountPartitionsWithGivenDifference {
+private:
+int mod = 1e9 + 7;
+int countPartitionsUtil(int ind, int target, vector<int>& arr, vector<vector<int>>& dp) {
+    if(ind == 0) {
+        /* If target is 0 and the element is also 0,there 
+        are 2 ways to achieve this (include or exclude).*/
+        if(target == 0 && arr[0] == 0) return 2;
+        if(target == 0 || target == arr[0]) return 1;
+
+        return 0;
+    }
+
+    if(dp[ind][target] != -1) return dp[ind][target];
+
+    int notTaken = countPartitionsUtil(ind - 1, target, arr, dp);
+    int taken = 0;
+    if(arr[ind] <= target) {
+        taken = countPartitionsUtil(ind - 1, target - arr[ind], arr, dp);
+    }
+
+    return dp[ind][target] = (notTaken + taken) % mod;
+}
+
+int findWays(vector<int>& nums, int tar) {
+    int n = nums.size();
+
+    // vector<vector<int>> dp(n, vector<int>(tar + 1, 0));
+
+    /* If the first element is 0, we have 2 
+    ways to achieve sum 0: by either including
+    or excluding the element.*/
+    // if(nums[0] == 0) dp[0][0] = 2;
+    // else dp[0][0] = 1;
+
+    /* If the first element is not 0 and is less
+    than or equal to target, we have 1 way to 
+    achieve the sum equal to that element.*/
+    /*
+    if(nums[0] != 0 && nums[0] <= tar) dp[0][nums[0]] = 1;
+
+    for(int ind = 1; ind < n; ind++) {
+        for(int target = 0; target <= tar; target++) {
+            int notTaken = dp[ind-1][target];
+
+            int taken = 0;
+            if(nums[ind] <= target) {
+                taken = dp[ind-1][target - nums[ind]];
+            }
+
+            dp[ind][target] = (notTaken + taken) % mod;
+        }
+    }
+
+    return dp[n-1][tar];
+    */
+    vector<int> prev(tar + 1, 0);
+
+    /* 2 cases for target 0 when the first 
+    element is 0: either pick it or not.*/
+    if(nums[0] == 0) prev[0] = 2;
+    else prev[0] = 1;
+
+    if(nums[0] != 0 && nums[0] < tar) prev[nums[0]] = 1;
+
+    for(int ind = 1; ind < n; ind++) {
+        vector<int> cur(tar + 1, 0);
+
+        for(int target = 0; target <= tar; target++) {
+            int notTaken = prev[target];
+            int taken = 0;
+            if(nums[ind] <= target) taken = prev[target - nums[ind]];
+
+            cur[target] = (notTaken + taken) % mod;
+        }
+
+        prev = cur;
+    }
+    return prev[tar];
+}
+
+public:
+int countPartitions(int n, int diff, vector<int>& arr) {
+    int totSum = 0;
+    for(int i = 0; i < n; i++) totSum += arr[i];
+
+    if(totSum - diff < 0 || (totSum - diff) % 2) return 0;
+    int s2 = (totSum - diff)/2;
+    // vector<vector<int>> dp(n, vector<int>(s2 + 1, -1));
+    // return countPartitionsUtil(n - 1, s2, arr, dp);
+    return findWays(arr, s2);
+}
+
+// s1 - s2 = diff, s1 >= s2, s1 = totalSum - s2, 
+// => totalSum - 2 * s2 = diff => s2 = (totalSum - diff) / 2
+// Recursion - TC = O(2^N), SC = O(N)
+// Memoization - TC = O(N*K), SC = O(N*K) + O(N)
+// Tabulation - TC = O(N*K), SC = O(N*K)
+// Space Optimization - TC = O(N*K), SC = O(K)
+};
 
 
 
