@@ -712,6 +712,59 @@ class TargetSum {
         }
 };    
 
+class CoinChangeII {
+    private:
+        int mod = 1e9 + 7;
+    
+        int func(vector<int>& arr, int ind, int T, vector<vector<long long>>& dp) {
+            if(ind == 0) {
+                return (T % arr[0] == 0);
+            }
+    
+            if(dp[ind][T] != -1) return dp[ind][T];
+    
+            int notTaken = func(arr, ind - 1, T, dp);
+            int taken = 0;
+            if(arr[ind] <= T) {
+                taken = func(arr, ind, T - arr[ind], dp);
+            }
+    
+            return dp[ind][T] = (notTaken + taken) % mod;
+        }
+    public:
+        int count(vector<int>&coins, int N, int amount) {
+            // vector<vector<long long>> dp(N, vector<long long>(amount + 1, -1));
+            // return func(coins, N - 1, amount, dp);
+            // vector<vector<long long>> dp(N, vector<long long>(amount + 1, 0));
+            vector<long long> prev(amount + 1, 0);
+    
+            for(int i = 0; i <= amount; i++) {
+                // if(i % coins[0] == 0) dp[0][i] = 1;
+                prev[i] = (i % coins[0] == 0);
+            }
+    
+            for(int ind = 1; ind < N; ind++) {
+                vector<long long> cur(amount + 1, 0);
+                for(int target = 0; target <= amount; target++) {
+                    // int notTaken = dp[ind-1][target];
+                    int notTaken = prev[target];
+                    int taken = 0;
+    
+                    // if(coins[ind] <= target) taken = dp[ind][target - coins[ind]];
+                    if(coins[ind] <= target) taken = cur[target - coins[ind]];
+    
+                    // dp[ind][target] = (notTaken + taken) % mod;
+                    cur[target] = (notTaken + taken) % mod;
+                }
+    
+                prev = cur;
+            }
+    
+            // return dp[N - 1][amount];
+            return prev[amount];
+        }
+};    
+
 
 
 int main() {
