@@ -618,6 +618,102 @@ class MinimumCoins{
         }
 };
 
+class TargetSum {
+    private:
+        int mod = 1e9 + 7;
+        int func(int ind, int target, vector<int>& arr, vector<vector<int>>& dp) {
+            if(ind == 0) {
+                if(target == 0 && arr[0] == 0) return 2;
+                if(target == 0 || arr[0] == target) return 1;
+    
+                return 0;
+            }
+    
+            if(dp[ind][target] != -1) return dp[ind][target];
+    
+            int notTaken = func(ind - 1, target, arr, dp);
+            int taken = 0;
+            if(arr[ind] <= target) {
+                taken = func(ind - 1, target - arr[ind], arr, dp);
+            }
+    
+            return dp[ind][target] = (notTaken + taken);
+        }
+    
+        int func(vector<int>& arr, int target) {
+            int n = arr.size();
+    
+            /*
+            vector<vector<int>> dp(n, vector<int>(target + 1, 0));
+    
+            if(arr[0] == 0) dp[0][0] = 2;
+            else dp[0][0] = 1;
+    
+            if(arr[0] != 0 && arr[0] <= target) dp[0][arr[0]] = 1;
+    
+            for(int ind = 1; ind < n; ind++) {
+                for(int tar = 0; tar <= target; tar++) {
+                    int notTaken = dp[ind-1][tar];
+                    int taken = 0;
+    
+                    if(arr[ind] <= tar) {
+                        taken = dp[ind - 1][tar - arr[ind]];
+                    }
+    
+                    dp[ind][tar] = (notTaken + taken) % mod;
+                }
+            }
+    
+            return dp[n - 1][target];
+            */
+            vector<int> prev(target + 1, 0);
+    
+            if(arr[0] == 0) prev[0] = 2;
+            else prev[0] = 1;
+    
+            if(arr[0] != 0 && arr[0] <= target) prev[arr[0]] = 1;
+    
+            for(int ind = 1; ind < n; ind++) {
+                vector<int> cur(target + 1, 0);
+                for(int tar = 0; tar <= target; tar++) {
+                    int notTaken = prev[tar];
+                    int taken = 0;
+                    if(arr[ind] <= tar) {
+                        taken = prev[tar - arr[ind]];
+                    }
+    
+                    cur[tar] = (notTaken + taken) % mod;
+                }
+                prev = cur;
+            }
+    
+            return prev[target];
+        }
+    
+    public:
+        int targetSum(int n, int target, vector<int>& nums) {
+            int totSum = 0;
+            for(int i = 0; i < nums.size(); i++) {
+                totSum += nums[i];
+            }
+    
+            // Not possible to achieve the target sum
+            if(totSum - target < 0) return 0;
+    
+            /* The difference between the total 
+            sum and target sum must be even*/
+            if((totSum - target) % 2 == 1) return 0;
+    
+            int s2 = (totSum - target) / 2;
+            // vector<vector<int>> dp(n, vector<int>(s2 + 1, -1));
+    
+            // return func(n - 1, s2, nums, dp);
+            return func(nums, s2);
+        }
+};    
+
+
+
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
