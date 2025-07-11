@@ -822,7 +822,77 @@ class UnboundedKnapsack {
         }
 };    
 
-
+class RodCutting{
+    private:
+        int func(vector<int>& price, int n, int ind, vector<vector<int>>& dp) {
+            if(ind == 0) {
+                return price[0] * n;
+            }
+    
+            if(dp[ind][n] != -1) return dp[ind][n];
+    
+            int notTaken = 0 + func(price, n, ind - 1, dp);
+            int rodLength = ind + 1;
+            int taken = INT_MIN;
+    
+            if(rodLength <= n) taken = price[ind] + func(price, n - rodLength, ind, dp);
+    
+            return dp[ind][n] = max(notTaken, taken);
+        }
+    public:
+        int rodCutting(vector<int> price, int n) {
+            // vector<vector<int>> dp(n, vector<int>(n + 1, -1));
+            // return func(price, n, n - 1, dp);
+            /*
+            vector<vector<int>> dp(n, vector<int>(n + 1, 0));
+    
+            for(int i = 0; i <= n; i++) {
+                dp[0][i] = price[0] * i;
+            }
+    
+            for(int ind = 1; ind < n; ind++) {
+                for(int length = 1; length <= n; length++) {
+                    int notTaken = 0 + dp[ind-1][length];
+                    int taken = INT_MIN;
+    
+                    int rodLength = ind + 1;
+    
+                    if(rodLength <= length) {
+                        taken = price[ind] + dp[ind][length - rodLength];
+                    }
+    
+                    dp[ind][length] = max(notTaken, taken);
+                }
+            }
+    
+            return dp[n - 1][n];
+            */
+            vector<int> prev(n + 1, 0);
+            // vector<int> cur(n + 1, 0);
+    
+            for(int i = 0; i <= n; i++) {
+                prev[i] = price[0] * i;
+            }
+    
+            for(int ind = 1; ind < n; ind++) {
+                for(int length = 1; length <= n; length++) {
+                    int notTaken = 0 + prev[length];
+                    int taken = INT_MIN;
+    
+                    int rodLength = ind + 1;
+    
+                    if(rodLength <= length) {
+                        taken = price[ind] + prev[length - rodLength];
+                    }
+    
+                    prev[length] = max(notTaken, taken);
+                }
+                // prev = cur;
+            }
+    
+            return prev[n];
+        }
+};    
 
 int main() {
     ios_base::sync_with_stdio(false);
