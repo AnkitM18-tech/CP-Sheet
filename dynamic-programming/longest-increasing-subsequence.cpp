@@ -170,6 +170,74 @@ public:
     */
 };
 
+class LongestStringChain {
+private:
+    bool static compare(string& s, string& t) {
+        return s.size() < t.size();
+    }
+
+    bool checkPossible(string& s, string& t) {
+        // Base Case
+        // s > t
+        if(s.size() != t.size() + 1) return false;
+
+        // Pointers
+        int i = 0, j = 0;
+
+        while(i < s.size()) {
+            if(j < t.size() && s[i] == t[j]) {
+                i++, j++;
+            } else {
+                i++;
+            }
+        }
+
+        if(i == s.size() && j == t.size()) return true;
+        return false;
+    }
+public:
+    int longestStringChain(vector<string>& words) {
+        int n = words.size();
+        sort(words.begin(), words.end(), compare);
+        vector<int> dp(n, 1);
+
+        // vector<int> parent(n);
+        // vector<string> ans;
+
+        int maxLen = 0;
+        // int lastIndex = 0;
+
+        for(int i = 0; i < n; i++) {
+            // parent[i] = i;
+            for(int j = 0; j < i; j++) {
+                if(checkPossible(words[i], words[j]) && dp[i] < dp[j] + 1) {
+                    dp[i] = dp[j] + 1;
+                    // parent[i] = j;
+                }
+            }
+
+            if(dp[i] > maxLen) {
+                maxLen = dp[i];
+                // lastIndex = i;
+            }
+        }
+
+        /*
+        int i = lastIndex;
+        while(parent[i] != i) {
+            ans.push_back(words[i]);
+            i = parent[i];
+        }
+
+        ans.push_back(words[i]);
+        reverse(ans.begin(), ans.end());
+        */
+
+        return maxLen;
+    }
+    // TC = O(N^2 * L), SC = O(N)
+};
+
 
 
 int main() {
