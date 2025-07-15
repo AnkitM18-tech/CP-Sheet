@@ -238,6 +238,39 @@ public:
     // TC = O(N^2 * L), SC = O(N)
 };
 
+class LongestBitonicSubsequence {
+public:
+    int LongestBitonicSequence(vector<int> arr) {
+        int n = arr.size();
+        vector<int> LIS_dp(n, 1);
+        int maxLen = 0;
+
+        for(int i = 0; i < n; i++) {
+            for(int prev = 0; prev < i; prev++) {
+                if(arr[prev] < arr[i] && LIS_dp[i] < LIS_dp[prev] + 1) {
+                    LIS_dp[i] = LIS_dp[prev] + 1;
+                }
+            }
+        }
+
+        vector<int> LDS_dp(n, 1);
+
+        for(int i = n - 1; i >= 0; i--) {
+            for(int prev = n - 1; prev > i; prev--) {
+                if(arr[prev] < arr[i] && LDS_dp[i] < LDS_dp[prev] + 1) {
+                    LDS_dp[i] = LDS_dp[prev] + 1;
+                }
+            }
+
+            maxLen = max(maxLen, LIS_dp[i] + LDS_dp[i] - 1);
+        }
+
+        return maxLen;
+    }
+
+    // TC = O(2*N^2), SC = O(N)
+};
+
 
 
 int main() {
