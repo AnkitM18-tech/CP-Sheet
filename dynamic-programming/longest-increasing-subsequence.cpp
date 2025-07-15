@@ -271,6 +271,41 @@ public:
     // TC = O(2*N^2), SC = O(N)
 };
 
+class NumberOfLongestIncreasingSubsequence {
+public:
+    int numberOfLIS(vector<int> nums) {
+        int n = nums.size();
+        int ans = 0, maxLen = 0;
+
+        vector<int> dp(n, 1);
+        vector<int> count(n, 1);
+
+        for(int ind = 0; ind < n; ind++) {
+            for(int prevInd = 0; prevInd < ind; prevInd++) {
+                if(nums[prevInd] < nums[ind]) {
+                    if(dp[prevInd] + 1 > dp[ind]) {
+                        dp[ind] = dp[prevInd] + 1;
+                        // new - inherit
+                        count[ind] = count[prevInd];
+                    } else if(dp[prevInd] + 1 == dp[ind]) {
+                        // same - increase
+                        count[ind] += count[prevInd];
+                    }
+                }
+            }
+
+            maxLen = max(maxLen, dp[ind]);
+        }
+
+        for(int i = 0; i < n; i++) {
+            if(dp[i] == maxLen) ans += count[i];
+        }
+
+        return ans;
+
+        // TC = O(N^2), SC = O(N)
+    }
+};
 
 
 int main() {
