@@ -110,6 +110,58 @@ public:
     // TC = O(N*M), SC = O(M) - Space Optimization
 };
 
+class LongestPalindromicSubsequence{
+private:
+    int func(string& s1, string& s2) {
+        int n = s1.size();
+        int m  = s2.size();
+
+        vector<vector<int>> dp(n + 1, vector<int>(m + 1, -1));
+
+        for(int i = 0; i <= n; i++) dp[i][0] = 0;
+        for(int i = 0; i <= m; i++) dp[0][i] = 0;
+
+        for(int ind1 = 1; ind1 <= n; ind1++) {
+            for(int ind2 = 1; ind2 <= m; ind2++) {
+                if(s1[ind1 - 1] == s2[ind2 - 1]) {
+                    dp[ind1][ind2] = 1 + dp[ind1 - 1][ind2 - 1];
+                } else {
+                    dp[ind1][ind2] = max(dp[ind1 - 1][ind2], dp[ind1][ind2 - 1]);
+                }
+            }
+        }
+        return dp[n][m];
+    }
+
+    int lcs(string& s1, string& s2) {
+        int n = s1.size(), m = s2.size();
+
+        vector<int> prev(m + 1, 0), cur(m + 1, 0);
+
+        for(int ind1 = 1; ind1 <= n; ind1++) {
+            for(int ind2 = 1; ind2 <= m; ind2++) {
+                if(s1[ind1 - 1] == s2[ind2 - 1]) {
+                    cur[ind2] = 1 + prev[ind2 - 1];
+                } else {
+                    cur[ind2] = max(prev[ind2], cur[ind2 - 1]);
+                }
+            }
+            prev = cur;
+        }
+        return prev[m];
+    }
+public: 
+    int longestPalinSubseq(string s) {
+        string t = s;
+        reverse(s.begin(), s.end());
+
+        // return func(s, t);
+        return lcs(s, t);
+    }
+    // Tabulation - TC = O(N*N), SC = O(N*N)
+    // Space Optimization - TC = O(N*N), SC = O(N)
+};
+
 
 
 int main() {
