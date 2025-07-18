@@ -465,6 +465,75 @@ public:
     // likewise if s2 gets exhausted then i + 1 no of deletions needed
 };
 
+class WildcardMatching {
+private:
+    bool isAllStars(string& S1, int i) {
+        for(int j = 0; j <= i; j++) {
+            if(S1[j] != '*') return false;
+        }
+        return true;
+    }
+
+    bool wildcardMatchingUtil(string& S1, string& S2, int i, int j, vector<vector<int>>& dp) {
+        // Base Cases
+        if(i < 0 && j < 0) return true;
+        if(i < 0 && j >= 0) return false;
+        if(j < 0 && i >= 0) return isAllStars(S1, i);
+
+        if(dp[i][j] != -1) return dp[i][j] == 1;
+
+        // If the characters at the current
+        // positions match or S1 has a '?'
+        if(S1[i] == S2[j] || S1[i] == '?') {
+            return dp[i][j] = wildcardMatchingUtil(S1, S2, i - 1, j - 1, dp);
+        }
+
+        // Two options: either '*' represents an
+        // empty string or it matches a character in S2
+        if(S1[i] == '*') {
+            return dp[i][j] = wildcardMatchingUtil(S1, S2, i - 1, j, dp) || wildcardMatchingUtil(S1, S2, i, j - 1, dp);
+        }
+        return dp[i][j] = false;
+    }
+
+public:
+    bool wildCard(string str, string pat) {
+        int n = str.size(), m = pat.size();
+        // vector<vector<int>> dp(m, vector<int>(n, -1));
+        // return wildcardMatchingUtil(pat, str, m - 1, n - 1, dp);
+        vector<vector<bool>> dp(m + 1, vector<bool>(n + 1, false));
+        // vector<bool> prev(n + 1, false), cur(n + 1, false);
+        
+        // Base Case: empty pattern matches empty string
+        dp[0][0] = true;
+        // prev[0] = true;
+
+        // Base Case: pattern vs empty string
+        for(int i = 1; i <= m; i++) {
+            dp[i][0] = (pat[i - 1] == '*') && dp[i - 1][0];
+            // cur[0] = (pat[i - 1] == '*') && prev[0];
+        }
+
+        for(int i = 1; i <= m; i++) {
+            for(int j = 1; j <= n; j++) {
+                if(pat[i - 1] == str[j - 1] || pat[i - 1] == '?') {
+                    dp[i][j] = dp[i - 1][j - 1];
+                    // cur[j] = prev[j - 1];
+                } else if(pat[i - 1] == '*') {
+                    dp[i][j] = dp[i - 1][j] || dp[i][j - 1];
+                    // cur[j] = prev[j] || cur[j - 1];
+                } else {
+                    dp[i][j] = false;
+                    // cur[j] = false;
+                }
+            }
+            // prev = cur;
+        }
+
+        return dp[m][n];
+        // return prev[n];
+    }
+};
 
 
 int main() {
