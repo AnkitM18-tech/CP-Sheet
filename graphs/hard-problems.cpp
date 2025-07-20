@@ -189,6 +189,85 @@ public:
     }
 };
 
+class AlienDictionary {
+private:
+    vector<int> topoSort(int V, vector<int> adj[]) {
+        vector<int> inDegree(V, 0);
+
+        for(int i = 0 ; i < V; i++) {
+            for(auto it : adj[i]) {
+                inDegree[it]++;
+            }
+        }
+
+        vector<int> ans;
+        queue<int> q;
+
+        for(int i = 0; i < V; i++) {
+            if(inDegree[i] == 0) q.push(i);
+        }
+
+        while(!q.empty()) {
+            int node = q.front();
+            ans.push_back(node);
+            q.pop();
+
+            for(auto it : adj[node]) {
+                inDegree[it]--;
+
+                if(inDegree[it] == 0) q.push(it);
+            }
+        }
+
+        return ans;
+    }
+
+public:
+	string findOrder(string dict[], int N, int K) {
+		vector<int> adj[K];
+
+        for(int i = 0; i < N - 1; i++) {
+            string s1 = dict[i];
+            string s2 = dict[i + 1];
+            int len = min(s1.size(), s2.size());
+
+            for(int ptr = 0; ptr < len; ptr++) {
+                if(s1[ptr] != s2[ptr]) {
+                    adj[s1[ptr] - 'a'].push_back(s2[ptr] - 'a');
+                    break;
+                }
+            }
+        }
+
+        vector<int> topo = topoSort(K, adj);
+        string ans;
+
+        // for(int i = 0; i < K; i++) {
+        //     ans.push_back('a' + topo[i]);
+        //     ans.push_back(' ');
+        // }
+        for(auto it : topo) {
+            ans.push_back('a' + it);
+            ans.push_back(' ');
+        }
+
+        return ans;
+	}
+    // TC = O(K + N), SC = O(K + N)
+    /*
+    Follow-up question for interview:
+
+    When is the ordering of letters not possible:
+        If every character matches and the largest word appears before the 
+        shortest word: For example, if “abcd” appears before “abc”, 
+        we can say the ordering is not possible.
+    If there exists a cyclic dependency between the characters: 
+        For example, in the dictionary: dict: {“abc”, “bat”, “ade”} 
+        there exists a cyclic dependency between 'a' and 'b' 
+        because the dictionary states 'a' < 'b' < 'a', which is not possible.
+    */
+};
+
 
 
 int main() {
