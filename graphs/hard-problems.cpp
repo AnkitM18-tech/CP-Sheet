@@ -421,7 +421,68 @@ public:
     // TC = O(N * M * 26), SC = O(N)
 };
 
+class WordLadderII{
+public:
+    vector<vector<string>> findSequences(string beginWord, string endWord,vector<string> &wordList) {
+        vector<vector<string>> ans;
 
+        queue<vector<string>> q;
+        unordered_set<string> st(wordList.begin(), wordList.end());
+        
+        // erase starting word from set if exists
+        q.push({beginWord});
+
+        st.erase(beginWord);
+
+        // set to store the words that must be deleted after a level traversal
+        unordered_set<string> toErase;
+
+        while(!q.empty()) {
+            int size = q.size();
+
+            for(int i = 0; i < size; i++) {
+                vector<string> seq = q.front();
+                string word = seq.back();
+                q.pop();
+
+                if(word == endWord) {
+                    if(ans.empty()) {
+                        ans.push_back(seq);
+                    } else if(ans.back().size() == seq.size()) {
+                        ans.push_back(seq);
+                    }
+                }
+
+                for(int pos = 0; pos < word.size(); pos++) {
+                    char original = word[pos];
+
+                    for(char ch = 'a'; ch <= 'z'; ch++) {
+                        word[pos] = ch;
+
+                        if(st.find(word) != st.end()) {
+                            seq.push_back(word);
+                            q.push(seq);
+
+                            toErase.insert(word);
+                            
+                            // backtrack step
+                            seq.pop_back();
+                        }
+                    }
+
+                    word[pos] = original;
+                }
+            }
+
+            for(auto it : toErase) st.erase(it);
+            toErase.clear();
+
+            if(!ans.empty()) break;
+        }
+
+        return ans;
+    }
+};
 
 int main() {
     ios_base::sync_with_stdio(false);
