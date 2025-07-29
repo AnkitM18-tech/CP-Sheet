@@ -729,7 +729,89 @@ public:
     */
 };
 
+class MakeTheLargestIsland {
+private:
+    vector<int> delRow = {-1, 0, 1, 0};
+    vector<int> delCol = {0, -1, 0, 1};
 
+    bool isValid(int& i, int& j, int& n) {
+        if(i < 0 || i >= n) return false;
+        if(j < 0 || j >= n) return false;
+
+        return true;
+    }
+
+    void addInitialIslands(vector<vector<int>>& grid, DisjointSet& ds, int n) {
+        for(int row = 0; row < n; row++) {
+            for(int col = 0; col < n; col++) {
+                if(grid[row][col] == 0) continue;
+
+                for(int ind = 0; ind < 4; ind++) {
+                    int newRow = row + delRow[ind];
+                    int newCol = col + delCol[ind];
+
+                    if(isValid(newRow, newCol, n) && grid[newRow][newCol] == 1) {
+                        int nodeNo = row * n + col;
+                        int adjNodeNo = newRow * n + newCol;
+
+                        ds.unionBySize(nodeNo, adjNodeNo);
+                    }
+                }
+            }
+        }
+    }
+
+public:
+    int largestIsland(vector<vector<int>>& grid) {
+        int n = grid.size();
+
+        DisjointSet ds(n * n);
+        addInitialIslands(grid, ds, n);
+
+        int ans = 0;
+
+        for(int row = 0; row < n; row++) {
+            for(int col = 0; col < n; col++) {
+                if(grid[row][col] == 1) continue;
+
+                set<int> components;
+
+                for(int ind = 0; ind < 4; ind++) {
+                    int newRow = row + delRow[ind];
+                    int newCol = col + delCol[ind];
+
+                    if(isValid(newRow, newCol, n) && grid[newRow][newCol] == 1) {
+                        int nodeNo = newRow * n + newCol;
+                        components.insert(ds.findUPar(nodeNo));
+                    }
+                }
+
+                int sizeTotal = 0;
+
+                for(auto it : components) {
+                    sizeTotal += ds.size[it];
+                }
+
+                ans = max(ans, sizeTotal + 1);
+            }
+        }
+        
+        // Edge case - all 1s
+        for(int cellNo = 0; cellNo < n * n; cellNo++) {
+            ans = max(ans, ds.size[ds.findUPar(cellNo)]);
+        }
+
+        return ans;
+    }
+
+    /*
+        Time Complexity: O(N^2) Using nested loops, and within the loops, 
+        all the operations take constant time.
+
+        Space Complexity: O(N^2) The Disjoint set storing N^2 nodes 
+        (cells) will take up 2*N^2 space due to parent and size arrays.
+    */
+};
 
 int main() {
     ios_base::sync_with_stdio(false);
