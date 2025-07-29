@@ -662,6 +662,73 @@ public:
     
 };
 
+class NumberOfIslandsII{
+private:
+    vector<int> delRow = {-1, 0, 1, 0};
+    vector<int> delCol = {0, -1, 0, 1};
+
+    bool isValid(int& i, int& j, int& n, int& m) {
+        if(i < 0 || i >= n) return false;
+        if(j < 0 || j >= m) return false;
+
+        return true;
+    }
+
+public:
+    vector<int> numOfIslands(int n, int m, vector<vector<int>> &A){
+        DisjointSet ds(n * m);
+
+        vector<vector<int>> vis(n, vector<int>(m, 0));
+        int cnt = 0;
+
+        vector<int> ans;
+
+        for(auto it : A) {
+            int row = it[0];
+            int col = it[1];
+
+            if(vis[row][col] == 1) {
+                ans.push_back(cnt);
+                continue;
+            }
+            
+            vis[row][col] = 1;
+            cnt++;
+
+            for(int ind = 0; ind < 4; ind++) {
+                int newRow = row + delRow[ind];
+                int newCol = col + delCol[ind];
+
+                if(isValid(newRow, newCol, n, m) && vis[newRow][newCol] == 1) {
+                    int nodeNo = row * m + col;
+                    int adjNodeNo = newRow * m + newCol;
+
+                    if(ds.findUPar(nodeNo) != ds.findUPar(adjNodeNo)) {
+                        cnt--;
+                        ds.unionBySize(nodeNo, adjNodeNo);
+                    }
+                }
+            }
+
+            ans.push_back(cnt);
+        }
+
+        return ans;
+    }
+
+    /*
+    Time Complexity: O(K*4ɑ)
+    Each operation involves converting the sea cell to land cell 
+    and merging the nodes (if possible) taking an overall O(4ɑ) time.
+    Since, there are a total of K operations, the overall time complexity is O(K*4ɑ).
+
+    Space Complexity: O(K) + O(N*M)
+    The result list takes O(K) space. The visited array takes O(N*M) 
+    space and the Disjoint set uses parent and rank/size array storing all 
+    N*M nodes taking O(N*M) space.
+    */
+};
+
 
 
 int main() {
