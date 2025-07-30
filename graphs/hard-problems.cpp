@@ -813,6 +813,53 @@ public:
     */
 };
 
+class MostStonesRemovedWithSameRowOrColumn {
+public:
+    int maxRemove(vector<vector<int>>& stones, int n) {
+        int maxRow = 0, maxCol = 0;
+
+        for(auto it : stones) {
+            maxRow = max(maxRow, it[0]);
+            maxCol = max(maxCol, it[1]);
+        }
+
+        DisjointSet ds(maxRow + maxCol + 1);
+        // To store the nodes having a stone in Disjoint Set
+        unordered_map<int, int> stoneNodes;
+
+        for(auto it : stones) {
+            int nodeRow = it[0];
+            // Converted column number
+            int nodeCol = it[1] + maxRow + 1;
+
+            ds.unionBySize(nodeRow, nodeCol);
+
+            stoneNodes[nodeRow] = 1;
+            stoneNodes[nodeCol] = 1;
+        }
+
+        // To store connected components
+        int k = 0;
+
+        for(auto it : stoneNodes) {
+            if(ds.findUPar(it.first) == it.first) k++;
+        }
+
+        return n - k;
+    }
+
+    /*
+    Time Complexity: O(N) The given stones array is traversed multiple times. 
+    Traversing the hashset will also take O(N) time.
+
+    Space Complexity: O(Max Row number + Max Column number) 
+    The Disjoint set will store the nodes using the parent and size/rank array which 
+    will take (2*number of nodes) space. 
+    Since, the number of nodes = max row number + max column number, 
+    the overall space complexity is O(Max Row number + Max Column number).
+    */
+};
+
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
