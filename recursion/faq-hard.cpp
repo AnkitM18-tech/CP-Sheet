@@ -156,6 +156,60 @@ public:
     //  SC = O(E)
 };
 
+class WordSearch {
+public:
+    bool func(vector<vector<char>>& v, int i, int j, string& s, int k) {
+        // if all chars of the word are found
+        if(k == s.length()) return true;
+
+        // boundary conditions and character mismatch check
+        if(i < 0 || j < 0 || i >= v.size() || j >= v[0].size() || s[k] != v[i][j]) {
+            return false;
+        }
+
+        bool ans = false;
+
+        // Temporarily mark the cell as visited
+        char x = v[i][j];
+        v[i][j] = ' ';
+
+        // Check all 4 possible directions
+        ans |= func(v, i + 1, j, s, k + 1);
+        ans |= func(v, i - 1, j, s, k + 1);
+        ans |= func(v, i, j + 1, s, k + 1);
+        ans |= func(v, i, j - 1, s, k + 1);
+
+        // restore the original char
+        v[i][j] = x;
+
+        return ans;
+    }
+
+    bool exist(vector<vector<char>>& board, string word) {
+        for(int i = 0; i < board.size(); i++) {
+            for(int j = 0; j < board[0].size(); j++) {
+                if(board[i][j] == word[0]) {
+                    if(func(board, i, j, word, 0)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /*
+    Time Complexity : O(N * M * 4^L) where N is rows, M is columns and L is the 
+    word length; recursive search through board.
+
+    Space Complexity : O(L) due to recursive call stack depth, where L is the length 
+    of the word.
+    */
+};
+
+
+
 int main() {
     ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
