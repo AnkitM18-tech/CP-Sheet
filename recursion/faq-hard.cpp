@@ -208,7 +208,53 @@ public:
     */
 };
 
+class RatInAMaze {
+public:
+    void path(vector<vector<int>>& m, int x, int y, string dir, int n, vector<string>& result) {
+        // destination reached
+        if(x == n - 1 && y == n - 1) {
+            result.push_back(dir);
+            return;
+        }
 
+        // blocked cell
+        if(m[x][y] == 0) return;
+
+        // mark cell as visited
+        m[x][y] = 0;
+
+        // Up
+        if(x > 0) path(m, x - 1, y, dir + 'U', n, result);
+        // Left
+        if(y > 0) path(m, x, y - 1, dir + 'L', n, result);
+        // Down
+        if(x < n - 1) path(m, x + 1, y, dir + 'D', n, result);
+        // Right
+        if(y < n - 1) path(m, x, y + 1, dir + 'R', n, result);
+
+        m[x][y] = 1;
+    }
+
+    vector<string> findPath(vector<vector<int>> &grid) {
+        int n = grid.size();
+        vector<string> result;
+
+        if(grid[0][0] == 0 || grid[n - 1][n - 1] == 0) return result;
+
+        path(grid, 0, 0, "", n, result);
+
+        sort(result.begin(), result.end());
+
+        return result;
+    }
+    /*
+        Time Complexity : The time complexity is O(4^(N^2)) 
+        due to recursion exploring all paths in the grid.
+
+        Space Complexity :The space complexity is O(N^2) for the 
+        recursion stack and result storage.
+    */
+};
 
 int main() {
     ios_base::sync_with_stdio(false);
